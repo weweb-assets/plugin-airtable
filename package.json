@@ -1,0 +1,25 @@
+{
+    "name": "plugin-airtable",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/weweb-assets/plugin-airtable"
+    },
+    "version": "1.0.0",
+    "license": "MIT",
+    "scripts": {
+        "build": "weweb build",
+        "serve": "weweb serve"
+    },
+    "dependencies": {
+        "airtable": "^0.10.1"
+    },
+    "devDependencies": {
+        "@vue/eslint-config-prettier": "^6.0.0",
+        "@weweb/cli": "latest",
+        "babel-eslint": "^10.1.0",
+        "eslint": "^7.11.0",
+        "eslint-plugin-prettier": "^3.1.4",
+        "eslint-plugin-vue": "^7.0.1",
+        "prettier": "^2.1.2"
+    }
+}
