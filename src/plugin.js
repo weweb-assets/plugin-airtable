@@ -21,7 +21,7 @@ export default {
     async init() {
         /* wwEditor:start */
         const plugin = wwLib.wwPlugins.pluginAirtable;
-        plugin.settings = (await wwLib.wwPlugin.getSettings(plugin.id)) || this.settings;
+        if (plugin.id) plugin.settings = (await wwLib.wwPlugin.getSettings(plugin.id)) || this.settings;
         /* wwEditor:end */
     },
     /* wwEditor:start */

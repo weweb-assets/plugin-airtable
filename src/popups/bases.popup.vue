@@ -4,12 +4,14 @@
         <div class="settings" v-for="(base, index) in settings.privateData.bases" :key="index">
             <div class="settings__row -bases settings__label">
                 <div class="paragraph-l">Base</div>
-                <!-- <button class="ww-editor-button -secondary -small" @click="addTable(base)">Delete base</button> -->
                 <button class="ww-editor-button -primary -red -small" @click="deleteBase(base)">Delete base</button>
             </div>
             <div class="settings__row -bases">
                 <div class="settings__col">
-                    <label class="settings__label caption-s" for="">Base key</label>
+                    <label class="settings__label caption-s" for="">
+                        Base key
+                        <a class="settings__link" href="https://airtable.com/api" target="_blank"> Find it here </a>
+                    </label>
                     <input
                         type="text"
                         class="settings__input ww-editor-input -large"
@@ -45,12 +47,21 @@
                 </div>
                 <div class="settings__col m-left">
                     <label class="settings__label caption-s" for="">Name in weweb</label>
+                    <input
+                        type="text"
+                        class="settings__input ww-editor-input -large"
+                        placeholder="Display name"
+                        v-model="table.displayName"
+                    />
+                </div>
+                <div class="settings__col m-left">
+                    <label class="settings__label caption-s" for="">Table display by</label>
                     <div class="settings__row">
                         <input
                             type="text"
                             class="settings__input ww-editor-input -large"
-                            placeholder="Display name"
-                            v-model="table.displayName"
+                            placeholder="Key displayed"
+                            v-model="table.displayBy"
                         />
                         <div type="button" class="settings__button m-left" @click="deleteTable(base, index)">
                             <wwEditorIcon name="delete" small />
@@ -132,6 +143,10 @@ export default {
                 margin: var(--ww-spacing-04);
                 border-bottom: 2px solid var(--ww-color-dark-300);
             }
+        }
+        &__link {
+            color: var(--ww-color-blue-500);
+            margin-left: var(--ww-spacing-02);
         }
         &__add-base {
             margin: var(--ww-spacing-03) 0;
