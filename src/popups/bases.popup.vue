@@ -47,21 +47,12 @@
                 </div>
                 <div class="settings__col m-left">
                     <label class="settings__label caption-s" for="">Name in weweb</label>
-                    <input
-                        type="text"
-                        class="settings__input ww-editor-input -large"
-                        placeholder="Display name"
-                        v-model="table.displayName"
-                    />
-                </div>
-                <div class="settings__col m-left">
-                    <label class="settings__label caption-s" for="">Table display by</label>
                     <div class="settings__row">
                         <input
                             type="text"
                             class="settings__input ww-editor-input -large"
-                            placeholder="Key displayed"
-                            v-model="table.displayBy"
+                            placeholder="Display name"
+                            v-model="table.displayName"
                         />
                         <div type="button" class="settings__button m-left" @click="deleteTable(base, index)">
                             <wwEditorIcon name="delete" small />
