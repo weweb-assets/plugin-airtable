@@ -1,22 +1,23 @@
 <template>
-    <div class="ww-popup-settings">
-        <button class="settings__all ww-editor-button -primary -green" @click="syncAll" :disabled="isFetching">
+    <div class="ww-popup-airtable-sync">
+        <button class="airtable-sync__all ww-editor-button -primary -green" @click="syncAll" :disabled="isFetching">
             <div v-if="!isFetching">Synchronize all</div>
             <div v-else>Fetching...</div>
         </button>
-        <div v-for="(base, index) in settings.privateData.bases" :key="index">
-            <div class="settings__row settings__input">
+        <div class="airtable-sync__container" v-for="(base, index) in settings.privateData.bases" :key="index">
+            <div class="airtable-sync__row -base">
                 <div class="paragraph-m">{{ base.displayName || base.name }}</div>
                 <button
                     :disabled="isBaseFetching(base)"
                     class="ww-editor-button -primary -green -small"
                     @click="syncBase(base, table)"
+                    v-if="base.tables.length"
                 >
                     <div v-if="!isBaseFetching(base)">Synchronize base</div>
                     <div v-else>Fetching...</div>
                 </button>
             </div>
-            <div class="settings__row -tables settings__input" v-for="(table, index) in base.tables" :key="index">
+            <div class="airtable-sync__row -table" v-for="(table, index) in base.tables" :key="index">
                 <div class="caption-m">{{ table.displayName || table.name }}</div>
                 <button
                     :disabled="isBaseFetching(base) || isTableFetching(table)"
@@ -27,6 +28,7 @@
                     <div v-else>Fetching...</div>
                 </button>
             </div>
+            <div class="airtable-sync__separator"></div>
         </div>
     </div>
 </template>
@@ -84,10 +86,26 @@ export default {
             this.tableFetching(table, true);
             try {
                 const airtableBase = api.getBase(base.name);
-                const values = await api.getTable(airtableBase, table.name);
-                wwLib.wwPlugin.saveCmsDataSet(this.settings.id, table.id, table.displayName, 'Airtable', values);
+                const values = await api.getTable(airtableBase, table.name, {
+                    filterByFormula: table.filterByFormula || '',
+                    sort: table.sort || [],
+                    view: table.view || '',
+                });
+                wwLib.wwPlugin.saveCmsDataSet(
+                    this.settings.id,
+                    table.id,
+                    table.displayName || table.name,
+                    table.displayBy,
+                    'Airtable',
+                    values
+                );
+                wwLib.wwNotification.open({
+                    text: {
+                        en: `Table "${table.displayName || table.name}" succesfully fetched`,
+                    },
+                    color: 'green',
+                });
             } catch (err) {
-                wwLib.wwLog.error(JSON.stringify(err));
                 wwLib.wwNotification.open({
                     text: {
                         en: err.message || 'An error occured, please try again later.',
@@ -118,27 +136,38 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.ww-popup-settings {
+.ww-popup-airtable-sync {
     position: relative;
     display: flex;
     flex-direction: column;
     padding: var(--ww-spacing-03) 0;
-    .settings {
+    .airtable-sync {
+        &__container {
+            &:not(:last-child) {
+                .airtable-sync__separator {
+                    margin: var(--ww-spacing-04);
+                    border-bottom: 2px solid var(--ww-color-dark-300);
+                }
+            }
+        }
         &__all {
             margin: var(--ww-spacing-02) auto;
-        }
-        &__input {
-            margin-bottom: var(--ww-spacing-03);
         }
         &__row {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            &.-tables {
-                margin-left: var(--ww-spacing-02);
-                margin-right: var(--ww-spacing-02);
+            &.-base {
+                margin-bottom: var(--ww-spacing-03);
+            }
+            &.-table {
+                margin: 0 var(--ww-spacing-02);
+                margin-bottom: var(--ww-spacing-03);
             }
         }
+    }
+    .m-auto-left {
+        margin-left: auto;
     }
 }
 </style>

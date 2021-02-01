@@ -1,73 +1,32 @@
 <template>
-    <div class="ww-popup-settings">
-        <button class="settings__add-base ww-editor-button -primary" @click="addBase">Add base</button>
-        <div class="settings" v-for="(base, index) in settings.privateData.bases" :key="index">
-            <div class="settings__row -bases settings__label">
-                <div class="paragraph-l">Base</div>
-                <button class="ww-editor-button -primary -red -small" @click="deleteBase(base)">Delete base</button>
-            </div>
-            <div class="settings__row -bases">
-                <div class="settings__col">
-                    <label class="settings__label caption-s" for="">
-                        Base key
-                        <a class="settings__link" href="https://airtable.com/api" target="_blank"> Find it here </a>
-                    </label>
-                    <input
-                        type="text"
-                        class="settings__input ww-editor-input -large"
-                        placeholder="Key"
-                        v-model="base.name"
-                    />
-                </div>
-                <div class="settings__col m-left">
-                    <label class="settings__label caption-s" for="">Name in weweb</label>
-                    <div class="settings__row">
-                        <input
-                            type="text"
-                            class="settings__input ww-editor-input -large"
-                            placeholder="Display name"
-                            v-model="base.displayName"
-                        />
-                    </div>
+    <div class="ww-popup-airtable-bases">
+        <button class="airtable-bases__all ww-editor-button -primary" @click="addBase">Add base</button>
+        <div class="airtable-bases__container" v-for="(base, index) in settings.privateData.bases" :key="index">
+            <div class="airtable-bases__row -base">
+                <div class="paragraph-m">{{ base.displayName || base.name }}</div>
+                <button class="ww-editor-button -primary -small m-auto-left" @click="addTable(base)">Add table</button>
+                <button class="ww-editor-button -secondary -small m-left" @click="editBase(base, index)">Edit</button>
+                <div class="airtable-bases__button-delete m-left" @click="deleteBase(index)">
+                    <wwEditorIcon name="delete" small />
                 </div>
             </div>
-            <div class="settings__row -tables">
-                <div class="paragraph-m settings__label">Tables</div>
-                <button class="ww-editor-button -primary -small" @click="addTable(base)">Add table</button>
-            </div>
-            <div class="settings__row -tables" v-for="(table, index) in base.tables" :key="index">
-                <div class="settings__col">
-                    <label class="settings__label caption-s" for="">Name in Airtable</label>
-                    <input
-                        type="text"
-                        class="settings__input ww-editor-input -large"
-                        placeholder="Table name"
-                        v-model="table.name"
-                    />
-                </div>
-                <div class="settings__col m-left">
-                    <label class="settings__label caption-s" for="">Name in weweb</label>
-                    <div class="settings__row">
-                        <input
-                            type="text"
-                            class="settings__input ww-editor-input -large"
-                            placeholder="Display name"
-                            v-model="table.displayName"
-                        />
-                        <div type="button" class="settings__button m-left" @click="deleteTable(base, index)">
-                            <wwEditorIcon name="delete" small />
-                        </div>
-                    </div>
+            <div class="airtable-bases__row -table" v-for="(table, index) in base.tables" :key="index">
+                <div class="caption-m">{{ table.displayName || table.name }}</div>
+                <button class="ww-editor-button -secondary -small m-auto-left" @click="editTable(base, index, table)">
+                    Edit
+                </button>
+                <div class="airtable-bases__button-delete m-left" @click="deleteTable(base, index)">
+                    <wwEditorIcon name="delete" small />
                 </div>
             </div>
-            <div class="settings__separator"></div>
+            <div class="airtable-bases__separator"></div>
         </div>
     </div>
 </template>
 
 <script>
 export default {
-    name: 'TablesPopup',
+    name: 'BasesPopup',
     props: {
         options: {
             type: Object,
@@ -87,14 +46,50 @@ export default {
         };
     },
     methods: {
-        addBase() {
-            this.settings.privateData.bases.unshift({ tables: [{ id: wwLib.wwUtils.getUid() }] });
+        async addBase() {
+            try {
+                const result = await wwLib.wwPopups.open({
+                    firstPage: 'AIRTABLE_ADD_BASE_POPUP',
+                });
+                this.settings.privateData.bases.push(result.base);
+            } catch (err) {
+                wwLib.wwLog.error(err);
+            }
+        },
+        async editBase(base, index) {
+            try {
+                const result = await wwLib.wwPopups.open({
+                    firstPage: 'AIRTABLE_EDIT_BASE_POPUP',
+                    data: { base },
+                });
+                this.settings.privateData.bases.splice(index, 1, result.base);
+            } catch (err) {
+                wwLib.wwLog.error(err);
+            }
         },
         deleteBase(index) {
             this.settings.privateData.bases.splice(index, 1);
         },
-        addTable(base) {
-            base.tables.push({ id: wwLib.wwUtils.getUid() });
+        async addTable(base) {
+            try {
+                const result = await wwLib.wwPopups.open({
+                    firstPage: 'AIRTABLE_ADD_TABLE_POPUP',
+                });
+                base.tables.push(result.table);
+            } catch (err) {
+                wwLib.wwLog.error(err);
+            }
+        },
+        async editTable(base, index, table) {
+            try {
+                const result = await wwLib.wwPopups.open({
+                    firstPage: 'AIRTABLE_EDIT_TABLE_POPUP',
+                    data: { table },
+                });
+                base.tables.splice(index, 1, result.table);
+            } catch (err) {
+                wwLib.wwLog.error(err);
+            }
         },
         deleteTable(base, index) {
             base.tables.splice(index, 1);
@@ -109,6 +104,14 @@ export default {
                     this.settings.data,
                     this.settings.privateData
                 );
+
+                const oldTables = this.options.data.settings.privateData.bases.map(base => base.tables).flat(1);
+                const newTables = this.options.result.settings.privateData.bases.map(base => base.tables).flat(1);
+                const deletedTables = oldTables.filter(table => !newTables.find(elem => elem.id === table.id));
+                deletedTables.forEach(table => wwLib.wwPlugin.deleteCmsDataSet(table.id));
+
+                wwLib.wwPlugins.pluginAirtable.settings = plugin.settings;
+                this.options.data.settings = plugin.settings;
             } catch (err) {
                 wwLib.wwLog.error(err);
             }
@@ -116,69 +119,53 @@ export default {
         },
     },
     created() {
-        this.settings = this.options.data.settings || this.settings;
+        this.settings = _.cloneDeep(this.options.data.settings || this.settings);
         this.options.result.settings = this.settings;
     },
 };
 </script>
 
 <style scoped lang="scss">
-.ww-popup-settings {
+.ww-popup-airtable-bases {
     position: relative;
     display: flex;
     flex-direction: column;
     padding: var(--ww-spacing-03) 0;
-    .settings {
-        &:not(:last-child) {
-            .settings__separator {
-                margin: var(--ww-spacing-04);
-                border-bottom: 2px solid var(--ww-color-dark-300);
+    .airtable-bases {
+        &__container {
+            &:not(:last-child) {
+                .airtable-bases__separator {
+                    margin: var(--ww-spacing-04);
+                    border-bottom: 2px solid var(--ww-color-dark-300);
+                }
             }
         }
-        &__link {
-            color: var(--ww-color-blue-500);
-            margin-left: var(--ww-spacing-02);
-        }
-        &__add-base {
-            margin: var(--ww-spacing-03) 0;
-        }
-        &__label {
-            display: flex;
-            align-items: center;
-            font-weight: 500;
-            color: var(--ww-color-dark-500);
-            margin-bottom: var(--ww-spacing-01);
-            &-required {
-                margin-left: auto;
-                color: var(--ww-color-dark-400);
-            }
-        }
-        &__input {
-            width: 100%;
-            margin-bottom: var(--ww-spacing-03);
-        }
-        &__button {
-            margin: 0 var(--ww-spacing-03);
-            margin-bottom: var(--ww-spacing-03);
-            cursor: pointer;
-            &:hover {
-                color: var(--ww-color-red-500);
-            }
+        &__all {
+            margin: var(--ww-spacing-02) auto;
         }
         &__row {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            &.-bases {
-                margin: var(--ww-spacing-02) 0;
+            &.-base {
+                margin-bottom: var(--ww-spacing-03);
             }
-            &.-tables {
-                margin: var(--ww-spacing-01) var(--ww-spacing-04);
+            &.-table {
+                margin: 0 var(--ww-spacing-02);
+                margin-bottom: var(--ww-spacing-03);
             }
         }
-        &__col {
-            width: 100%;
+        &__button-delete {
+            margin: 0 var(--ww-spacing-03);
+            cursor: pointer;
+            transition: color 0.3s ease;
+            &:hover {
+                color: var(--ww-color-red-500);
+            }
         }
+    }
+    .m-auto-left {
+        margin-left: auto;
     }
     .m-left {
         margin-left: var(--ww-spacing-03);

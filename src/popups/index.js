@@ -1,11 +1,15 @@
 import settingsPopup from './settings.popup.vue';
 import configurationPopup from './configuration.popup.vue';
 import basesPopup from './bases.popup.vue';
+import basePopup from './base.popup.vue';
+import tablePopup from './table.popup.vue';
 import synchronizationPopup from './synchronization.popup.vue';
 
 wwLib.wwPopups.addPopup('airtableSettingsPopup', settingsPopup);
 wwLib.wwPopups.addPopup('airtableConfigurationPopup', configurationPopup);
 wwLib.wwPopups.addPopup('airtableBasesPopup', basesPopup);
+wwLib.wwPopups.addPopup('airtableBasePopup', basePopup);
+wwLib.wwPopups.addPopup('airtableTablePopup', tablePopup);
 wwLib.wwPopups.addPopup('airtableSynchronizationPopup', synchronizationPopup);
 
 wwLib.wwPopups.addStory('AIRTABLE_POPUP', {
@@ -41,7 +45,7 @@ wwLib.wwPopups.addStory('AIRTABLE_BASES_POPUP', {
         fr: 'Airtable - Bases',
     },
     type: 'airtableBasesPopup',
-    size: wwLib.wwPopups.SIZES.LARGE,
+    size: wwLib.wwPopups.SIZES.MEDIUM,
     buttons: {
         SAVE: {
             text: {
@@ -49,6 +53,74 @@ wwLib.wwPopups.addStory('AIRTABLE_BASES_POPUP', {
                 fr: 'Enregistrer les bases',
             },
             next: 'AIRTABLE_SYNCHRONIZATION_POPUP',
+        },
+    },
+});
+
+wwLib.wwPopups.addStory('AIRTABLE_ADD_BASE_POPUP', {
+    title: {
+        en: 'Airtable - Add base',
+        fr: 'Airtable - Ajouter une base',
+    },
+    type: 'airtableBasePopup',
+    size: wwLib.wwPopups.SIZES.MEDIUM,
+    buttons: {
+        SAVE: {
+            text: {
+                en: 'Add base',
+                fr: 'Ajouter une base',
+            },
+        },
+    },
+});
+
+wwLib.wwPopups.addStory('AIRTABLE_EDIT_BASE_POPUP', {
+    title: {
+        en: 'Airtable - Edit base',
+        fr: 'Airtable - Editer une base',
+    },
+    type: 'airtableBasePopup',
+    size: wwLib.wwPopups.SIZES.MEDIUM,
+    buttons: {
+        SAVE: {
+            text: {
+                en: 'Edit base',
+                fr: 'Editer la base',
+            },
+        },
+    },
+});
+
+wwLib.wwPopups.addStory('AIRTABLE_ADD_TABLE_POPUP', {
+    title: {
+        en: 'Airtable - Add table',
+        fr: 'Airtable - Ajouter une table',
+    },
+    type: 'airtableTablePopup',
+    size: wwLib.wwPopups.SIZES.MEDIUM,
+    buttons: {
+        SAVE: {
+            text: {
+                en: 'Add table',
+                fr: 'Ajouter une table',
+            },
+        },
+    },
+});
+
+wwLib.wwPopups.addStory('AIRTABLE_EDIT_TABLE_POPUP', {
+    title: {
+        en: 'Airtable - Edit table',
+        fr: 'Airtable - Editer la table',
+    },
+    type: 'airtableTablePopup',
+    size: wwLib.wwPopups.SIZES.MEDIUM,
+    buttons: {
+        SAVE: {
+            text: {
+                en: 'Edit table',
+                fr: 'Editer la table',
+            },
         },
     },
 });

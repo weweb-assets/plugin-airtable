@@ -15,7 +15,7 @@
             <div class="settings__properties-name paragraph-s -languages">Configuration</div>
             <wwEditorIcon class="settings__properties-icon -right" name="chevron-forward" />
         </div>
-        <a class="settings__properties" href="https://developer.weweb.io/" target="_blank">
+        <a class="settings__properties" href="//developer.weweb.io/" target="_blank">
             <wwEditorIcon class="settings__properties-icon -left" name="comment" />
             <div class="settings__properties-name paragraph-s -languages">Documentation</div>
             <wwEditorIcon class="settings__properties-icon -right" name="chevron-forward" />
