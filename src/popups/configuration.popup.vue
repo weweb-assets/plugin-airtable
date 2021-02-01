@@ -1,20 +1,20 @@
 <template>
-    <div class="ww-popup-settings-configuration">
-        <label class="settings-configuration__label caption-s" for="api-key">
+    <div class="ww-popup-airtable-configuration">
+        <label class="airtable-configuration__label caption-s" for="api-key">
             Api key
-            <a class="settings-configuration__link" href="https://airtable.com/account" target="_blank">Find it here</a>
-            <div class="settings-configuration__label-required">required</div>
+            <a class="airtable-configuration__link" href="https://airtable.com/account" target="_blank">Find it here</a>
+            <div class="airtable-configuration__label-required">required</div>
         </label>
         <input
             :type="isKeyHidden ? 'password' : 'text'"
             name="api-key"
-            class="settings-configuration__input caption-m ww-editor-input -large"
+            class="airtable-configuration__input caption-m ww-editor-input -large"
             placeholder="Api Key"
             v-model="settings.privateData.apiKey"
         />
-        <div class="settings-configuration__row">
+        <div class="airtable-configuration__row">
             <wwManagerRadio :value="!isKeyHidden" @input="isKeyHidden = !$event" />
-            <span class="settings-configuration__radio-label caption-m">Show api key</span>
+            <span class="airtable-configuration__radio-label caption-m">Show api key</span>
         </div>
     </div>
 </template>
@@ -73,12 +73,12 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.ww-popup-settings-configuration {
+.ww-popup-airtable-configuration {
     position: relative;
     display: flex;
     flex-direction: column;
     padding: var(--ww-spacing-03) 0;
-    .settings-configuration {
+    .airtable-configuration {
         &__label {
             display: flex;
             align-items: center;

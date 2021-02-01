@@ -1,28 +1,31 @@
 <template>
-    <div class="ww-popup-settings">
-        <div class="settings__properties" @click="next('AIRTABLE_SYNCHRONIZATION_POPUP')">
-            <wwEditorIcon class="settings__properties-icon -left" name="download" />
-            <div class="settings__properties-name paragraph-s -languages">Synchronisation</div>
-            <wwEditorIcon class="settings__properties-icon -right" name="chevron-forward" />
+    <div class="ww-popup-airtable-settings">
+        <div class="airtable-settings__properties" @click="next('AIRTABLE_SYNCHRONIZATION_POPUP')">
+            <wwEditorIcon class="airtable-settings__properties-icon -left" name="download" />
+            <div class="airtable-settings__properties-name paragraph-s -languages">Synchronisation</div>
+            <wwEditorIcon class="airtable-settings__properties-icon -right" name="chevron-forward" />
         </div>
-        <div class="settings__properties" @click="next('AIRTABLE_BASES_POPUP')">
-            <wwEditorIcon class="settings__properties-icon -left" name="bind" />
-            <div class="settings__properties-name paragraph-s -languages">Bases</div>
-            <wwEditorIcon class="settings__properties-icon -right" name="chevron-forward" />
+        <div class="airtable-settings__properties" @click="next('AIRTABLE_BASES_POPUP')">
+            <wwEditorIcon class="airtable-settings__properties-icon -left" name="bind" />
+            <div class="airtable-settings__properties-name paragraph-s -languages">Bases</div>
+            <wwEditorIcon class="airtable-settings__properties-icon -right" name="chevron-forward" />
         </div>
-        <div class="settings__properties" @click="next('AIRTABLE_CONFIGURATION_POPUP')">
-            <wwEditorIcon class="settings__properties-icon -left" name="advanced" />
-            <div class="settings__properties-name paragraph-s -languages">Configuration</div>
-            <wwEditorIcon class="settings__properties-icon -right" name="chevron-forward" />
+        <div class="airtable-settings__properties" @click="next('AIRTABLE_CONFIGURATION_POPUP')">
+            <wwEditorIcon class="airtable-settings__properties-icon -left" name="advanced" />
+            <div class="airtable-settings__properties-name paragraph-s -languages">Configuration</div>
+            <wwEditorIcon class="airtable-settings__properties-icon -right" name="chevron-forward" />
         </div>
-        <a class="settings__properties" href="//developer.weweb.io/" target="_blank">
-            <wwEditorIcon class="settings__properties-icon -left" name="comment" />
-            <div class="settings__properties-name paragraph-s -languages">Documentation</div>
-            <wwEditorIcon class="settings__properties-icon -right" name="chevron-forward" />
+        <a class="airtable-settings__properties" href="//developer.weweb.io/" target="_blank">
+            <wwEditorIcon class="airtable-settings__properties-icon -left" name="comment" />
+            <div class="airtable-settings__properties-name paragraph-s -languages">Documentation</div>
+            <wwEditorIcon class="airtable-settings__properties-icon -right" name="chevron-forward" />
         </a>
-        <div class="settings__delete-zone danger-zone">
-            <span class="settings__delete-zone-label">DANGER ZONE</span>
-            <button class="settings__delete-zone-button ww-editor-button -primary -red -small" @click="deletePlugin">
+        <div class="airtable-settings__delete-zone danger-zone">
+            <span class="airtable-settings__delete-zone-label">DANGER ZONE</span>
+            <button
+                class="airtable-settings__delete-zone-button ww-editor-button -primary -red -small"
+                @click="deletePlugin"
+            >
                 Delete plugin
             </button>
         </div>
@@ -86,24 +89,25 @@ export default {
                     },
                 ],
             });
-            if (confirm) await wwLib.wwPlugin.deleteDesignPlugin(this.pluginId);
+            if (!confirm) return;
+            await wwLib.wwPlugin.deleteSettings(this.pluginId, this.settings.id);
+            await wwLib.wwPlugin.deleteDesignPlugin(this.pluginId);
         },
     },
     created() {
         this.pluginId = this.options.data.pluginId;
-        this.settings = this.options.data.settings || this.settings;
-        this.options.result.settings = this.settings;
+        this.settings = this.options.data.settings;
     },
 };
 </script>
 
 <style scoped lang="scss">
-.ww-popup-settings {
+.ww-popup-airtable-settings {
     position: relative;
     display: flex;
     flex-direction: column;
     padding: var(--ww-spacing-03) 0;
-    .settings {
+    .airtable-settings {
         &__input {
             margin-bottom: var(--ww-spacing-03);
         }
