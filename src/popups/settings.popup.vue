@@ -90,7 +90,6 @@ export default {
                 ],
             });
             if (!confirm) return;
-            await wwLib.wwPlugin.deleteSettings(this.pluginId, this.settings.id);
             await wwLib.wwPlugin.deleteDesignPlugin(this.pluginId);
         },
     },
