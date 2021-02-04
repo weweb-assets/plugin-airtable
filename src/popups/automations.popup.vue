@@ -48,9 +48,11 @@ export default {
     methods: {
         async copyCode(base, table) {
             const designId = wwLib.wwWebsiteData.getInfo().id;
-            window.copy(
-                `fetch('https://data.weweb.io/callback/designs/${designId}/cms_data_set/${table.id}?base=${base.name}&table=${table.name}')`
-            );
+            wwLib
+                .getManagerWindow()
+                .copy(
+                    `fetch('https://data.weweb.io/callback/designs/${designId}/cms_data_set/${table.id}?base=${base.name}&table=${table.name}')`
+                );
             wwLib.wwNotification.open({
                 text: {
                     en: 'Code copied to clipboard',
