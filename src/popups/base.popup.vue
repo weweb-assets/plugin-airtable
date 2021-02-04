@@ -9,10 +9,13 @@
             type="text"
             name="base-key"
             class="airtable-base__input caption-m ww-editor-input -large"
-            placeholder="Key"
+            placeholder="app**************"
             v-model="base.name"
         />
-        <label class="airtable-base__label caption-s" for="base-name"> Name in weweb </label>
+        <label class="airtable-base__label caption-s" for="base-name">
+            Name in weweb
+            <div class="airtable-base__label-required">optional</div>
+        </label>
         <input
             type="text"
             name="base-name"

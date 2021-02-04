@@ -18,7 +18,7 @@
                 </button>
             </div>
             <div class="airtable-sync__row -table" v-for="(table, index) in base.tables" :key="index">
-                <div class="caption-m">{{ table.displayName || table.name }}</div>
+                <div class="caption-m">{{ table.name }}</div>
                 <button
                     :disabled="isBaseFetching(base) || isTableFetching(table)"
                     class="ww-editor-button -primary -green -small"
@@ -94,14 +94,14 @@ export default {
                 wwLib.wwPlugin.saveCmsDataSet(
                     this.settings.id,
                     table.id,
-                    table.displayName || table.name,
+                    table.name,
                     table.displayBy,
                     'Airtable',
                     values
                 );
                 wwLib.wwNotification.open({
                     text: {
-                        en: `Table "${table.displayName || table.name}" succesfully fetched`,
+                        en: `Table "${table.name}" succesfully fetched`,
                     },
                     color: 'green',
                 });

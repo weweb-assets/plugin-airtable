@@ -2,32 +2,31 @@
     <div class="ww-popup-airtable-table">
         <label class="airtable-table__label caption-s" for="name-airtable">
             Name in Airtable
+            <a class="airtable-table__link" :href="`https://airtable.com/${base.name}`" target="_blank">Find it here</a>
             <div class="airtable-table__label-required">required</div>
         </label>
         <input
             type="text"
             name="name-airtable"
             class="airtable-table__input caption-m ww-editor-input -large"
-            placeholder="Name"
+            placeholder="Table 1"
             v-model="table.name"
         />
-        <label class="airtable-table__label caption-s" for="name-weweb"> Name in weweb </label>
-        <input
-            type="text"
-            name="name-weweb"
-            class="airtable-table__input caption-m ww-editor-input -large"
-            placeholder="Display name"
-            v-model="table.displayName"
-        />
-        <label class="airtable-table__label caption-s" for="display-by"> Display by </label>
+        <label class="airtable-table__label caption-s" for="display-by">
+            Display by
+            <div class="airtable-table__label-required">optional</div>
+        </label>
         <input
             type="text"
             name="display-by"
             class="airtable-table__input caption-m ww-editor-input -large"
-            placeholder="Display by"
+            placeholder="Name"
             v-model="table.displayBy"
         />
-        <label class="airtable-table__label caption-s" for="table-view"> View </label>
+        <label class="airtable-table__label caption-s" for="table-view">
+            View
+            <div class="airtable-table__label-required">optional</div>
+        </label>
         <input
             type="text"
             name="table-view"
@@ -44,6 +43,7 @@
             >
                 Find it here
             </a>
+            <div class="airtable-table__label-required">optional</div>
         </label>
         <input
             type="text"
@@ -102,6 +102,7 @@ export default {
                 { value: 'asc', label: 'Asc', default: true },
                 { value: 'desc', label: 'Desc' },
             ],
+            base: {},
             table: {
                 id: wwLib.wwUtils.getUid(),
                 name: '',
@@ -131,6 +132,7 @@ export default {
     },
     created() {
         this.table = this.options.data.table || this.table;
+        this.base = this.options.data.base || this.base;
         this.options.result.table = this.table;
         this.options.setButtonState('SAVE', this.table.name.length ? 'ok' : 'disabled');
     },

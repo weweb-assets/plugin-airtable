@@ -2,22 +2,28 @@
     <div class="ww-popup-airtable-settings">
         <div class="airtable-settings__properties" @click="next('AIRTABLE_SYNCHRONIZATION_POPUP')">
             <wwEditorIcon class="airtable-settings__properties-icon -left" name="download" />
-            <div class="airtable-settings__properties-name paragraph-s -languages">Synchronisation</div>
+            <div class="airtable-settings__properties-name paragraph-s">Synchronisation</div>
+            <wwEditorIcon class="airtable-settings__properties-icon -right" name="chevron-forward" />
+        </div>
+        <div class="airtable-settings__properties" @click="next('AIRTABLE_AUTOMATIONS_POPUP')">
+            <wwEditorIcon class="airtable-settings__properties-icon -left" name="copy-paste" />
+            <div class="airtable-settings__properties-name paragraph-s">Automations</div>
             <wwEditorIcon class="airtable-settings__properties-icon -right" name="chevron-forward" />
         </div>
         <div class="airtable-settings__properties" @click="next('AIRTABLE_BASES_POPUP')">
             <wwEditorIcon class="airtable-settings__properties-icon -left" name="bind" />
-            <div class="airtable-settings__properties-name paragraph-s -languages">Bases</div>
+            <div class="airtable-settings__properties-name paragraph-s">Bases</div>
             <wwEditorIcon class="airtable-settings__properties-icon -right" name="chevron-forward" />
         </div>
         <div class="airtable-settings__properties" @click="next('AIRTABLE_CONFIGURATION_POPUP')">
             <wwEditorIcon class="airtable-settings__properties-icon -left" name="advanced" />
-            <div class="airtable-settings__properties-name paragraph-s -languages">Configuration</div>
+            <div class="airtable-settings__properties-name paragraph-s">Configuration</div>
             <wwEditorIcon class="airtable-settings__properties-icon -right" name="chevron-forward" />
         </div>
+
         <a class="airtable-settings__properties" href="//developer.weweb.io/" target="_blank">
             <wwEditorIcon class="airtable-settings__properties-icon -left" name="comment" />
-            <div class="airtable-settings__properties-name paragraph-s -languages">Documentation</div>
+            <div class="airtable-settings__properties-name paragraph-s">Documentation</div>
             <wwEditorIcon class="airtable-settings__properties-icon -right" name="chevron-forward" />
         </a>
         <div class="airtable-settings__delete-zone danger-zone">

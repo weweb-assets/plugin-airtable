@@ -11,7 +11,7 @@
                 </div>
             </div>
             <div class="airtable-bases__row -table" v-for="(table, index) in base.tables" :key="index">
-                <div class="caption-m">{{ table.displayName || table.name }}</div>
+                <div class="caption-m">{{ table.name }}</div>
                 <button class="ww-editor-button -secondary -small m-auto-left" @click="editTable(base, index, table)">
                     Edit
                 </button>
@@ -74,6 +74,7 @@ export default {
             try {
                 const result = await wwLib.wwPopups.open({
                     firstPage: 'AIRTABLE_ADD_TABLE_POPUP',
+                    data: { base },
                 });
                 base.tables.push(result.table);
             } catch (err) {
@@ -84,7 +85,7 @@ export default {
             try {
                 const result = await wwLib.wwPopups.open({
                     firstPage: 'AIRTABLE_EDIT_TABLE_POPUP',
-                    data: { table },
+                    data: { base, table },
                 });
                 base.tables.splice(index, 1, result.table);
             } catch (err) {

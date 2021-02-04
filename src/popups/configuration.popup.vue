@@ -9,7 +9,7 @@
             :type="isKeyHidden ? 'password' : 'text'"
             name="api-key"
             class="airtable-configuration__input caption-m ww-editor-input -large"
-            placeholder="Api Key"
+            placeholder="key**************"
             v-model="settings.privateData.apiKey"
         />
         <div class="airtable-configuration__row">

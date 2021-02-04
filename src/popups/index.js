@@ -4,6 +4,7 @@ import basesPopup from './bases.popup.vue';
 import basePopup from './base.popup.vue';
 import tablePopup from './table.popup.vue';
 import synchronizationPopup from './synchronization.popup.vue';
+import automationsPopup from './automations.popup.vue';
 
 wwLib.wwPopups.addPopup('airtableSettingsPopup', settingsPopup);
 wwLib.wwPopups.addPopup('airtableConfigurationPopup', configurationPopup);
@@ -11,6 +12,7 @@ wwLib.wwPopups.addPopup('airtableBasesPopup', basesPopup);
 wwLib.wwPopups.addPopup('airtableBasePopup', basePopup);
 wwLib.wwPopups.addPopup('airtableTablePopup', tablePopup);
 wwLib.wwPopups.addPopup('airtableSynchronizationPopup', synchronizationPopup);
+wwLib.wwPopups.addPopup('airtableAutomationsPopup', automationsPopup);
 
 wwLib.wwPopups.addStory('AIRTABLE_POPUP', {
     title: {
@@ -123,6 +125,15 @@ wwLib.wwPopups.addStory('AIRTABLE_EDIT_TABLE_POPUP', {
             },
         },
     },
+});
+
+wwLib.wwPopups.addStory('AIRTABLE_AUTOMATIONS_POPUP', {
+    title: {
+        en: 'Airtable - Automations',
+        fr: 'Airtable - Automations',
+    },
+    type: 'airtableAutomationsPopup',
+    size: wwLib.wwPopups.SIZES.MEDIUM,
 });
 
 wwLib.wwPopups.addStory('AIRTABLE_SYNCHRONIZATION_POPUP', {
