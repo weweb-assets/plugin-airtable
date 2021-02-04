@@ -49,20 +49,20 @@ export default {
         async copyCode(base, table) {
             const designId = wwLib.wwWebsiteData.getInfo().id;
             try {
-                console.log(navigator.clipboard.writeText('1'));
+                await console.log(navigator.clipboard.writeText('1'));
             } catch {}
             try {
-                console.log(window.navigator.clipboard.writeText('1'));
+                console.log(window.navigator.clipboard.writeText('2'));
             } catch {}
             try {
-                console.log(wwLib.getManagerWindow().navigator.clipboard.writeText(1));
+                console.log(wwLib.getManagerWindow().navigator.clipboard.writeText('3'));
             } catch {}
             try {
-                console.log(wwLib.getFrontWindow().navigator.clipboard.writeText('1'));
+                console.log(wwLib.getFrontWindow().navigator.clipboard.writeText('4'));
             } catch {}
             wwLib
                 .getFrontWindow()
-                .copy(
+                .navigator.clipboard.writeText(
                     `fetch('https://data.weweb.io/callback/designs/${designId}/cms_data_set/${table.id}?base=${base.name}&table=${table.name}')`
                 );
             wwLib.wwNotification.open({
