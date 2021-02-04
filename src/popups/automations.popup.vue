@@ -48,8 +48,16 @@ export default {
     methods: {
         async copyCode(base, table) {
             const designId = wwLib.wwWebsiteData.getInfo().id;
+            console.log(window.copy);
+            console.log(wwLib.getManagerWindow().copy);
+            console.log(wwLib.getFrontWindow().copy);
+            console.log(navigator.clipboard.writeText);
+            console.log(window.navigator.clipboard.writeText);
+            console.log(wwLib.getManagerWindow().navigator.clipboard.writeText);
+            console.log(wwLib.getFrontWindow().navigator.clipboard.writeText);
+            console.log(copy);
             wwLib
-                .getManagerWindow()
+                .getFrontWindow()
                 .copy(
                     `fetch('https://data.weweb.io/callback/designs/${designId}/cms_data_set/${table.id}?base=${base.name}&table=${table.name}')`
                 );
