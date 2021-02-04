@@ -48,14 +48,18 @@ export default {
     methods: {
         async copyCode(base, table) {
             const designId = wwLib.wwWebsiteData.getInfo().id;
-            console.log(window.copy);
-            console.log(wwLib.getManagerWindow().copy);
-            console.log(wwLib.getFrontWindow().copy);
-            console.log(navigator.clipboard.writeText);
-            console.log(window.navigator.clipboard.writeText);
-            console.log(wwLib.getManagerWindow().navigator.clipboard.writeText);
-            console.log(wwLib.getFrontWindow().navigator.clipboard.writeText);
-            console.log(copy);
+            try {
+                console.log(navigator.clipboard.writeText('1'));
+            } catch {}
+            try {
+                console.log(window.navigator.clipboard.writeText('1'));
+            } catch {}
+            try {
+                console.log(wwLib.getManagerWindow().navigator.clipboard.writeText(1));
+            } catch {}
+            try {
+                console.log(wwLib.getFrontWindow().navigator.clipboard.writeText('1'));
+            } catch {}
             wwLib
                 .getFrontWindow()
                 .copy(
