@@ -6,11 +6,12 @@
             <div class="airtable-configuration__label-required">required</div>
         </label>
         <input
-            :type="isKeyHidden ? 'password' : 'text'"
+            type="text"
             name="api-key"
             class="airtable-configuration__input caption-m ww-editor-input -large"
             placeholder="key**************"
             v-model="settings.privateData.apiKey"
+            :style="{ '-webkit-text-security': isKeyHidden ? 'disc' : 'none' }"
         />
         <div class="airtable-configuration__row">
             <wwManagerRadio :value="!isKeyHidden" @input="isKeyHidden = !$event" />
