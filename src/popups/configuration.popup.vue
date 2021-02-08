@@ -21,8 +21,6 @@
 </template>
 
 <script>
-import api from '../api';
-
 export default {
     name: 'ConfigurationPopup',
     props: {
@@ -43,11 +41,6 @@ export default {
                 },
             },
         };
-    },
-    watch: {
-        'settings.privateData.apiKey'() {
-            api.configure(this.settings.privateData.apiKey);
-        },
     },
     methods: {
         async beforeNext() {

@@ -10,9 +10,9 @@
             <div class="airtable-settings__properties-name paragraph-s">Automations</div>
             <wwEditorIcon class="airtable-settings__properties-icon -right" name="chevron-forward" />
         </div>
-        <div class="airtable-settings__properties" @click="next('AIRTABLE_BASES_POPUP')">
+        <div class="airtable-settings__properties" @click="next('AIRTABLE_TABLES_POPUP')">
             <wwEditorIcon class="airtable-settings__properties-icon -left" name="bind" />
-            <div class="airtable-settings__properties-name paragraph-s">Bases</div>
+            <div class="airtable-settings__properties-name paragraph-s">Tables</div>
             <wwEditorIcon class="airtable-settings__properties-icon -right" name="chevron-forward" />
         </div>
         <div class="airtable-settings__properties" @click="next('AIRTABLE_CONFIGURATION_POPUP')">

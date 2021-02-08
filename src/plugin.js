@@ -1,5 +1,6 @@
 /* wwEditor:start */
 import './popups';
+import { GET_AIRTABLE_BASES, GET_AIRTABLE_TABLES } from './graphql';
 /* wwEditor:end */
 
 export default {
@@ -25,6 +26,28 @@ export default {
         /* wwEditor:end */
     },
     /* wwEditor:start */
+    /*=============================================m_ÔÔ_m=============================================\
+        META API
+    \================================================================================================*/
+    async getBases() {
+        const { data } = await wwLib.$apollo.query({
+            query: GET_AIRTABLE_BASES,
+            variables: {
+                apiKey: this.settings.privateData.apiKey,
+            },
+        });
+        return data.getAirtableBases.data;
+    },
+    async getTables(baseId) {
+        const { data } = await wwLib.$apollo.query({
+            query: GET_AIRTABLE_TABLES,
+            variables: {
+                apiKey: this.settings.privateData.apiKey,
+                baseId,
+            },
+        });
+        return data.getAirtableTables.data;
+    },
     /*=============================================m_ÔÔ_m=============================================\
         SIDEBAR POPUP
     \================================================================================================*/

@@ -1,38 +1,53 @@
 <template>
     <div class="ww-popup-airtable-table">
         <label class="airtable-table__label caption-s" for="name-airtable">
-            Name in Airtable
-            <a class="airtable-table__link" :href="`https://airtable.com/${base.name}`" target="_blank">Find it here</a>
+            Base
             <div class="airtable-table__label-required">required</div>
         </label>
-        <input
-            type="text"
-            name="name-airtable"
-            class="airtable-table__input caption-m ww-editor-input -large"
-            placeholder="Table 1"
-            v-model="table.name"
+        <wwEditorSelect
+            class="airtable-table__input"
+            :options="basesOptions"
+            v-model="table.baseId"
+            @input="setBase"
+            placeholder="Select a base"
+            large
         />
-        <label class="airtable-table__label caption-s" for="display-by">
-            Display by
-            <div class="airtable-table__label-required">optional</div>
+        <label class="airtable-table__label caption-s" for="name-airtable">
+            Table
+            <div class="airtable-table__label-required">required</div>
         </label>
-        <input
-            type="text"
-            name="display-by"
-            class="airtable-table__input caption-m ww-editor-input -large"
-            placeholder="Name"
-            v-model="table.displayBy"
+        <wwEditorSelect
+            class="airtable-table__input"
+            :options="tablesOptions"
+            v-model="table.tableId"
+            @input="setTable"
+            :disabled="!table.baseId"
+            placeholder="Select a table"
+            large
         />
         <label class="airtable-table__label caption-s" for="table-view">
             View
             <div class="airtable-table__label-required">optional</div>
         </label>
-        <input
-            type="text"
-            name="table-view"
-            class="airtable-table__input caption-m ww-editor-input -large"
-            placeholder="Grid view"
+        <wwEditorSelect
+            class="airtable-table__input"
+            :options="tablesViewsOptions"
             v-model="table.view"
+            :disabled="!table.tableId"
+            placeholder="Select a view"
+            large
+        />
+        <label class="airtable-table__label caption-s" for="display-by">
+            Display by
+            <div class="airtable-table__label-required">optional</div>
+        </label>
+        <wwEditorSelect
+            class="airtable-table__input"
+            :options="tablesFieldsOptions"
+            v-model="table.displayBy"
+            :disabled="!table.tableId"
+            placeholder="Select a field"
+            large
         />
         <label class="airtable-table__label caption-s" for="filter-formula">
             Filter by formula
@@ -54,7 +69,7 @@
         />
         <div class="airtable-table__row airtable-table__input">
             <label class="airtable-table__label caption-s" for="table-view"> Sort </label>
-            <button class="ww-editor-button -primary -small m-auto-left" @click="addSort">
+            <button class="ww-editor-button -primary -small m-auto-left" @click="addSort" :disabled="!table.tableId">
                 Add a field to sort by
             </button>
         </div>
@@ -65,12 +80,11 @@
         >
             <div class="caption-s" v-if="!index">Sort by</div>
             <div class="caption-s" v-else>then by</div>
-            <input
-                type="text"
-                name="sort-field"
-                class="caption-m ww-editor-input"
-                placeholder="Field"
+            <wwEditorSelect
+                :options="tablesFieldsOptions"
                 v-model="sort.field"
+                :disabled="!table.tableId"
+                placeholder="Select a field"
             />
             <wwEditorSelect
                 class="airtable-table__select"
@@ -98,24 +112,67 @@ export default {
     },
     data() {
         return {
+            allBases: [],
+            allTables: [],
             directionOptions: [
                 { value: 'asc', label: 'Asc', default: true },
                 { value: 'desc', label: 'Desc' },
             ],
-            base: {},
             table: {
                 id: wwLib.wwUtils.getUid(),
-                name: '',
+                baseId: undefined,
+                tableId: undefined,
+                view: undefined,
+                displayBy: undefined,
                 sort: [],
             },
         };
     },
     watch: {
-        'table.name'() {
-            this.options.setButtonState('SAVE', this.table.name.length ? 'ok' : 'disabled');
+        'table.baseId'() {
+            this.getTables();
+        },
+        'table.tableId'() {
+            this.options.setButtonState('SAVE', this.table.tableId ? 'ok' : 'disabled');
+        },
+    },
+    computed: {
+        basesOptions() {
+            return this.allBases.map(base => {
+                return { value: base.id, label: base.name };
+            });
+        },
+        tablesOptions() {
+            return this.allTables.map(table => {
+                return { value: table.id, label: table.name };
+            });
+        },
+        tablesFieldsOptions() {
+            const table = this.allTables.find(table => table.id === this.table.tableId);
+            if (!table) return [];
+            return table.fields.map(field => {
+                return { value: field.name, label: field.name };
+            });
+        },
+        tablesViewsOptions() {
+            const table = this.allTables.find(table => table.id === this.table.tableId);
+            if (!table) return [];
+            return table.views.map(view => {
+                return { value: view.name, label: view.name };
+            });
         },
     },
     methods: {
+        async getBases() {
+            this.options.setLoadingStatus(true);
+            this.allBases = await wwLib.wwPlugins.pluginAirtable.getBases();
+            this.options.setLoadingStatus(false);
+        },
+        async getTables() {
+            this.options.setLoadingStatus(true);
+            this.allTables = await wwLib.wwPlugins.pluginAirtable.getTables(this.table.baseId);
+            this.options.setLoadingStatus(false);
+        },
         addSort() {
             if (!this.table.sort) this.table.sort = [];
             this.table.sort.push({ field: '', direction: 'asc' });
@@ -129,12 +186,28 @@ export default {
             this.table.sort.splice(index, 1);
             this.$forceUpdate();
         },
+        setBase() {
+            const base = this.allBases.find(base => base.id === this.table.baseId);
+            if (base) this.table.baseName = base.name;
+            this.table.tableId = undefined;
+            this.setTable();
+        },
+        setTable() {
+            const table = this.allTables.find(table => table.id === this.table.tableId);
+            if (table) this.table.tableName = table.name;
+            this.table.view = undefined;
+            this.table.displayBy = undefined;
+            this.table.view = undefined;
+            this.table.sort = [];
+        },
+    },
+    mounted() {
+        this.getBases();
     },
     created() {
         this.table = this.options.data.table || this.table;
-        this.base = this.options.data.base || this.base;
         this.options.result.table = this.table;
-        this.options.setButtonState('SAVE', this.table.name.length ? 'ok' : 'disabled');
+        this.options.setButtonState('SAVE', this.table.tableId ? 'ok' : 'disabled');
     },
 };
 </script>
