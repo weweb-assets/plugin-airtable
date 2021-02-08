@@ -37,7 +37,7 @@ export default {
             settings: {
                 privateData: {
                     apiKey: '',
-                    bases: [],
+                    tables: [],
                 },
             },
         };

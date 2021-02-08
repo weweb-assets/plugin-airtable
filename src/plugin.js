@@ -12,7 +12,7 @@ export default {
         id: wwLib.wwUtils.getUid(),
         data: {},
         privateData: {
-            bases: [],
+            tables: [],
         },
     },
     /* wwEditor:end */
