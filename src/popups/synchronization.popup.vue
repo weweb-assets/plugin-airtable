@@ -6,12 +6,14 @@
         </button>
         <div class="airtable-sync__row" v-for="(table, index) in settings.privateData.tables" :key="index">
             <div class="paragraph-m">{{ table.tableName }}</div>
-            <template v-if="!isTableFetching(table)">
-                <div class="caption-m m-auto-left" v-if="getSource(table).lastSyncDate">
-                    {{ getSource(table).lastSyncDate | dateFromNow }}
-                </div>
-                <div class="caption-m m-auto-left" v-else>Table never synchronized</div>
-            </template>
+            <div class="caption-m m-auto-left">
+                <template v-if="!isTableFetching(table)">
+                    <template v-if="getSource(table).lastSyncDate">
+                        {{ getSource(table).lastSyncDate | dateFromNow }}
+                    </template>
+                    <template v-else>Table never synchronized</template>
+                </template>
+            </div>
             <button
                 :disabled="isTableFetching(table)"
                 class="ww-editor-button -primary -green -small m-left"
