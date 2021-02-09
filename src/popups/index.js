@@ -98,6 +98,14 @@ wwLib.wwPopups.addStory('AIRTABLE_AUTOMATIONS_POPUP', {
     },
     type: 'airtableAutomationsPopup',
     size: wwLib.wwPopups.SIZES.MEDIUM,
+    buttons: {
+        DONE: {
+            text: {
+                en: 'Done',
+                fr: 'Done',
+            },
+        },
+    },
 });
 
 wwLib.wwPopups.addStory('AIRTABLE_SYNCHRONIZATION_POPUP', {
@@ -107,4 +115,12 @@ wwLib.wwPopups.addStory('AIRTABLE_SYNCHRONIZATION_POPUP', {
     },
     type: 'airtableSynchronizationPopup',
     size: wwLib.wwPopups.SIZES.MEDIUM,
+    buttons: {
+        DONE: {
+            text: {
+                en: 'Done',
+                fr: 'Done',
+            },
+        },
+    },
 });
