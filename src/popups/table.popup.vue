@@ -138,14 +138,18 @@ export default {
     },
     computed: {
         basesOptions() {
-            return this.allBases.map(base => {
-                return { value: base.id, label: base.name };
-            });
+            return this.allBases
+                .map(base => {
+                    return { value: base.id, label: base.name };
+                })
+                .sort((a, b) => a.label.localeCompare(b.label));
         },
         tablesOptions() {
-            return this.allTables.map(table => {
-                return { value: table.id, label: table.name };
-            });
+            return this.allTables
+                .map(table => {
+                    return { value: table.id, label: table.name };
+                })
+                .sort((a, b) => a.label.localeCompare(b.label));
         },
         tablesFieldsOptions() {
             const table = this.allTables.find(table => table.id === this.table.tableId);
