@@ -66,6 +66,7 @@
             class="airtable-table__input caption-m ww-editor-input -large"
             placeholder="{Name} = 'Mr Toucan'"
             v-model="table.filterByFormula"
+            :disabled="!table.tableId"
         />
         <div class="airtable-table__row airtable-table__input">
             <label class="airtable-table__label caption-s" for="table-view"> Sort </label>
@@ -154,16 +155,20 @@ export default {
         tablesFieldsOptions() {
             const table = this.allTables.find(table => table.id === this.table.tableId);
             if (!table) return [];
-            return table.fields.map(field => {
-                return { value: field.name, label: field.name };
-            });
+            return table.fields
+                .map(field => {
+                    return { value: field.name, label: field.name };
+                })
+                .sort((a, b) => a.label.localeCompare(b.label));
         },
         tablesViewsOptions() {
             const table = this.allTables.find(table => table.id === this.table.tableId);
             if (!table) return [];
-            return table.views.map(view => {
-                return { value: view.name, label: view.name };
-            });
+            return table.views
+                .map(view => {
+                    return { value: view.name, label: view.name };
+                })
+                .sort((a, b) => a.label.localeCompare(b.label));
         },
     },
     methods: {
