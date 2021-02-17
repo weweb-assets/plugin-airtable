@@ -5,7 +5,7 @@
             <div class="airtable-table__label-required">required</div>
         </label>
         <wwEditorSelect
-            class="airtable-table__input"
+            class="caption-m airtable-table__input"
             :options="basesOptions"
             v-model="table.baseId"
             @input="setBase"
@@ -17,7 +17,7 @@
             <div class="airtable-table__label-required">required</div>
         </label>
         <wwEditorSelect
-            class="airtable-table__input"
+            class="caption-m airtable-table__input"
             :options="tablesOptions"
             v-model="table.tableId"
             @input="setTable"
@@ -30,7 +30,7 @@
             <div class="airtable-table__label-required">optional</div>
         </label>
         <wwEditorSelect
-            class="airtable-table__input"
+            class="caption-m airtable-table__input"
             :options="tablesViewsOptions"
             v-model="table.view"
             :disabled="!table.tableId"
@@ -42,7 +42,7 @@
             <div class="airtable-table__label-required">optional</div>
         </label>
         <wwEditorSelect
-            class="airtable-table__input"
+            class="caption-m airtable-table__input"
             :options="tablesFieldsOptions"
             v-model="table.displayBy"
             :disabled="!table.tableId"
@@ -82,13 +82,14 @@
             <div class="caption-s" v-if="!index">Sort by</div>
             <div class="caption-s" v-else>then by</div>
             <wwEditorSelect
+                class="caption-m"
                 :options="tablesFieldsOptions"
                 v-model="sort.field"
                 :disabled="!table.tableId"
                 placeholder="Select a field"
             />
             <wwEditorSelect
-                class="airtable-table__select"
+                class="caption-m airtable-table__select"
                 :options="directionOptions"
                 :value="sort.direction"
                 @input="updateSort(sort, $event)"
