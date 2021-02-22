@@ -107,6 +107,9 @@ export default {
     created() {
         this.settings = this.options.data.settings;
     },
+    mounted() {
+        if (this.options.data.isFirstTime) this.syncAll();
+    },
 };
 </script>
 

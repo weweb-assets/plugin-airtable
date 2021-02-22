@@ -62,6 +62,7 @@ export default {
             await wwLib.wwPopups.open({
                 firstPage: settings.privateData.apiKey ? 'AIRTABLE_POPUP' : 'AIRTABLE_CONFIGURATION_POPUP',
                 data: {
+                    isFirstTime: !settings.privateData.apiKey,
                     pluginId: id,
                     settings,
                 },
