@@ -23,7 +23,11 @@ export default {
         /* wwEditor:start */
         const plugin = wwLib.wwPlugins.pluginAirtable;
         plugin.settings = (await wwLib.wwPlugin.getSettings(plugin.id)) || this.settings;
-        if (!plugin.settings.privateData.apiKey) this.sidebarButton();
+        if (!plugin.settings.privateData.tables) plugin.settings.privateData.tables = [];
+        if (!plugin.settings.privateData.apiKey) {
+            plugin.settings.privateData.apiKey = '';
+            this.sidebarButton();
+        }
         /* wwEditor:end */
     },
     /* wwEditor:start */

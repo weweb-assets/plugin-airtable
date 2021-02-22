@@ -35,16 +35,18 @@ export default {
         return {
             isKeyHidden: true,
             settings: {
-                data: {},
-                privateData: {
-                    apiKey: '',
-                },
+                privateData: {},
             },
         };
     },
     watch: {
-        'settings.privateData.apiKey'() {
-            this.options.setButtonState('SAVE', this.settings.privateData.apiKey.length ? 'ok' : 'disabled');
+        isSetup() {
+            this.options.setButtonState('SAVE', this.isSetup ? 'ok' : 'disabled');
+        },
+    },
+    computed: {
+        isSetup() {
+            return !!this.settings.privateData.apiKey && !!this.settings.privateData.apiKey.length;
         },
     },
     methods: {
@@ -65,10 +67,9 @@ export default {
         },
     },
     created() {
-        this.settings = this.options.data.settings || this.settings;
-        this.settings.privateData.apiKey = this.settings.privateData.apiKey || '';
+        this.settings = this.options.data.settings;
         this.options.result.settings = this.settings;
-        this.options.setButtonState('SAVE', this.settings.privateData.apiKey.length ? 'ok' : 'disabled');
+        this.options.setButtonState('SAVE', this.isSetup ? 'ok' : 'disabled');
     },
 };
 </script>

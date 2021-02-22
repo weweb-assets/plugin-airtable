@@ -32,7 +32,6 @@ export default {
     data() {
         return {
             settings: {
-                data: {},
                 privateData: {},
             },
         };
@@ -54,8 +53,7 @@ export default {
         },
     },
     created() {
-        this.settings = this.options.data.settings || this.settings;
-        this.settings.privateData.tables = this.settings.privateData.tables || [];
+        this.settings = this.options.data.settings;
     },
 };
 </script>

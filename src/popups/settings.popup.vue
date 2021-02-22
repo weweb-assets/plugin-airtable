@@ -20,7 +20,6 @@
             <div class="airtable-settings__properties-name paragraph-s">Configuration</div>
             <wwEditorIcon class="airtable-settings__properties-icon -right" name="chevron-forward" />
         </div>
-
         <a class="airtable-settings__properties" href="//developer.weweb.io/" target="_blank">
             <wwEditorIcon class="airtable-settings__properties-icon -left" name="comment" />
             <div class="airtable-settings__properties-name paragraph-s">Documentation</div>
@@ -52,10 +51,7 @@ export default {
     data() {
         return {
             pluginId: undefined,
-            settings: {
-                data: {},
-                privateData: {},
-            },
+            settings: {},
         };
     },
     methods: {

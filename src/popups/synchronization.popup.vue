@@ -50,10 +50,7 @@ export default {
             isFetching: false,
             tablesFetching: [],
             settings: {
-                data: {},
-                privateData: {
-                    tables: [],
-                },
+                privateData: {},
             },
         };
     },
@@ -108,8 +105,7 @@ export default {
         },
     },
     created() {
-        this.settings = this.options.data.settings || this.settings;
-        this.settings.privateData.tables = this.settings.privateData.tables || [];
+        this.settings = this.options.data.settings;
     },
 };
 </script>

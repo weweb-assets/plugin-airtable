@@ -134,11 +134,14 @@ export default {
         'table.baseId'() {
             this.getTables();
         },
-        'table.tableId'() {
-            this.options.setButtonState('SAVE', this.table.tableId ? 'ok' : 'disabled');
+        isSetup() {
+            this.options.setButtonState('SAVE', this.isSetup ? 'ok' : 'disabled');
         },
     },
     computed: {
+        isSetup() {
+            return !!this.table.tableId;
+        },
         basesOptions() {
             return this.allBases
                 .map(base => {
@@ -217,7 +220,7 @@ export default {
     created() {
         this.table = this.options.data.table || this.table;
         this.options.result.table = this.table;
-        this.options.setButtonState('SAVE', this.table.tableId ? 'ok' : 'disabled');
+        this.options.setButtonState('SAVE', this.isSetup ? 'ok' : 'disabled');
     },
 };
 </script>

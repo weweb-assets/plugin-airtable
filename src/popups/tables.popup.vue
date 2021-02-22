@@ -27,16 +27,18 @@ export default {
     data() {
         return {
             settings: {
-                data: {},
-                privateData: {
-                    tables: [],
-                },
+                privateData: {},
             },
         };
     },
     watch: {
-        'settings.privateData.tables'() {
-            this.options.setButtonState('SAVE', this.settings.privateData.tables.length ? 'ok' : 'disabled');
+        isSetup() {
+            this.options.setButtonState('SAVE', this.isSetup ? 'ok' : 'disabled');
+        },
+    },
+    computed: {
+        isSetup() {
+            return this.settings.privateData.tables && this.settings.privateData.tables.length;
         },
     },
     methods: {
@@ -121,10 +123,9 @@ export default {
         },
     },
     created() {
-        this.settings = this.options.data.settings || this.settings;
-        this.settings.privateData.tables = this.settings.privateData.tables || [];
+        this.settings = this.options.data.settings;
         this.options.result.settings = this.settings;
-        this.options.setButtonState('SAVE', this.settings.privateData.tables.length ? 'ok' : 'disabled');
+        this.options.setButtonState('SAVE', this.isSetup ? 'ok' : 'disabled');
     },
 };
 </script>
