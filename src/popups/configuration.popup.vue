@@ -35,9 +35,9 @@ export default {
         return {
             isKeyHidden: true,
             settings: {
+                data: {},
                 privateData: {
                     apiKey: '',
-                    tables: [],
                 },
             },
         };
@@ -66,6 +66,7 @@ export default {
     },
     created() {
         this.settings = this.options.data.settings || this.settings;
+        this.settings.privateData.apiKey = this.settings.privateData.apiKey || '';
         this.options.result.settings = this.settings;
         this.options.setButtonState('SAVE', this.settings.privateData.apiKey.length ? 'ok' : 'disabled');
     },

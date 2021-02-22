@@ -53,10 +53,8 @@ export default {
         return {
             pluginId: undefined,
             settings: {
-                privateData: {
-                    apiKey: '',
-                    tables: [],
-                },
+                data: {},
+                privateData: {},
             },
         };
     },

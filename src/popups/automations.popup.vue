@@ -32,10 +32,8 @@ export default {
     data() {
         return {
             settings: {
-                privateData: {
-                    apiKey: '',
-                    tables: [],
-                },
+                data: {},
+                privateData: {},
             },
         };
     },
@@ -56,7 +54,8 @@ export default {
         },
     },
     created() {
-        this.settings = _.cloneDeep(this.options.data.settings || this.settings);
+        this.settings = this.options.data.settings || this.settings;
+        this.settings.privateData.tables = this.settings.privateData.tables || [];
     },
 };
 </script>
