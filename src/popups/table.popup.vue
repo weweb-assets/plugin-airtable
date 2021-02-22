@@ -178,12 +178,26 @@ export default {
     methods: {
         async getBases() {
             this.options.setLoadingStatus(true);
-            this.allBases = await wwLib.wwPlugins.pluginAirtable.getBases();
+            try {
+                this.allBases = await wwLib.wwPlugins.pluginAirtable.getBases();
+            } catch (err) {
+                wwLib.wwNotification.open({
+                    text: 'Unable to pull your bases, please make sure you entered the correct API key.',
+                    color: 'red',
+                });
+            }
             this.options.setLoadingStatus(false);
         },
         async getTables() {
             this.options.setLoadingStatus(true);
-            this.allTables = await wwLib.wwPlugins.pluginAirtable.getTables(this.table.baseId);
+            try {
+                this.allTables = await wwLib.wwPlugins.pluginAirtable.getTables(this.table.baseId);
+            } catch (err) {
+                wwLib.wwNotification.open({
+                    text: 'Unable to pull your tables, please make sure you entered the correct API key.',
+                    color: 'red',
+                });
+            }
             this.options.setLoadingStatus(false);
         },
         addSort() {

@@ -1,7 +1,7 @@
 <template>
     <div class="ww-popup-airtable-configuration">
         <label class="airtable-configuration__label caption-s" for="api-key">
-            Api key
+            API key
             <a class="airtable-configuration__link" href="https://airtable.com/account" target="_blank">Find it here</a>
             <div class="airtable-configuration__label-required">required</div>
         </label>
