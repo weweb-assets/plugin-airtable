@@ -123,7 +123,7 @@ export default {
         },
     },
     created() {
-        this.settings = this.options.data.settings;
+        this.settings = _.cloneDeep(this.options.data.settings);
         this.options.result.settings = this.settings;
         this.options.setButtonState('SAVE', this.isSetup ? 'ok' : 'disabled');
     },
