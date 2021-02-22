@@ -42,6 +42,11 @@ export default {
             },
         };
     },
+    watch: {
+        'settings.privateData.apiKey'() {
+            this.options.setButtonState('SAVE', this.settings.privateData.apiKey.length ? 'ok' : 'disabled');
+        },
+    },
     methods: {
         async beforeNext() {
             this.options.setLoadingStatus(true);
@@ -62,6 +67,7 @@ export default {
     created() {
         this.settings = this.options.data.settings || this.settings;
         this.options.result.settings = this.settings;
+        this.options.setButtonState('SAVE', this.settings.privateData.apiKey.length ? 'ok' : 'disabled');
     },
 };
 </script>

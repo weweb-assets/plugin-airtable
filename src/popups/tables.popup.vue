@@ -34,6 +34,11 @@ export default {
             },
         };
     },
+    watch: {
+        'settings.privateData.tables'() {
+            this.options.setButtonState('SAVE', this.settings.privateData.tables.length ? 'ok' : 'disabled');
+        },
+    },
     methods: {
         async addTable() {
             try {
@@ -57,7 +62,38 @@ export default {
                 wwLib.wwLog.error(err);
             }
         },
-        deleteTable(index) {
+        async deleteTable(index) {
+            const confirm = await wwLib.wwModals.open({
+                title: {
+                    en: 'Delete data source?',
+                    fr: 'Supprimer la source de données?',
+                },
+                text: {
+                    en: 'Are you sure you want to delete the data source?',
+                    fr: 'Voulez-vous vraiment supprimer la source de données ?',
+                },
+                buttons: [
+                    {
+                        text: {
+                            en: 'Cancel',
+                            fr: 'Annuler',
+                        },
+                        color: '-secondary',
+                        value: false,
+                        escape: true,
+                    },
+                    {
+                        text: {
+                            en: 'Delete',
+                            fr: 'Supprimer',
+                        },
+                        color: '-primary -red',
+                        value: true,
+                        enter: true,
+                    },
+                ],
+            });
+            if (!confirm) return;
             this.settings.privateData.tables.splice(index, 1);
         },
         async beforeNext() {
@@ -87,6 +123,7 @@ export default {
     created() {
         this.settings = _.cloneDeep(this.options.data.settings || this.settings);
         this.options.result.settings = this.settings;
+        this.options.setButtonState('SAVE', this.settings.privateData.tables.length ? 'ok' : 'disabled');
     },
 };
 </script>

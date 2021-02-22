@@ -9,9 +9,9 @@ export default {
         Data
     \================================================================================================*/
     settings: {
-        id: wwLib.wwUtils.getUid(),
         data: {},
         privateData: {
+            apiKey: '',
             tables: [],
         },
     },
@@ -22,7 +22,15 @@ export default {
     async init() {
         /* wwEditor:start */
         const plugin = wwLib.wwPlugins.pluginAirtable;
-        if (plugin.id) plugin.settings = (await wwLib.wwPlugin.getSettings(plugin.id)) || this.settings;
+        plugin.settings = plugin.settings.id
+            ? (await wwLib.wwPlugin.getSettings(plugin.id)) || this.settings
+            : await wwLib.wwPlugin.saveSettings(
+                  plugin.id,
+                  wwLib.wwUtils.getUid(),
+                  plugin.settings.data,
+                  plugin.settings.privateData
+              );
+        if (!plugin.settings.privateData.apiKey.length) this.sidebarButton();
         /* wwEditor:end */
     },
     /* wwEditor:start */
