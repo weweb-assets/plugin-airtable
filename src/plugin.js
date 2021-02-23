@@ -59,10 +59,11 @@ export default {
     async sidebarButton() {
         try {
             const { id, settings } = wwLib.wwPlugins.pluginAirtable;
+            const isFirstTime = !settings.privateData.apiKey || !settings.privateData.apiKey.length;
             await wwLib.wwPopups.open({
                 firstPage: settings.privateData.apiKey ? 'AIRTABLE_POPUP' : 'AIRTABLE_CONFIGURATION_POPUP',
                 data: {
-                    isFirstTime: !settings.privateData.apiKey,
+                    isFirstTime,
                     pluginId: id,
                     settings,
                 },
