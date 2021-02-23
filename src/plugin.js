@@ -23,9 +23,9 @@ export default {
         /* wwEditor:start */
         const plugin = wwLib.wwPlugins.pluginAirtable;
         plugin.settings = (await wwLib.wwPlugin.getSettings(plugin.id)) || this.settings;
+        if (!plugin.settings.privateData.apiKey) plugin.settings.privateData.apiKey = '';
         if (!plugin.settings.privateData.tables) plugin.settings.privateData.tables = [];
-        if (!plugin.settings.privateData.apiKey) {
-            plugin.settings.privateData.apiKey = '';
+        if (!plugin.settings.privateData.apiKey.length) {
             this.sidebarButton();
         }
         /* wwEditor:end */
@@ -59,9 +59,10 @@ export default {
     async sidebarButton() {
         try {
             const { id, settings } = wwLib.wwPlugins.pluginAirtable;
-            const isFirstTime = !settings.privateData.apiKey || !settings.privateData.apiKey.length;
+            const isSetup = !settings.privateData.apiKey.length;
+            const isFirstTime = !settings.privateData.tables.length;
             await wwLib.wwPopups.open({
-                firstPage: settings.privateData.apiKey ? 'AIRTABLE_POPUP' : 'AIRTABLE_CONFIGURATION_POPUP',
+                firstPage: isSetup ? 'AIRTABLE_POPUP' : 'AIRTABLE_CONFIGURATION_POPUP',
                 data: {
                     isFirstTime,
                     pluginId: id,
