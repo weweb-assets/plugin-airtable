@@ -46,7 +46,7 @@ export default {
     },
     computed: {
         isSetup() {
-            return !!this.settings.privateData.apiKey && !!this.settings.privateData.apiKey.length;
+            return this.settings.privateData.apiKey && this.settings.privateData.apiKey.length;
         },
     },
     methods: {
