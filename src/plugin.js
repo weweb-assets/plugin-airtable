@@ -59,7 +59,7 @@ export default {
     async sidebarButton() {
         try {
             const { id, settings } = wwLib.wwPlugins.pluginAirtable;
-            const isSetup = !settings.privateData.apiKey.length;
+            const isSetup = !!settings.privateData.apiKey.length;
             const isFirstTime = !settings.privateData.tables.length;
             await wwLib.wwPopups.open({
                 firstPage: isSetup ? 'AIRTABLE_POPUP' : 'AIRTABLE_CONFIGURATION_POPUP',
