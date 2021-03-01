@@ -4,27 +4,41 @@
             Base
             <div class="airtable-table__label-required">required</div>
         </label>
-        <wwEditorSelect
-            class="caption-m airtable-table__input"
-            :options="basesOptions"
-            v-model="table.baseId"
-            @input="setBase"
-            placeholder="Select a base"
-            large
-        />
+        <div class="airtable-table__row">
+            <wwEditorSelect
+                class="caption-m airtable-table__input -full"
+                :options="basesOptions"
+                v-model="table.baseId"
+                @input="setBase"
+                placeholder="Select a base"
+                large
+            />
+            <button class="airtable-table__input ww-editor-button -primary -small m-left" @click="getBases(true)">
+                Refresh
+            </button>
+        </div>
         <label class="airtable-table__label caption-s" for="name-airtable">
             Table
             <div class="airtable-table__label-required">required</div>
         </label>
-        <wwEditorSelect
-            class="caption-m airtable-table__input"
-            :options="tablesOptions"
-            v-model="table.tableId"
-            @input="setTable"
-            :disabled="!table.baseId"
-            placeholder="Select a table"
-            large
-        />
+        <div class="airtable-table__row">
+            <wwEditorSelect
+                class="caption-m airtable-table__input -full"
+                :options="tablesOptions"
+                v-model="table.tableId"
+                @input="setTable"
+                :disabled="!table.baseId"
+                placeholder="Select a table"
+                large
+            />
+            <button
+                class="airtable-table__input ww-editor-button -primary -small m-left"
+                @click="getTables(true)"
+                :disabled="!table.baseId"
+            >
+                Refresh
+            </button>
+        </div>
         <label class="airtable-table__label caption-s" for="table-view">
             View
             <div class="airtable-table__label-required">optional</div>
@@ -176,10 +190,10 @@ export default {
         },
     },
     methods: {
-        async getBases() {
+        async getBases(isNoCache = false) {
             this.options.setLoadingStatus(true);
             try {
-                this.allBases = await wwLib.wwPlugins.pluginAirtable.getBases();
+                this.allBases = await wwLib.wwPlugins.pluginAirtable.getBases(isNoCache);
             } catch (err) {
                 wwLib.wwNotification.open({
                     text: 'Unable to pull your bases, please make sure you entered the correct API key.',
@@ -188,10 +202,10 @@ export default {
             }
             this.options.setLoadingStatus(false);
         },
-        async getTables() {
+        async getTables(isNoCache = false) {
             this.options.setLoadingStatus(true);
             try {
-                this.allTables = await wwLib.wwPlugins.pluginAirtable.getTables(this.table.baseId);
+                this.allTables = await wwLib.wwPlugins.pluginAirtable.getTables(this.table.baseId, isNoCache);
             } catch (err) {
                 wwLib.wwNotification.open({
                     text: 'Unable to pull your tables, please make sure you entered the correct API key.',
@@ -263,6 +277,9 @@ export default {
         }
         &__input {
             margin-bottom: var(--ww-spacing-03);
+            &.-full {
+                width: 100%;
+            }
         }
         &__select {
             min-width: 65px;
@@ -287,6 +304,9 @@ export default {
     }
     .m-auto-left {
         margin-left: auto;
+    }
+    .m-left {
+        margin-left: var(--ww-spacing-02);
     }
 }
 </style>

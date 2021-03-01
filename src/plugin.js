@@ -25,7 +25,7 @@ export default {
         plugin.settings = (await wwLib.wwPlugin.getSettings(plugin.id)) || this.settings;
         if (!plugin.settings.privateData.apiKey) plugin.settings.privateData.apiKey = '';
         if (!plugin.settings.privateData.tables) plugin.settings.privateData.tables = [];
-        if (!plugin.settings.privateData.apiKey.length) {
+        if (plugin.isNew && !plugin.settings.privateData.apiKey.length) {
             this.sidebarButton();
         }
         /* wwEditor:end */
@@ -34,22 +34,24 @@ export default {
     /*=============================================m_ÔÔ_m=============================================\
         META API
     \================================================================================================*/
-    async getBases() {
+    async getBases(isNoCache = false) {
         const { data } = await wwLib.$apollo.query({
             query: GET_AIRTABLE_BASES,
             variables: {
                 apiKey: this.settings.privateData.apiKey,
             },
+            fetchPolicy: isNoCache ? 'network-only' : 'cache-first',
         });
         return data.getAirtableBases.data;
     },
-    async getTables(baseId) {
+    async getTables(baseId, isNoCache = false) {
         const { data } = await wwLib.$apollo.query({
             query: GET_AIRTABLE_TABLES,
             variables: {
                 apiKey: this.settings.privateData.apiKey,
                 baseId,
             },
+            fetchPolicy: isNoCache ? 'network-only' : 'cache-first',
         });
         return data.getAirtableTables.data;
     },
