@@ -148,6 +148,12 @@ export default {
         'table.baseId'() {
             this.getTables();
         },
+        'table.tableId'() {
+            const table = this.allTables.find(table => table.id === this.table.tableId);
+            if (!table) return;
+            this.table.view = table.views[0];
+            if (table.fields.find(field => field.name === 'Name')) this.table.displayBy = 'Name';
+        },
         isSetup() {
             this.options.setButtonState('SAVE', this.isSetup ? 'ok' : 'disabled');
         },
