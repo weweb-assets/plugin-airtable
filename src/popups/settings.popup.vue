@@ -62,7 +62,7 @@ export default {
             const confirm = await wwLib.wwModals.open({
                 title: {
                     en: 'Delete plugin Airtable?',
-                    fr: 'Supprimer le plugin Airtable?',
+                    fr: 'Supprimer le plugin Airtable ?',
                 },
                 text: {
                     en: 'Are you sure you want to delete the plugin from your website?',
