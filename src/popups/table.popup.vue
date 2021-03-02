@@ -151,7 +151,7 @@ export default {
         'table.tableId'() {
             const table = this.allTables.find(table => table.id === this.table.tableId);
             if (!table) return;
-            this.table.view = table.views[0];
+            this.table.view = table.views[0] && table.views[0].name;
             if (table.fields.find(field => field.name === 'Name')) this.table.displayBy = 'Name';
         },
         isSetup() {
