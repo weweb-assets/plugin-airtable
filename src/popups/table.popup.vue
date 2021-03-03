@@ -148,12 +148,6 @@ export default {
         'table.baseId'() {
             this.getTables();
         },
-        'table.tableId'() {
-            const table = this.allTables.find(table => table.id === this.table.tableId);
-            if (!table) return;
-            this.table.view = table.views[0] && table.views[0].name;
-            if (table.fields.find(field => field.name === 'Name')) this.table.displayBy = 'Name';
-        },
         isSetup() {
             this.options.setButtonState('SAVE', this.isSetup ? 'ok' : 'disabled');
         },
@@ -241,10 +235,14 @@ export default {
         },
         setTable() {
             const table = this.allTables.find(table => table.id === this.table.tableId);
-            if (table) this.table.tableName = table.name;
-            this.table.view = undefined;
-            this.table.displayBy = undefined;
-            this.table.view = undefined;
+            if (table) {
+                this.table.tableName = table.name;
+                this.table.view = table.views[0] && table.views[0].name;
+                if (table.fields.find(field => field.name === 'Name')) this.table.displayBy = 'Name';
+            } else {
+                this.table.view = undefined;
+                this.table.displayBy = undefined;
+            }
             this.table.sort = [];
         },
     },
