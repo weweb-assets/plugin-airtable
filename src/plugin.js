@@ -58,14 +58,6 @@ export default {
     /*=============================================m_ÔÔ_m=============================================\
         SYNCHRONIZE
     \================================================================================================*/
-    tableFetching(table, value) {
-        if (value) {
-            this.tablesFetching.push(table.id);
-        } else {
-            const index = this.tablesFetching.indexOf(table.id);
-            if (index !== -1) this.tablesFetching.splice(index, 1);
-        }
-    },
     async sync(table) {
         try {
             await wwLib.wwPlugin.saveCmsDataSet(
