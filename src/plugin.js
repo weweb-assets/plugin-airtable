@@ -8,8 +8,6 @@ export default {
     /*=============================================m_ÔÔ_m=============================================\
         Data
     \================================================================================================*/
-    isFetching: false,
-    tablesFetching: [],
     settings: {
         data: {},
         privateData: {
@@ -69,7 +67,6 @@ export default {
         }
     },
     async sync(table) {
-        this.tableFetching(table, true);
         try {
             await wwLib.wwPlugin.saveCmsDataSet(
                 this.settings.id,
@@ -95,12 +92,9 @@ export default {
             });
             wwLib.wwLog.error(err);
         }
-        this.tableFetching(table, false);
     },
     async syncAll() {
-        this.isFetching = true;
         for (const table of this.settings.privateData.tables) await this.sync(table);
-        this.isFetching = false;
     },
     /*=============================================m_ÔÔ_m=============================================\
         SIDEBAR POPUP

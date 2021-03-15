@@ -47,6 +47,8 @@ export default {
     },
     data() {
         return {
+            isFetching: false,
+            tablesFetching: [],
             settings: {
                 privateData: {},
             },
@@ -57,16 +59,25 @@ export default {
             return wwLib.$store.getters['cms/getData'][table.id] || {};
         },
         isTableFetching(table) {
-            return wwLib.wwPlugins.pluginAirtable.tablesFetching.indexOf(table.id) !== -1;
+            return this.tablesFetching.indexOf(table.id) !== -1;
         },
-        isFetching() {
-            wwLib.wwPlugins.pluginAirtable.isFetching;
+        tableFetching(table, value) {
+            if (value) {
+                this.tablesFetching.push(table.id);
+            } else {
+                const index = this.tablesFetching.indexOf(table.id);
+                if (index !== -1) this.tablesFetching.splice(index, 1);
+            }
         },
-        sync(table) {
-            wwLib.wwPlugins.pluginAirtable.sync(table);
+        async sync(table) {
+            this.tableFetching(table, true);
+            await wwLib.wwPlugins.pluginAirtable.sync(table);
+            this.tableFetching(table, false);
         },
-        syncAll() {
-            wwLib.wwPlugins.pluginAirtable.syncAll();
+        async syncAll() {
+            this.isFetching = true;
+            for (const table of this.settings.privateData.tables) await this.sync(table);
+            this.isFetching = false;
         },
     },
     created() {
