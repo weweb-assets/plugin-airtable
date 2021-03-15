@@ -8,6 +8,8 @@ export default {
     /*=============================================m_ÔÔ_m=============================================\
         Data
     \================================================================================================*/
+    isFetching: false,
+    tablesFetching: [],
     settings: {
         data: {},
         privateData: {
@@ -54,6 +56,51 @@ export default {
             fetchPolicy: isNoCache ? 'network-only' : 'cache-first',
         });
         return data.getAirtableTables.data;
+    },
+    /*=============================================m_ÔÔ_m=============================================\
+        SYNCHRONIZE
+    \================================================================================================*/
+    tableFetching(table, value) {
+        if (value) {
+            this.tablesFetching.push(table.id);
+        } else {
+            const index = this.tablesFetching.indexOf(table.id);
+            if (index !== -1) this.tablesFetching.splice(index, 1);
+        }
+    },
+    async sync(table) {
+        this.tableFetching(table, true);
+        try {
+            await wwLib.wwPlugin.saveCmsDataSet(
+                this.settings.id,
+                table.id,
+                table.tableName,
+                table.displayBy,
+                'Airtable'
+            );
+
+            wwLib.wwNotification.open({
+                text: {
+                    en: `Table "${table.tableName}" succesfully fetched`,
+                },
+                color: 'green',
+            });
+        } catch (err) {
+            wwLib.wwNotification.open({
+                text: {
+                    en: 'An error occured, please try again later.',
+                    fr: 'Une erreur est survenue. Veuillez réessayer plus tard.',
+                },
+                color: 'red',
+            });
+            wwLib.wwLog.error(err);
+        }
+        this.tableFetching(table, false);
+    },
+    async syncAll() {
+        this.isFetching = true;
+        for (const table of this.settings.privateData.tables) await this.sync(table);
+        this.isFetching = false;
     },
     /*=============================================m_ÔÔ_m=============================================\
         SIDEBAR POPUP

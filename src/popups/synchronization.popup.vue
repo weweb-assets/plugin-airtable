@@ -47,8 +47,6 @@ export default {
     },
     data() {
         return {
-            isFetching: false,
-            tablesFetching: [],
             settings: {
                 privateData: {},
             },
@@ -59,49 +57,16 @@ export default {
             return wwLib.$store.getters['cms/getData'][table.id] || {};
         },
         isTableFetching(table) {
-            return this.tablesFetching.indexOf(table.id) !== -1;
+            return wwLib.wwPlugins.pluginAirtable.tablesFetching.indexOf(table.id) !== -1;
         },
-        tableFetching(table, value) {
-            if (value) {
-                this.tablesFetching.push(table.id);
-            } else {
-                const index = this.tablesFetching.indexOf(table.id);
-                if (index !== -1) this.tablesFetching.splice(index, 1);
-            }
+        isFetching() {
+            wwLib.wwPlugins.pluginAirtable.isFetching;
         },
-        async sync(table) {
-            this.tableFetching(table, true);
-            try {
-                await wwLib.wwPlugin.saveCmsDataSet(
-                    this.settings.id,
-                    table.id,
-                    table.tableName,
-                    table.displayBy,
-                    'Airtable'
-                );
-
-                wwLib.wwNotification.open({
-                    text: {
-                        en: `Table "${table.tableName}" succesfully fetched`,
-                    },
-                    color: 'green',
-                });
-            } catch (err) {
-                wwLib.wwNotification.open({
-                    text: {
-                        en: 'An error occured, please try again later.',
-                        fr: 'Une erreur est survenue. Veuillez réessayer plus tard.',
-                    },
-                    color: 'red',
-                });
-                wwLib.wwLog.error(err);
-            }
-            this.tableFetching(table, false);
+        sync(table) {
+            wwLib.wwPlugins.pluginAirtable.sync(table);
         },
-        async syncAll() {
-            this.isFetching = true;
-            for (const table of this.settings.privateData.tables) await this.sync(table);
-            this.isFetching = false;
+        syncAll() {
+            wwLib.wwPlugins.pluginAirtable.syncAll();
         },
     },
     created() {
