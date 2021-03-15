@@ -71,8 +71,10 @@ export default {
                     fr: 'Supprimer la source de données?',
                 },
                 text: {
-                    en: 'Are you sure you want to delete the data source?',
-                    fr: 'Voulez-vous vraiment supprimer la source de données ?',
+                    en:
+                        'Are you sure you want to delete this data source? All elements binded to this data source will be unbind.',
+                    fr:
+                        'Voulez-vous vraiment supprimer la source de données ? Tous les éléments liés à cette source de données seront dissociés.',
                 },
                 buttons: [
                     {
