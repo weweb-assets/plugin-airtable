@@ -3,6 +3,10 @@
     "editor": {
         "privateSettings": {
             "apiKey": {
+                "label": {
+                    "en": "API Key",
+                    "fr": "Clef API"
+                },
                 "type": "Text",
                 "required": true
             }
