@@ -1,3 +1,11 @@
 {
-    "componentPath": "./src/index.js"
+    "componentPath": "./src/index.js",
+    "editor": {
+        "privateSettings": {
+            "apiKey": {
+                "type": "Text",
+                "required": true
+            }
+        }
+    }
 }
