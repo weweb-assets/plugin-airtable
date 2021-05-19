@@ -34,8 +34,8 @@ export default {
     watch: {
         isValid: {
             immediate: true,
-            handler() {
-                this.$emit('update-is-valid', this.isValid);
+            handler(value) {
+                this.$emit('update-is-valid', value);
             },
         },
     },
@@ -43,7 +43,7 @@ export default {
         isValid() {
             if (!this.settings) return false;
             if (!this.settings.privateData) return false;
-            return this.settings.privateData.apiKey && this.settings.privateData.apiKey.length;
+            return !!this.settings.privateData.apiKey;
         },
     },
     methods: {
