@@ -1511,10 +1511,9 @@
     "@webassemblyjs/wast-parser" "1.9.0"
     "@xtuc/long" "4.2.2"
 
-"@weweb/cli@latest":
+"@weweb/cli@git+https://github.com/weweb-team/weweb-cli.git#bd4d3465552b39ed13e962d731ab04623d4b1662":
   version "1.2.7"
-  resolved "https://registry.yarnpkg.com/@weweb/cli/-/cli-1.2.7.tgz#93e5f65304967483601ad97de069bc4c57594ce1"
-  integrity sha512-/rJ6meYmNy8RZvW7oZG3kLTJcXVr8citKvtiNqXeerJGRTnP0du0IsChkPYqryYxME2bU+e349vEi+w+HHTNBQ==
+  resolved "git+https://github.com/weweb-team/weweb-cli.git#bd4d3465552b39ed13e962d731ab04623d4b1662"
   dependencies:
     "@babel/core" "^7.11.6"
     "@babel/preset-env" "^7.11.5"
