@@ -9,7 +9,7 @@
                 name="api-key"
                 placeholder="key**************"
                 :value="settings.privateData.apiKey"
-                @input="changeApiKey($event.target.value)"
+                @input="changeApiKey"
                 :style="{ '-webkit-text-security': isKeyHidden ? 'disc' : 'none' }"
             />
         </wwEditorFormRow>

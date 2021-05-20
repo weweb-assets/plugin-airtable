@@ -5,9 +5,9 @@ module.exports = {
             edit: () => import('./src/SettingsEdit.vue'),
             summary: () => import('./src/SettingsSummary.vue'),
         },
-        // collection: {
-        //     edit: () => '',
-        //     summary: () => '',
-        // },
+        collection: {
+            edit: () => import('./src/CollectionEdit.vue'),
+            // summary: () => '',
+        },
     },
 };
