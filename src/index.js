@@ -1,6 +1,7 @@
 /* wwEditor:start */
-import './popups';
-import { GET_AIRTABLE_BASES, GET_AIRTABLE_TABLES } from './graphql';
+import './SettingsEdit.vue';
+import './SettingsSummary.vue';
+import './CollectionEdit.vue';
 /* wwEditor:end */
 
 export default {

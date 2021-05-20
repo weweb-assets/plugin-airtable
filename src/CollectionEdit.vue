@@ -243,6 +243,9 @@ export default {
     &__row {
         display: flex;
         align-items: center;
+        *:first-child {
+            flex: 1;
+        }
         &.-space-between {
             justify-content: space-between;
             padding: 0 var(--ww-spacing-05);
