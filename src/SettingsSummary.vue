@@ -1,5 +1,8 @@
 <template>
-    <div class="ww-popup-airtable-configuration">API KEY: ****</div>
+    <div class="settings-summary">
+        <wwEditorIcon large name="key" class="settings-summary__icon"></wwEditorIcon>
+        <span class="caption-m">********</span>
+    </div>
 </template>
 
 <script>
@@ -9,3 +12,13 @@ export default {
     },
 };
 </script>
+
+<style lang="scss" scoped>
+.settings-summary {
+    display: flex;
+    align-items: baseline;
+    &__icon {
+        margin-right: var(--ww-spacing-02);
+    }
+}
+</style>

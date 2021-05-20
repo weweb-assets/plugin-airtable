@@ -1,22 +1,21 @@
 <template>
-    <div class="ww-popup-airtable-configuration">
-        <label class="airtable-configuration__label caption-s" for="api-key">
-            API key
-            <a class="airtable-configuration__link" href="https://airtable.com/account" target="_blank">Find it here</a>
-            <div class="airtable-configuration__label-required">required</div>
-        </label>
-        <input
-            type="text"
-            name="api-key"
-            class="airtable-configuration__input caption-m ww-editor-input -large"
-            placeholder="key**************"
-            :value="settings.privateData.apiKey"
-            @input="changeApiKey($event.target.value)"
-            :style="{ '-webkit-text-security': isKeyHidden ? 'disc' : 'none' }"
-        />
-        <div class="airtable-configuration__row">
+    <div class="airtable-settings">
+        <wwEditorFormRow required label="API key">
+            <template slot="append-label">
+                <a class="airtable-settings__link" href="https://airtable.com/account" target="_blank">Find it here</a>
+            </template>
+            <wwEditorFormInput
+                type="text"
+                name="api-key"
+                placeholder="key**************"
+                :value="settings.privateData.apiKey"
+                @input="changeApiKey($event.target.value)"
+                :style="{ '-webkit-text-security': isKeyHidden ? 'disc' : 'none' }"
+            />
+        </wwEditorFormRow>
+        <div class="airtable-settings__row">
             <wwManagerRadio :value="!isKeyHidden" @input="isKeyHidden = !$event" />
-            <span class="airtable-configuration__radio-label caption-m">Show api key</span>
+            <span class="airtable-settings__radio-label caption-m">Show api key</span>
         </div>
     </div>
 </template>
@@ -54,38 +53,20 @@ export default {
 };
 </script>
 
-<style scoped lang="scss">
-.ww-popup-airtable-configuration {
-    position: relative;
+<style lang="scss" scoped>
+.airtable-settings {
     display: flex;
     flex-direction: column;
-    padding: var(--ww-spacing-03) 0;
-    .airtable-configuration {
-        &__label {
-            display: flex;
-            align-items: center;
-            font-weight: 500;
-            color: var(--ww-color-dark-500);
-            margin-bottom: var(--ww-spacing-01);
-            &-required {
-                margin-left: auto;
-                color: var(--ww-color-dark-400);
-            }
-        }
-        &__link {
-            color: var(--ww-color-blue-500);
-            margin-left: var(--ww-spacing-02);
-        }
-        &__input {
-            margin-bottom: var(--ww-spacing-03);
-        }
-        &__row {
-            display: flex;
-            align-items: center;
-        }
-        &__radio-label {
-            margin-left: var(--ww-spacing-02);
-        }
+    &__link {
+        color: var(--ww-color-blue-500);
+        margin-left: var(--ww-spacing-02);
+    }
+    &__row {
+        display: flex;
+        align-items: center;
+    }
+    &__radio-label {
+        margin-left: var(--ww-spacing-02);
     }
 }
 </style>
