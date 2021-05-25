@@ -5,7 +5,7 @@
                 <wwEditorSelect
                     class="caption-m collection-edit__input -full"
                     :options="basesOptions"
-                    v-model="table.baseId"
+                    :value="table.baseId"
                     @input="setBase"
                     placeholder="Select a base"
                     large
@@ -20,7 +20,7 @@
                 <wwEditorSelect
                     class="caption-m collection-edit__input -full"
                     :options="tablesOptions"
-                    v-model="table.tableId"
+                    :value="table.tableId"
                     @input="setTable"
                     :disabled="!table.baseId"
                     placeholder="Select a table"
@@ -39,7 +39,8 @@
             <wwEditorSelect
                 class="caption-m collection-edit__input"
                 :options="tablesViewsOptions"
-                v-model="table.view"
+                :value="table.view"
+                @input="setProp('view', $event)"
                 :disabled="!table.tableId"
                 placeholder="Select a view"
                 large
@@ -60,7 +61,8 @@
                 name="filter-formula"
                 class="collection-edit__input caption-m ww-editor-input -large"
                 placeholder="{Name} = 'Mr Toucan'"
-                v-model="table.filterByFormula"
+                :value="table.filterByFormula"
+                @input="setProp('filterByFormula', $event.target.value)"
                 :disabled="!table.tableId"
             />
         </wwEditorFormRow>
@@ -84,7 +86,8 @@
                 <wwEditorSelect
                     class="caption-m"
                     :options="tablesFieldsOptions"
-                    v-model="sort.field"
+                    :value="sort.field"
+                    @input="updateSort(index, 'field', $event)"
                     :disabled="!table.tableId"
                     placeholder="Select a field"
                 />
@@ -92,7 +95,7 @@
                     class="caption-m collection-edit__select"
                     :options="directionOptions"
                     :value="sort.direction"
-                    @input="updateSort(sort, $event)"
+                    @input="updateSort(index, 'direction', $event)"
                 />
                 <div class="collection-edit__button-delete" @click="deleteSort(index)">
                     <wwEditorIcon name="delete" small />
@@ -116,21 +119,11 @@ export default {
                 { value: 'asc', label: 'Asc', default: true },
                 { value: 'desc', label: 'Desc' },
             ],
-            table: {
-                id: wwLib.wwUtils.getUid(),
-                baseId: undefined,
-                tableId: undefined,
-                view: undefined,
-                sort: [],
-            },
         };
     },
     watch: {
         'table.baseId'() {
             this.getTables();
-        },
-        config() {
-            this.table = { ...this.table, ...this.config.table };
         },
         isSetup(value) {
             this.$emit('update-is-valid', value);
@@ -139,6 +132,15 @@ export default {
     computed: {
         isSetup() {
             return !!this.table.tableId;
+        },
+        table() {
+            return {
+                baseId: undefined,
+                tableId: undefined,
+                view: undefined,
+                sort: [],
+                ...this.config.table,
+            };
         },
         basesOptions() {
             return this.allBases
@@ -176,7 +178,7 @@ export default {
     methods: {
         async getBases(isNoCache = false) {
             try {
-                this.allBases = await wwLib.wwPlugins.pluginAirtable.getBases(isNoCache);
+                this.allBases = await wwLib.wwPlugins['plugin-airtable'].getBases(isNoCache);
             } catch (err) {
                 wwLib.wwNotification.open({
                     text: 'Unable to pull your bases, please make sure you entered the correct API key.',
@@ -186,7 +188,7 @@ export default {
         },
         async getTables(isNoCache = false) {
             try {
-                this.allTables = await wwLib.wwPlugins.pluginAirtable.getTables(this.table.baseId, isNoCache);
+                this.allTables = await wwLib.wwPlugins['plugin-airtable'].getTables(this.table.baseId, isNoCache);
             } catch (err) {
                 wwLib.wwNotification.open({
                     text: 'Unable to pull your tables, please make sure you entered the correct API key.',
@@ -195,35 +197,54 @@ export default {
             }
         },
         addSort() {
-            if (!this.table.sort) this.table.sort = [];
-            this.table.sort.push({ field: '', direction: 'asc' });
-            this.$forceUpdate();
+            const sort = this.table.sort || [];
+            sort.push({ field: '', direction: 'asc' });
+            this.$emit('update-config', { table: { ...this.table, sort } });
         },
-        updateSort(sort, event) {
-            sort.direction = event;
-            this.$forceUpdate();
+        updateSort(index, key, value) {
+            if (this.table.sort[index][key] === value) return;
+            const sort = [...(this.table.sort || [])];
+            sort[index][key] = value;
+            this.$emit('update-config', { table: { ...this.table, sort } });
         },
         deleteSort(index) {
-            this.table.sort.splice(index, 1);
-            this.$forceUpdate();
+            const sort = [...this.table.sort];
+            sort.splice(index, 1);
+            this.$emit('update-config', { table: { ...this.table, sort } });
         },
-        setBase() {
-            const base = this.allBases.find(base => base.id === this.table.baseId);
-            if (base) this.table.baseName = base.name;
-            this.table.tableId = undefined;
-            this.setTable();
+        setBase(baseId) {
+            if (baseId === this.table.baseId) return;
+            const base = this.allBases.find(base => base.id === baseId);
+            const newTable = {};
+            if (base) newTable.baseName = base.name;
+            newTable.tableId = undefined;
+            newTable.baseId = baseId;
+            const newConfig = { table: { ...this.table, ...newTable, ...this.getTable(undefined) } };
+            this.$emit('update-config', newConfig);
         },
-        setTable() {
-            const table = this.allTables.find(table => table.id === this.table.tableId);
+        getTable(tableId) {
+            const table = this.allTables.find(table => table.id === tableId);
+            const result = {};
             if (table) {
-                this.table.tableName = table.name;
-                this.table.view = table.views[0] && table.views[0].name;
-                if (table.fields.find(field => field.name === 'Name')) this.table.displayBy = 'Name';
+                result.tableName = table.name;
+                result.view = table.views[0] && table.views[0].name;
+                if (table.fields.find(field => field.name === 'Name')) result.displayBy = 'Name';
             } else {
-                this.table.view = undefined;
-                this.table.displayBy = undefined;
+                result.view = undefined;
+                result.displayBy = undefined;
             }
-            this.table.sort = [];
+            result.sort = [];
+            result.tableId = tableId;
+
+            return result;
+        },
+        setTable(tableId) {
+            if (this.table.id === tableId) return;
+            this.$emit('update-config', { table: { ...this.table, ...this.getTable(tableId) } });
+        },
+        setProp(key, value) {
+            if (this.table[key] === value) return;
+            this.$emit('update-config', { table: { ...this.table, [key]: value } });
         },
     },
     mounted() {

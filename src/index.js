@@ -2,6 +2,7 @@
 import './SettingsEdit.vue';
 import './SettingsSummary.vue';
 import './CollectionEdit.vue';
+import { GET_AIRTABLE_BASES, GET_AIRTABLE_TABLES } from './graphql';
 /* wwEditor:end */
 
 export default {
