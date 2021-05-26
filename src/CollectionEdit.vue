@@ -122,8 +122,11 @@ export default {
         };
     },
     watch: {
-        'table.baseId'() {
-            this.getTables();
+        'table.baseId': {
+            immediate: true,
+            handler() {
+                this.getTables();
+            },
         },
         isSetup(value) {
             this.$emit('update-is-valid', value);
@@ -187,6 +190,7 @@ export default {
             }
         },
         async getTables(isNoCache = false) {
+            if (!this.table.baseId) return;
             try {
                 this.allTables = await wwLib.wwPlugins['plugin-airtable'].getTables(this.table.baseId, isNoCache);
             } catch (err) {
