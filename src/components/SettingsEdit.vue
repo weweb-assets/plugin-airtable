@@ -23,6 +23,7 @@
 <script>
 export default {
     props: {
+        plugin: { type: Object, required: true },
         settings: { type: Object, required: true },
     },
     data() {
@@ -40,8 +41,6 @@ export default {
     },
     computed: {
         isValid() {
-            if (!this.settings) return false;
-            if (!this.settings.privateData) return false;
             return !!this.settings.privateData.apiKey;
         },
     },

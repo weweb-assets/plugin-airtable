@@ -1,41 +1,15 @@
 /* wwEditor:start */
-import './SettingsEdit.vue';
-import './SettingsSummary.vue';
-import './CollectionEdit.vue';
+import './components/SettingsEdit.vue';
+import './components/SettingsSummary.vue';
+import './components/CollectionEdit.vue';
 import { GET_AIRTABLE_BASES, GET_AIRTABLE_TABLES } from './graphql';
 /* wwEditor:end */
 
 export default {
+    /*=============================================m_ÔÔ_m=============================================\
+        Airtable API
+    \================================================================================================*/
     /* wwEditor:start */
-    /*=============================================m_ÔÔ_m=============================================\
-        Data
-    \================================================================================================*/
-    settings: {
-        data: {},
-        privateData: {
-            apiKey: '',
-            tables: [],
-        },
-    },
-    /* wwEditor:end */
-    /*=============================================m_ÔÔ_m=============================================\
-        Init
-    \================================================================================================*/
-    async init() {
-        /* wwEditor:start */
-        const plugin = wwLib.wwPlugins.pluginAirtable;
-        plugin.settings = (await wwLib.wwPlugin.getSettings(plugin.id)) || this.settings;
-        if (!plugin.settings.privateData.apiKey) plugin.settings.privateData.apiKey = '';
-        if (!plugin.settings.privateData.tables) plugin.settings.privateData.tables = [];
-        if (plugin.isNew && !plugin.settings.privateData.apiKey.length) {
-            this.sidebarButton();
-        }
-        /* wwEditor:end */
-    },
-    /* wwEditor:start */
-    /*=============================================m_ÔÔ_m=============================================\
-        META API
-    \================================================================================================*/
     async getBases(isNoCache = false) {
         const { data } = await wwLib.$apollo.query({
             query: GET_AIRTABLE_BASES,
@@ -57,58 +31,14 @@ export default {
         });
         return data.getAirtableTables.data;
     },
+    /* wwEditor:end */
     /*=============================================m_ÔÔ_m=============================================\
-        SYNCHRONIZE
+        Collection API
     \================================================================================================*/
-    async sync(table) {
-        try {
-            await wwLib.wwPlugin.saveCmsDataSet(
-                this.settings.id,
-                table.id,
-                table.tableName,
-                table.displayBy,
-                'Airtable'
-            );
-
-            wwLib.wwNotification.open({
-                text: {
-                    en: `Table "${table.tableName}" succesfully fetched`,
-                },
-                color: 'green',
-            });
-        } catch (err) {
-            wwLib.wwNotification.open({
-                text: {
-                    en: 'An error occured, please try again later.',
-                    fr: 'Une erreur est survenue. Veuillez réessayer plus tard.',
-                },
-                color: 'red',
-            });
-            wwLib.wwLog.error(err);
-        }
-    },
-    async syncAll() {
-        for (const table of this.settings.privateData.tables) await this.sync(table);
-    },
-    /*=============================================m_ÔÔ_m=============================================\
-        SIDEBAR POPUP
-    \================================================================================================*/
-    async sidebarButton() {
-        try {
-            const { id, settings } = wwLib.wwPlugins.pluginAirtable;
-            const isSetup = !!settings.privateData.apiKey.length;
-            const isFirstTime = !settings.privateData.tables.length;
-            await wwLib.wwPopups.open({
-                firstPage: isSetup ? 'AIRTABLE_POPUP' : 'AIRTABLE_CONFIGURATION_POPUP',
-                data: {
-                    isFirstTime,
-                    pluginId: id,
-                    settings,
-                },
-            });
-        } catch (err) {
-            wwLib.wwLog.error(err);
-        }
+    /* wwEditor:start */
+    // eslint-disable-next-line no-unused-vars
+    async fetchCollection(_collection) {
+        return { data: null, error: null };
     },
     /* wwEditor:end */
 };

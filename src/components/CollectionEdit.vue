@@ -102,6 +102,7 @@
                 </div>
             </div>
         </wwEditorFormRow>
+        <wwLoader :loading="isBasesLoading || isTablesLoading" />
     </div>
 </template>
 
@@ -109,10 +110,13 @@
 export default {
     name: 'TablePopup',
     props: {
-        config: { type: Object },
+        plugin: { type: Object, required: true },
+        config: { type: Object, required: true },
     },
     data() {
         return {
+            isBasesLoading: false,
+            isTablesLoading: false,
             allBases: [],
             allTables: [],
             directionOptions: [
@@ -128,13 +132,16 @@ export default {
                 this.getTables();
             },
         },
-        isSetup(value) {
-            this.$emit('update-is-valid', value);
+        isSetup: {
+            immediate: true,
+            handler(value) {
+                this.$emit('update-is-valid', value);
+            },
         },
     },
     computed: {
         isSetup() {
-            return !!this.table.tableId;
+            return !!this.table.baseId && !!this.table.tableId && !!this.table.view;
         },
         table() {
             return {
@@ -142,7 +149,7 @@ export default {
                 tableId: undefined,
                 view: undefined,
                 sort: [],
-                ...this.config.table,
+                ...this.config,
             };
         },
         basesOptions() {
@@ -180,41 +187,45 @@ export default {
     },
     methods: {
         async getBases(isNoCache = false) {
+            this.isBasesLoading = true;
             try {
-                this.allBases = await wwLib.wwPlugins['plugin-airtable'].getBases(isNoCache);
+                this.allBases = await this.plugin.getBases(isNoCache);
             } catch (err) {
                 wwLib.wwNotification.open({
                     text: 'Unable to pull your bases, please make sure you entered the correct API key.',
                     color: 'red',
                 });
             }
+            this.isBasesLoading = false;
         },
         async getTables(isNoCache = false) {
             if (!this.table.baseId) return;
+            this.isTablesLoading = true;
             try {
-                this.allTables = await wwLib.wwPlugins['plugin-airtable'].getTables(this.table.baseId, isNoCache);
+                this.allTables = await this.plugin.getTables(this.table.baseId, isNoCache);
             } catch (err) {
                 wwLib.wwNotification.open({
                     text: 'Unable to pull your tables, please make sure you entered the correct API key.',
                     color: 'red',
                 });
             }
+            this.isTablesLoading = false;
         },
         addSort() {
             const sort = this.table.sort || [];
             sort.push({ field: '', direction: 'asc' });
-            this.$emit('update-config', { table: { ...this.table, sort } });
+            this.$emit('update-config', { ...this.table, sort });
         },
         updateSort(index, key, value) {
             if (this.table.sort[index][key] === value) return;
             const sort = [...(this.table.sort || [])];
             sort[index][key] = value;
-            this.$emit('update-config', { table: { ...this.table, sort } });
+            this.$emit('update-config', { ...this.table, sort });
         },
         deleteSort(index) {
             const sort = [...this.table.sort];
             sort.splice(index, 1);
-            this.$emit('update-config', { table: { ...this.table, sort } });
+            this.$emit('update-config', { ...this.table, sort });
         },
         setBase(baseId) {
             if (baseId === this.table.baseId) return;
@@ -223,7 +234,7 @@ export default {
             if (base) newTable.baseName = base.name;
             newTable.tableId = undefined;
             newTable.baseId = baseId;
-            const newConfig = { table: { ...this.table, ...newTable, ...this.getTable(undefined) } };
+            const newConfig = { ...this.table, ...newTable, ...this.getTable(undefined) };
             this.$emit('update-config', newConfig);
         },
         getTable(tableId) {
@@ -244,11 +255,11 @@ export default {
         },
         setTable(tableId) {
             if (this.table.id === tableId) return;
-            this.$emit('update-config', { table: { ...this.table, ...this.getTable(tableId) } });
+            this.$emit('update-config', { ...this.table, ...this.getTable(tableId) });
         },
         setProp(key, value) {
             if (this.table[key] === value) return;
-            this.$emit('update-config', { table: { ...this.table, [key]: value } });
+            this.$emit('update-config', { ...this.table, [key]: value });
         },
     },
     mounted() {
