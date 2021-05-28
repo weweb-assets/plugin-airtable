@@ -11,6 +11,7 @@
                 :value="settings.privateData.apiKey"
                 @input="changeApiKey"
                 :style="{ '-webkit-text-security': isKeyHidden ? 'disc' : 'none' }"
+                v-on:keyup.native.enter="$emit('save')"
             />
         </wwEditorFormRow>
         <div class="airtable-settings__row">
