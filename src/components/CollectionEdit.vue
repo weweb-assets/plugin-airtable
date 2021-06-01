@@ -1,24 +1,27 @@
 <template>
-    <div class="collection-edit">
+    <div class="airtable-collection-edit">
         <wwEditorFormRow label="Base" required>
-            <div class="collection-edit__row">
+            <div class="airtable-collection-edit__row">
                 <wwEditorSelect
-                    class="caption-m collection-edit__input -full"
+                    class="caption-m airtable-collection-edit__input -full"
                     :options="basesOptions"
                     :value="table.baseId"
                     @input="setBase"
                     placeholder="Select a base"
                     large
                 />
-                <button class="collection-edit__input ww-editor-button -primary -small m-left" @click="getBases(true)">
+                <button
+                    class="airtable-collection-edit__input ww-editor-button -primary -small m-left"
+                    @click="getBases(true)"
+                >
                     Refresh
                 </button>
             </div>
         </wwEditorFormRow>
         <wwEditorFormRow label="Table" required>
-            <div class="collection-edit__row">
+            <div class="airtable-collection-edit__row">
                 <wwEditorSelect
-                    class="caption-m collection-edit__input -full"
+                    class="caption-m airtable-collection-edit__input -full"
                     :options="tablesOptions"
                     :value="table.tableId"
                     @input="setTable"
@@ -27,7 +30,7 @@
                     large
                 />
                 <button
-                    class="collection-edit__input ww-editor-button -primary -small m-left"
+                    class="airtable-collection-edit__input ww-editor-button -primary -small m-left"
                     @click="getTables(true)"
                     :disabled="!table.baseId"
                 >
@@ -37,7 +40,7 @@
         </wwEditorFormRow>
         <wwEditorFormRow label="View">
             <wwEditorSelect
-                class="caption-m collection-edit__input"
+                class="caption-m airtable-collection-edit__input"
                 :options="tablesViewsOptions"
                 :value="table.view"
                 @input="setProp('view', $event)"
@@ -47,23 +50,23 @@
             />
         </wwEditorFormRow>
         <wwEditorFormRow label="Filter by formula">
-            <template slot="append-label"
-                ><a
-                    class="collection-edit__link"
+            <template slot="append-label">
+                <a
+                    class="airtable-collection-edit__link"
                     href="//support.airtable.com/hc/en-us/articles/203255215-Formula-field-reference"
                     target="_blank"
                 >
                     Find it here
-                </a></template
-            >
-            <input
+                </a>
+            </template>
+            <wwEditorFormInput
                 type="text"
                 name="filter-formula"
-                class="collection-edit__input caption-m ww-editor-input -large"
                 placeholder="{Name} = 'Mr Toucan'"
                 :value="table.filterByFormula"
                 @input="setProp('filterByFormula', $event.target.value)"
-                :disabled="!table.tableId"
+                v-on:keyup.native.enter="$emit('save')"
+                large
             />
         </wwEditorFormRow>
         <wwEditorFormRow label="Sort">
@@ -77,7 +80,7 @@
                 </button>
             </template>
             <div
-                class="collection-edit__row -space-between collection-edit__input"
+                class="airtable-collection-edit__row -space-between airtable-collection-edit__input"
                 v-for="(sort, index) in table.sort"
                 :key="index"
             >
@@ -92,12 +95,12 @@
                     placeholder="Select a field"
                 />
                 <wwEditorSelect
-                    class="caption-m collection-edit__select"
+                    class="caption-m airtable-collection-edit__select"
                     :options="directionOptions"
                     :value="sort.direction"
                     @input="updateSort(index, 'direction', $event)"
                 />
-                <div class="collection-edit__button-delete" @click="deleteSort(index)">
+                <div class="airtable-collection-edit__button-delete" @click="deleteSort(index)">
                     <wwEditorIcon name="delete" small />
                 </div>
             </div>
@@ -269,7 +272,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.collection-edit {
+.airtable-collection-edit {
     display: flex;
     flex-direction: column;
     &__link {
@@ -295,11 +298,11 @@ export default {
             color: var(--ww-color-red-500);
         }
     }
-}
-.m-auto-left {
-    margin-left: auto;
-}
-.m-left {
-    margin-left: var(--ww-spacing-02);
+    .m-auto-left {
+        margin-left: auto;
+    }
+    .m-left {
+        margin-left: var(--ww-spacing-02);
+    }
 }
 </style>

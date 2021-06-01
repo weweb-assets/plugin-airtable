@@ -1,8 +1,8 @@
 <template>
-    <div class="collection-summary">
-        <div class="collection-summary__elem caption-s">Base: {{ config.baseName || '-' }}</div>
-        <div class="collection-summary__elem caption-s">Table: {{ config.tableName || '-' }}</div>
-        <div class="collection-summary__elem caption-s">View: {{ config.view || '-' }}</div>
+    <div class="airtable-collection-summary">
+        <div class="airtable-collection-summary__elem caption-s">Base: {{ config.baseName || '-' }}</div>
+        <div class="airtable-collection-summary__elem caption-s">Table: {{ config.tableName || '-' }}</div>
+        <div class="airtable-collection-summary__elem caption-s">View: {{ config.view || '-' }}</div>
     </div>
 </template>
 
@@ -29,7 +29,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.collection-summary {
+.airtable-collection-summary {
     &__elem {
         margin-bottom: var(--ww-spacing-01);
     }

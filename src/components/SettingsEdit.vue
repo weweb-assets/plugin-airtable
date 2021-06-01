@@ -1,8 +1,10 @@
 <template>
-    <div class="airtable-settings">
+    <div class="airtable-settings-edit">
         <wwEditorFormRow required label="API key">
             <template slot="append-label">
-                <a class="airtable-settings__link" href="https://airtable.com/account" target="_blank">Find it here</a>
+                <a class="airtable-settings-edit__link" href="https://airtable.com/account" target="_blank">
+                    Find it here
+                </a>
             </template>
             <wwEditorFormInput
                 type="text"
@@ -12,11 +14,12 @@
                 @input="changeApiKey"
                 :style="{ '-webkit-text-security': isKeyHidden ? 'disc' : 'none' }"
                 v-on:keyup.native.enter="$emit('save')"
+                large
             />
         </wwEditorFormRow>
-        <div class="airtable-settings__row">
+        <div class="airtable-settings-edit__row">
             <wwManagerRadio :value="!isKeyHidden" @input="isKeyHidden = !$event" />
-            <span class="airtable-settings__radio-label caption-m">Show api key</span>
+            <span class="airtable-settings-edit__radio-label caption-m">Show api key</span>
         </div>
     </div>
 </template>
@@ -54,7 +57,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.airtable-settings {
+.airtable-settings-edit {
     display: flex;
     flex-direction: column;
     &__link {

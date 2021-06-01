@@ -1,6 +1,6 @@
 <template>
-    <div class="settings-summary" v-if="isValid">
-        <wwEditorIcon large name="key" class="settings-summary__icon"></wwEditorIcon>
+    <div class="airtable-settings-summary" v-if="isValid">
+        <wwEditorIcon large name="key" class="airtable-settings-summary__icon"></wwEditorIcon>
         <span class="caption-m">********</span>
     </div>
 </template>
@@ -28,7 +28,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.settings-summary {
+.airtable-settings-summary {
     display: flex;
     align-items: baseline;
     &__icon {
