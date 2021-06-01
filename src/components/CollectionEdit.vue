@@ -1,7 +1,7 @@
 <template>
     <div class="airtable-collection-edit">
-        <wwEditorFormRow label="Base" required>
-            <div class="airtable-collection-edit__row">
+        <div class="airtable-collection-edit__row">
+            <wwEditorFormRow label="Base" required>
                 <wwEditorSelect
                     class="caption-m airtable-collection-edit__input -full"
                     :options="basesOptions"
@@ -10,16 +10,16 @@
                     placeholder="Select a base"
                     large
                 />
-                <button
-                    class="airtable-collection-edit__input ww-editor-button -primary -small m-left"
-                    @click="getBases(true)"
-                >
-                    Refresh
-                </button>
-            </div>
-        </wwEditorFormRow>
-        <wwEditorFormRow label="Table" required>
-            <div class="airtable-collection-edit__row">
+            </wwEditorFormRow>
+            <button
+                class="airtable-collection-edit__input ww-editor-button -primary -small m-left"
+                @click="getBases(true)"
+            >
+                Refresh
+            </button>
+        </div>
+        <div class="airtable-collection-edit__row">
+            <wwEditorFormRow label="Table" required>
                 <wwEditorSelect
                     class="caption-m airtable-collection-edit__input -full"
                     :options="tablesOptions"
@@ -29,15 +29,15 @@
                     placeholder="Select a table"
                     large
                 />
-                <button
-                    class="airtable-collection-edit__input ww-editor-button -primary -small m-left"
-                    @click="getTables(true)"
-                    :disabled="!table.baseId"
-                >
-                    Refresh
-                </button>
-            </div>
-        </wwEditorFormRow>
+            </wwEditorFormRow>
+            <button
+                class="airtable-collection-edit__input ww-editor-button -primary -small m-left"
+                @click="getTables(true)"
+                :disabled="!table.baseId"
+            >
+                Refresh
+            </button>
+        </div>
         <wwEditorFormRow label="View">
             <wwEditorSelect
                 class="caption-m airtable-collection-edit__input"
