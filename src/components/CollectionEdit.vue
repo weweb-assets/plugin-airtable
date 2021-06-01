@@ -1,9 +1,8 @@
 <template>
     <div class="airtable-collection-edit">
         <div class="airtable-collection-edit__row">
-            <wwEditorFormRow label="Base" required>
+            <wwEditorFormRow label="Base" required class="-full">
                 <wwEditorSelect
-                    class="caption-m airtable-collection-edit__input -full"
                     :options="basesOptions"
                     :value="table.baseId"
                     @input="setBase"
@@ -11,17 +10,11 @@
                     large
                 />
             </wwEditorFormRow>
-            <button
-                class="airtable-collection-edit__input ww-editor-button -primary -small m-left"
-                @click="getBases(true)"
-            >
-                Refresh
-            </button>
+            <button class="ww-editor-button -primary -small m-left" @click="getBases(true)">Refresh</button>
         </div>
         <div class="airtable-collection-edit__row">
-            <wwEditorFormRow label="Table" required>
+            <wwEditorFormRow label="Table" required class="-full">
                 <wwEditorSelect
-                    class="caption-m airtable-collection-edit__input -full"
                     :options="tablesOptions"
                     :value="table.tableId"
                     @input="setTable"
@@ -30,17 +23,12 @@
                     large
                 />
             </wwEditorFormRow>
-            <button
-                class="airtable-collection-edit__input ww-editor-button -primary -small m-left"
-                @click="getTables(true)"
-                :disabled="!table.baseId"
-            >
+            <button class="ww-editor-button -primary -small m-left" @click="getTables(true)" :disabled="!table.baseId">
                 Refresh
             </button>
         </div>
         <wwEditorFormRow label="View">
             <wwEditorSelect
-                class="caption-m airtable-collection-edit__input"
                 :options="tablesViewsOptions"
                 :value="table.view"
                 @input="setProp('view', $event)"
@@ -65,14 +53,14 @@
                 placeholder="{Name} = 'Mr Toucan'"
                 :value="table.filterByFormula"
                 @input="setProp('filterByFormula', $event.target.value)"
-                v-on:keyup.native.enter="$emit('save')"
+                v-on:keyup.native.enter="$emit('next')"
                 large
             />
         </wwEditorFormRow>
         <wwEditorFormRow label="Sort">
             <template slot="append-label">
                 <button
-                    class="ww-editor-button -primary -small m-auto-left"
+                    class="ww-editor-button -primary -small m-auto-left m-bottom"
                     @click="addSort"
                     :disabled="!table.tableId"
                 >
@@ -80,29 +68,27 @@
                 </button>
             </template>
             <div
-                class="airtable-collection-edit__row -space-between airtable-collection-edit__input"
+                class="airtable-collection-edit__row -space-between m-bottom"
                 v-for="(sort, index) in table.sort"
                 :key="index"
             >
-                <div class="caption-s" v-if="!index">Sort by</div>
-                <div class="caption-s" v-else>then by</div>
+                <div class="label-xs" v-if="!index">Sort by</div>
+                <div class="label-xs" v-else>then by</div>
                 <wwEditorSelect
-                    class="caption-m"
                     :options="tablesFieldsOptions"
                     :value="sort.field"
-                    @input="updateSort(index, 'field', $event)"
+                    @input="setSortProp(index, { field: $event })"
                     :disabled="!table.tableId"
                     placeholder="Select a field"
                 />
                 <wwEditorSelect
-                    class="caption-m airtable-collection-edit__select"
                     :options="directionOptions"
                     :value="sort.direction"
-                    @input="updateSort(index, 'direction', $event)"
+                    @input="setSortProp(index, { direction: $event })"
                 />
-                <div class="airtable-collection-edit__button-delete" @click="deleteSort(index)">
-                    <wwEditorIcon name="delete" small />
-                </div>
+                <button class="ww-editor-button -tertiary -small -red -icon" @click="deleteSort(index)">
+                    <wwEditorIcon class="ww-editor-button-icon" name="delete" small />
+                </button>
             </div>
         </wwEditorFormRow>
         <wwLoader :loading="isBasesLoading || isTablesLoading" />
@@ -111,7 +97,6 @@
 
 <script>
 export default {
-    name: 'TablePopup',
     props: {
         plugin: { type: Object, required: true },
         config: { type: Object, required: true },
@@ -215,20 +200,19 @@ export default {
             this.isTablesLoading = false;
         },
         addSort() {
-            const sort = this.table.sort || [];
-            sort.push({ field: '', direction: 'asc' });
-            this.$emit('update-config', { ...this.table, sort });
+            const sorts = _.cloneDeep(this.table.sort || []);
+            sorts.push({ field: '', direction: 'asd' });
+            this.setProp('sort', sorts);
         },
-        updateSort(index, key, value) {
-            if (this.table.sort[index][key] === value) return;
-            const sort = [...(this.table.sort || [])];
-            sort[index][key] = value;
-            this.$emit('update-config', { ...this.table, sort });
+        setSortProp(index, value) {
+            const sorts = _.cloneDeep(this.table.sort);
+            sorts.splice(index, 1, { ...sorts[index], ...value });
+            this.setProp('sort', sorts);
         },
         deleteSort(index) {
-            const sort = [...this.table.sort];
-            sort.splice(index, 1);
-            this.$emit('update-config', { ...this.table, sort });
+            const sorts = _.cloneDeep(this.table.sort);
+            sorts.splice(index, 1);
+            this.setProp('sort', sorts);
         },
         setBase(baseId) {
             if (baseId === this.table.baseId) return;
@@ -282,20 +266,11 @@ export default {
     &__row {
         display: flex;
         align-items: center;
-        *:first-child {
-            flex: 1;
-        }
         &.-space-between {
             justify-content: space-between;
-            padding: 0 var(--ww-spacing-05);
         }
-    }
-    &__button-delete {
-        margin-right: var(--ww-spacing-03);
-        cursor: pointer;
-        transition: color 0.3s ease;
-        &:hover {
-            color: var(--ww-color-red-500);
+        .-full {
+            width: 100%;
         }
     }
     .m-auto-left {
@@ -303,6 +278,9 @@ export default {
     }
     .m-left {
         margin-left: var(--ww-spacing-02);
+    }
+    .m-bottom {
+        margin-bottom: var(--ww-spacing-02);
     }
 }
 </style>
