@@ -16,7 +16,7 @@
     },
     "devDependencies": {
         "@vue/eslint-config-prettier": "^6.0.0",
-        "@weweb/cli": "git+https://github.com/weweb-team/weweb-cli-public.git#f61e3b53209b85500417b77137c2e9a783ee871c",
+        "@weweb/cli": "latest",
         "babel-eslint": "^10.1.0",
         "eslint": "^7.11.0",
         "eslint-plugin-prettier": "^3.1.4",
