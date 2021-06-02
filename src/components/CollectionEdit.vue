@@ -52,7 +52,7 @@
                 name="filter-formula"
                 placeholder="{Name} = 'Mr Toucan'"
                 :value="table.filterByFormula"
-                @input="setProp('filterByFormula', $event.target.value)"
+                @input="setProp('filterByFormula', $event)"
                 v-on:keyup.native.enter="$emit('next')"
                 large
             />
