@@ -201,7 +201,7 @@ export default {
         },
         addSort() {
             const sorts = _.cloneDeep(this.table.sort || []);
-            sorts.push({ field: '', direction: 'asd' });
+            sorts.push({ field: this.tablesFieldsOptions[0].value, direction: 'asd' });
             this.setProp('sort', sorts);
         },
         setSortProp(index, value) {
