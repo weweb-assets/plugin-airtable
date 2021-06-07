@@ -1,3 +1,3 @@
-<iframe src="https://www.youtube-nocookie.com/embed/76CMCIW-wGk" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/a7a294a1-34eb-483e-b849-21bb9560c3a4/Untitled.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/a7a294a1-34eb-483e-b849-21bb9560c3a4/Untitled.png)
 
-Get api key from your profile.
+To use the Airtable plugin, you must copy/paste your API key, which you can find [on your account](https://airtable.com/account).
