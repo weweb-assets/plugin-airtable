@@ -27,16 +27,29 @@
                 Refresh
             </button>
         </div>
-        <wwEditorFormRow label="View">
-            <wwEditorSelect
-                :options="tablesViewsOptions"
-                :value="table.view"
-                @input="setProp('view', $event)"
-                :disabled="!table.tableId"
-                placeholder="Select a view"
-                large
-            />
-        </wwEditorFormRow>
+        <div class="airtable-collection-edit__row">
+            <wwEditorFormRow label="View" class="-full" required>
+                <wwEditorSelect
+                    :options="tablesViewsOptions"
+                    :value="table.view"
+                    @input="setProp('view', $event)"
+                    :disabled="!table.tableId"
+                    placeholder="Select a view"
+                    large
+                />
+            </wwEditorFormRow>
+            <wwEditorFormRow label="Lookup depth" class="m-left">
+                <wwEditorFormInput
+                    type="number"
+                    name="depth"
+                    placeholder="Default: 1"
+                    :value="table.depth"
+                    @input="setProp('depth', $event)"
+                    v-on:keyup.native.enter="$emit('next')"
+                    large
+                />
+            </wwEditorFormRow>
+        </div>
         <wwEditorFormRow label="Filter by formula">
             <template slot="append-label">
                 <a
@@ -136,6 +149,7 @@ export default {
                 baseId: undefined,
                 tableId: undefined,
                 view: undefined,
+                depth: 1,
                 sort: [],
                 ...this.config,
             };
