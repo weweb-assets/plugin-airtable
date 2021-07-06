@@ -1,7 +1,7 @@
 <template>
     <div class="airtable-settings-edit">
         <wwEditorFormRow required label="API key">
-            <template slot="append-label">
+            <template #append-label>
                 <a class="airtable-settings-edit__link" href="https://airtable.com/account" target="_blank">
                     Find it here
                 </a>
@@ -10,15 +10,14 @@
                 type="text"
                 name="api-key"
                 placeholder="key**************"
-                :value="settings.privateData.apiKey"
-                @input="changeApiKey"
-                :style="{ '-webkit-text-security': isKeyHidden ? 'disc' : 'none' }"
-                v-on:keyup.native.enter="$emit('save')"
+                :model-value="settings.privateData.apiKey"
+                :style="{ '-webkit-text-security': isKeyVisible ? 'disc' : 'none' }"
                 large
+                @update:modelValue="changeApiKey"
             />
         </wwEditorFormRow>
         <div class="airtable-settings-edit__row">
-            <wwManagerRadio :value="!isKeyHidden" @input="isKeyHidden = !$event" />
+            <wwManagerRadio v-model="isKeyVisible" />
             <span class="airtable-settings-edit__radio-label caption-m">Show api key</span>
         </div>
     </div>
@@ -27,30 +26,17 @@
 <script>
 export default {
     props: {
-        plugin: { type: Object, required: true },
         settings: { type: Object, required: true },
     },
+    emits: ['update:settings'],
     data() {
         return {
-            isKeyHidden: true,
+            isKeyVisible: true,
         };
-    },
-    watch: {
-        isValid: {
-            immediate: true,
-            handler(value) {
-                this.$emit('update-is-valid', value);
-            },
-        },
-    },
-    computed: {
-        isValid() {
-            return !!this.settings.privateData.apiKey;
-        },
     },
     methods: {
         changeApiKey(apiKey) {
-            this.$emit('update-settings', { ...this.settings, privateData: { apiKey } });
+            this.$emit('update:settings', { ...this.settings, privateData: { apiKey } });
         },
     },
 };

@@ -1,27 +1,19 @@
 <template>
-    <div class="airtable-settings-summary" v-if="isValid">
-        <wwEditorIcon large name="key" class="airtable-settings-summary__icon"></wwEditorIcon>
-        <span class="caption-m">********</span>
+    <div class="airtable-settings-summary">
+        <wwEditorIcon large name="key" class="airtable-settings-summary__icon" />
+        <span class="caption-m">{{ apiKey }}</span>
     </div>
 </template>
 
 <script>
 export default {
     props: {
-        plugin: { type: Object, required: true },
         settings: { type: Object, required: true },
     },
     computed: {
-        isValid() {
-            return !!this.settings.privateData.apiKey;
-        },
-    },
-    watch: {
-        isValid: {
-            immediate: true,
-            handler(value) {
-                this.$emit('update-is-valid', value);
-            },
+        apiKey() {
+            const apiKey = this.settings.privateData.apiKey || '';
+            return apiKey.replace(/.+/, '*');
         },
     },
 };

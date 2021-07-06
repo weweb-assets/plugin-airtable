@@ -1,4 +1,3 @@
-import Vue from 'vue';
 /* wwEditor:start */
 import './components/SettingsEdit.vue';
 import './components/SettingsSummary.vue';
@@ -8,12 +7,6 @@ import { GET_AIRTABLE_BASES, GET_AIRTABLE_TABLES } from './graphql';
 /* wwEditor:end */
 
 export default {
-    /*=============================================m_ÔÔ_m=============================================\
-        Plugin API
-    \================================================================================================*/
-    onLoad() {
-        Vue.prototype.$pluginAirtable = this;
-    },
     /*=============================================m_ÔÔ_m=============================================\
         Collection API
     \================================================================================================*/

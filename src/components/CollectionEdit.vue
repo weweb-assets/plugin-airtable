@@ -4,10 +4,10 @@
             <wwEditorFormRow label="Base" required class="-full">
                 <wwEditorSelect
                     :options="basesOptions"
-                    :value="table.baseId"
-                    @input="setBase"
+                    :model-value="table.baseId"
                     placeholder="Select a base"
                     large
+                    @update:modelValue="setBase"
                 />
             </wwEditorFormRow>
             <button class="ww-editor-button -primary -small m-left" @click="getBases(true)">Refresh</button>
@@ -16,14 +16,14 @@
             <wwEditorFormRow label="Table" required class="-full">
                 <wwEditorSelect
                     :options="tablesOptions"
-                    :value="table.tableId"
-                    @input="setTable"
+                    :model-value="table.tableId"
                     :disabled="!table.baseId"
                     placeholder="Select a table"
                     large
+                    @update:modelValue="setTable"
                 />
             </wwEditorFormRow>
-            <button class="ww-editor-button -primary -small m-left" @click="getTables(true)" :disabled="!table.baseId">
+            <button class="ww-editor-button -primary -small m-left" :disabled="!table.baseId" @click="getTables(true)">
                 Refresh
             </button>
         </div>
@@ -31,11 +31,11 @@
             <wwEditorFormRow label="View" class="-full" required>
                 <wwEditorSelect
                     :options="tablesViewsOptions"
-                    :value="table.view"
-                    @input="setProp('view', $event)"
+                    :model-value="table.view"
                     :disabled="!table.tableId"
                     placeholder="Select a view"
                     large
+                    @update:modelValue="setProp('view', $event)"
                 />
             </wwEditorFormRow>
             <wwEditorFormRow label="Lookup depth" class="m-left">
@@ -43,15 +43,14 @@
                     type="number"
                     name="depth"
                     placeholder="Default: 1"
-                    :value="table.depth"
-                    @input="setProp('depth', $event)"
-                    v-on:keyup.native.enter="$emit('next')"
+                    :model-value="table.depth"
                     large
+                    @update:modelValue="setProp('depth', $event)"
                 />
             </wwEditorFormRow>
         </div>
         <wwEditorFormRow label="Filter by formula">
-            <template slot="append-label">
+            <template #append-label>
                 <a
                     class="airtable-collection-edit__link"
                     href="//support.airtable.com/hc/en-us/articles/203255215-Formula-field-reference"
@@ -64,40 +63,39 @@
                 type="text"
                 name="filter-formula"
                 placeholder="{Name} = 'Mr Toucan'"
-                :value="table.filterByFormula"
-                @input="setProp('filterByFormula', $event)"
-                v-on:keyup.native.enter="$emit('next')"
+                :model-value="table.filterByFormula"
                 large
+                @update:modelValue="setProp('filterByFormula', $event)"
             />
         </wwEditorFormRow>
         <wwEditorFormRow label="Sort">
-            <template slot="append-label">
+            <template #append-label>
                 <button
                     class="ww-editor-button -primary -small m-auto-left m-bottom"
-                    @click="addSort"
                     :disabled="!table.tableId"
+                    @click="addSort"
                 >
                     Add a field to sort by
                 </button>
             </template>
             <div
-                class="airtable-collection-edit__row -space-between m-bottom"
                 v-for="(sort, index) in table.sort"
                 :key="index"
+                class="airtable-collection-edit__row -space-between m-bottom"
             >
-                <div class="label-xs" v-if="!index">Sort by</div>
-                <div class="label-xs" v-else>then by</div>
+                <div v-if="!index" class="label-xs">Sort by</div>
+                <div v-else class="label-xs">then by</div>
                 <wwEditorSelect
                     :options="tablesFieldsOptions"
-                    :value="sort.field"
-                    @input="setSortProp(index, { field: $event })"
+                    :model-value="sort.field"
                     :disabled="!table.tableId"
                     placeholder="Select a field"
+                    @update:modelValue="setSortProp(index, { field: $event })"
                 />
                 <wwEditorSelect
                     :options="directionOptions"
-                    :value="sort.direction"
-                    @input="setSortProp(index, { direction: $event })"
+                    :model-value="sort.direction"
+                    @update:modelValue="setSortProp(index, { direction: $event })"
                 />
                 <button class="ww-editor-button -tertiary -small -red -icon" @click="deleteSort(index)">
                     <wwEditorIcon class="ww-editor-button-icon" name="delete" small />
@@ -114,6 +112,7 @@ export default {
         plugin: { type: Object, required: true },
         config: { type: Object, required: true },
     },
+    emits: ['update:config'],
     data() {
         return {
             isBasesLoading: false,
@@ -126,24 +125,7 @@ export default {
             ],
         };
     },
-    watch: {
-        'table.baseId': {
-            immediate: true,
-            handler() {
-                this.getTables();
-            },
-        },
-        isSetup: {
-            immediate: true,
-            handler(value) {
-                this.$emit('update-is-valid', value);
-            },
-        },
-    },
     computed: {
-        isSetup() {
-            return !!this.table.baseId && !!this.table.tableId && !!this.table.view;
-        },
         table() {
             return {
                 baseId: undefined,
@@ -186,6 +168,17 @@ export default {
                 })
                 .sort((a, b) => a.label.localeCompare(b.label));
         },
+    },
+    watch: {
+        'table.baseId': {
+            immediate: true,
+            handler() {
+                this.getTables();
+            },
+        },
+    },
+    mounted() {
+        this.getBases();
     },
     methods: {
         async getBases(isNoCache = false) {
@@ -236,7 +229,7 @@ export default {
             newTable.tableId = undefined;
             newTable.baseId = baseId;
             const newConfig = { ...this.table, ...newTable, ...this.getTable(undefined) };
-            this.$emit('update-config', newConfig);
+            this.$emit('update:config', newConfig);
         },
         getTable(tableId) {
             const table = this.allTables.find(table => table.id === tableId);
@@ -256,15 +249,12 @@ export default {
         },
         setTable(tableId) {
             if (this.table.id === tableId) return;
-            this.$emit('update-config', { ...this.table, ...this.getTable(tableId) });
+            this.$emit('update:config', { ...this.table, ...this.getTable(tableId) });
         },
         setProp(key, value) {
             if (this.table[key] === value) return;
-            this.$emit('update-config', { ...this.table, [key]: value });
+            this.$emit('update:config', { ...this.table, [key]: value });
         },
-    },
-    mounted() {
-        this.getBases();
     },
 };
 </script>
