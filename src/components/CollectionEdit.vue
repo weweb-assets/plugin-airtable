@@ -10,7 +10,9 @@
                     @update:modelValue="setBase"
                 />
             </wwEditorFormRow>
-            <button class="ww-editor-button -primary -small m-left" @click="getBases(true)">Refresh</button>
+            <button type="button" class="ww-editor-button -primary -small m-left" @click="getBases(true)">
+                Refresh
+            </button>
         </div>
         <div class="airtable-collection-edit__row">
             <wwEditorFormRow label="Table" required class="-full">
@@ -23,7 +25,12 @@
                     @update:modelValue="setTable"
                 />
             </wwEditorFormRow>
-            <button class="ww-editor-button -primary -small m-left" :disabled="!table.baseId" @click="getTables(true)">
+            <button
+                type="button"
+                class="ww-editor-button -primary -small m-left"
+                :disabled="!table.baseId"
+                @click="getTables(true)"
+            >
                 Refresh
             </button>
         </div>
@@ -71,6 +78,7 @@
         <wwEditorFormRow label="Sort">
             <template #append-label>
                 <button
+                    type="button"
                     class="ww-editor-button -primary -small m-auto-left m-bottom"
                     :disabled="!table.tableId"
                     @click="addSort"
@@ -97,7 +105,7 @@
                     :model-value="sort.direction"
                     @update:modelValue="setSortProp(index, { direction: $event })"
                 />
-                <button class="ww-editor-button -tertiary -small -red -icon" @click="deleteSort(index)">
+                <button type="button" class="ww-editor-button -tertiary -small -red -icon" @click="deleteSort(index)">
                     <wwEditorIcon class="ww-editor-button-icon" name="delete" small />
                 </button>
             </div>

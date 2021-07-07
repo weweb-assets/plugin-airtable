@@ -1,14 +1,8 @@
 <template>
     <div class="airtable-collection-summary">
-        <div v-show="config.baseId" class="airtable-collection-summary__elem caption-s">
-            Base: {{ config.baseName || '-' }}
-        </div>
-        <div v-show="config.tableId" class="airtable-collection-summary__elem caption-s">
-            Table: {{ config.tableName || '-' }}
-        </div>
-        <div v-show="config.view" class="airtable-collection-summary__elem caption-s">
-            View: {{ config.view || '-' }}
-        </div>
+        <div class="airtable-collection-summary__elem caption-s">Base: {{ config.baseName || '-' }}</div>
+        <div class="airtable-collection-summary__elem caption-s">Table: {{ config.tableName || '-' }}</div>
+        <div class="airtable-collection-summary__elem caption-s">View: {{ config.view || '-' }}</div>
     </div>
 </template>
 

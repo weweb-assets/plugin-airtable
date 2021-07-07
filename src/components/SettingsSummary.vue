@@ -13,7 +13,7 @@ export default {
     computed: {
         apiKey() {
             const apiKey = this.settings.privateData.apiKey || '';
-            return apiKey.replace(/.+/, '*');
+            return apiKey.replace(/./g, '*');
         },
     },
 };

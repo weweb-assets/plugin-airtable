@@ -11,7 +11,7 @@
                 name="api-key"
                 placeholder="key**************"
                 :model-value="settings.privateData.apiKey"
-                :style="{ '-webkit-text-security': isKeyVisible ? 'disc' : 'none' }"
+                :style="{ '-webkit-text-security': isKeyVisible ? 'none' : 'disc' }"
                 large
                 @update:modelValue="changeApiKey"
             />
@@ -31,7 +31,7 @@ export default {
     emits: ['update:settings'],
     data() {
         return {
-            isKeyVisible: true,
+            isKeyVisible: false,
         };
     },
     methods: {
