@@ -2,7 +2,7 @@
     <div class="airtable-collection-edit">
         <div class="airtable-collection-edit__row">
             <wwEditorFormRow label="Base" required class="-full">
-                <wwEditorSelect
+                <wwEditorInputTextSelect
                     :options="basesOptions"
                     :model-value="table.baseId"
                     placeholder="Select a base"
@@ -16,7 +16,7 @@
         </div>
         <div class="airtable-collection-edit__row">
             <wwEditorFormRow label="Table" required class="-full">
-                <wwEditorSelect
+                <wwEditorInputTextSelect
                     :options="tablesOptions"
                     :model-value="table.tableId"
                     :disabled="!table.baseId"
@@ -36,7 +36,7 @@
         </div>
         <div class="airtable-collection-edit__row">
             <wwEditorFormRow label="View" class="-full" required>
-                <wwEditorSelect
+                <wwEditorInputTextSelect
                     :options="tablesViewsOptions"
                     :model-value="table.view"
                     :disabled="!table.tableId"
@@ -46,7 +46,7 @@
                 />
             </wwEditorFormRow>
             <wwEditorFormRow label="Lookup depth" class="m-left">
-                <wwEditorFormInput
+                <wwEditorInputText
                     type="number"
                     name="depth"
                     placeholder="Default: 1"
@@ -66,7 +66,7 @@
                     Find it here
                 </a>
             </template>
-            <wwEditorFormInput
+            <wwEditorInputText
                 type="text"
                 name="filter-formula"
                 placeholder="{Name} = 'Mr Toucan'"
@@ -93,14 +93,14 @@
             >
                 <div v-if="!index" class="label-xs">Sort by</div>
                 <div v-else class="label-xs">then by</div>
-                <wwEditorSelect
+                <wwEditorInputTextSelect
                     :options="tablesFieldsOptions"
                     :model-value="sort.field"
                     :disabled="!table.tableId"
                     placeholder="Select a field"
                     @update:modelValue="setSortProp(index, { field: $event })"
                 />
-                <wwEditorSelect
+                <wwEditorInputTextSelect
                     :options="directionOptions"
                     :model-value="sort.direction"
                     @update:modelValue="setSortProp(index, { direction: $event })"

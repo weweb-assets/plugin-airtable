@@ -6,7 +6,7 @@
                     Find it here
                 </a>
             </template>
-            <wwEditorFormInput
+            <wwEditorInputText
                 type="text"
                 name="api-key"
                 placeholder="key**************"
@@ -17,7 +17,7 @@
             />
         </wwEditorFormRow>
         <div class="airtable-settings-edit__row">
-            <wwManagerRadio v-model="isKeyVisible" />
+            <wwEditorInputSwitch v-model="isKeyVisible" />
             <span class="airtable-settings-edit__radio-label caption-m">Show api key</span>
         </div>
     </div>
