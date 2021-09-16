@@ -71,7 +71,6 @@
                     class="airtable-collection-edit__row -space-between m-bottom"
                 >
                     <wwEditorSelect
-                        small
                         :options="tablesFieldsOptions"
                         :model-value="field"
                         :disabled="!table.tableId"
@@ -88,8 +87,7 @@
                 </div>
                 <div class="airtable-collection-edit__row -space-between m-bottom">
                     <wwEditorSelect
-                        small
-                        :options="tablesFieldsOptions"
+                        :options="tablesFieldsWithSelectOptions"
                         placeholder="Select a field"
                         @update:modelValue="setFieldsProp(null, $event)"
                     />
@@ -208,6 +206,19 @@ export default {
                 })
                 .sort((a, b) => a.label.localeCompare(b.label));
         },
+        tablesFieldsWithSelectOptions() {
+            const table = this.allTables.find(table => table.id === this.table.tableId);
+            if (!table) return [];
+            const fields = table.fields
+                .map(field => {
+                    return { value: field.name, label: field.name };
+                })
+                .sort((a, b) => a.label.localeCompare(b.label));
+
+            fields.unshift({ value: null, label: 'Select a field' });
+
+            return fields;
+        },
         tablesViewsOptions() {
             const table = this.allTables.find(table => table.id === this.table.tableId);
             if (!table) return [];
@@ -311,6 +322,7 @@ export default {
             this.setProp('fields', !this.isFilterFields ? [] : null);
         },
         setFieldsProp(index, field) {
+            if (!field) return;
             const fields = _.cloneDeep(this.table.fields);
             if (index === null || index > fields.length) fields.push(field);
             else {
