@@ -56,6 +56,46 @@
                 />
             </wwEditorFormRow>
         </div>
+        <wwEditorFormRow label="Filter fields to fetch">
+            <template #append-label>
+                <wwManagerRadio
+                    class="m-auto-left m-bottom"
+                    :modelValue="isFilterFields"
+                    @update:modelValue="filterFields()"
+                ></wwManagerRadio>
+            </template>
+            <template v-if="isFilterFields">
+                <div
+                    v-for="(field, index) in table.fields"
+                    :key="index"
+                    class="airtable-collection-edit__row -space-between m-bottom"
+                >
+                    <wwEditorSelect
+                        small
+                        :options="tablesFieldsOptions"
+                        :model-value="field"
+                        :disabled="!table.tableId"
+                        placeholder="Select a field"
+                        @update:modelValue="setFieldsProp(index, $event)"
+                    />
+                    <button
+                        type="button"
+                        class="ww-editor-button -tertiary -small -red -icon"
+                        @click="deleteField(index)"
+                    >
+                        <wwEditorIcon class="ww-editor-button-icon" name="delete" small />
+                    </button>
+                </div>
+                <div class="airtable-collection-edit__row -space-between m-bottom">
+                    <wwEditorSelect
+                        small
+                        :options="tablesFieldsOptions"
+                        placeholder="Select a field"
+                        @update:modelValue="setFieldsProp(null, $event)"
+                    />
+                </div> </template
+        ></wwEditorFormRow>
+
         <wwEditorFormRow label="Filter by formula">
             <template #append-label>
                 <a
@@ -141,6 +181,7 @@ export default {
                 view: undefined,
                 depth: 1,
                 sort: [],
+                fields: null,
                 ...this.config,
             };
         },
@@ -175,6 +216,9 @@ export default {
                     return { value: view.name, label: view.name };
                 })
                 .sort((a, b) => a.label.localeCompare(b.label));
+        },
+        isFilterFields() {
+            return this.table.fields !== null;
         },
     },
     watch: {
@@ -262,6 +306,23 @@ export default {
         setProp(key, value) {
             if (this.table[key] === value) return;
             this.$emit('update:config', { ...this.table, [key]: value });
+        },
+        filterFields() {
+            this.setProp('fields', !this.isFilterFields ? [] : null);
+        },
+        setFieldsProp(index, field) {
+            const fields = _.cloneDeep(this.table.fields);
+            if (index === null || index > fields.length) fields.push(field);
+            else {
+                fields[index] = field;
+            }
+
+            this.setProp('fields', fields);
+        },
+        deleteField(index) {
+            const fields = _.cloneDeep(this.table.fields);
+            fields.splice(index, 1);
+            this.setProp('fields', fields);
         },
     },
 };
