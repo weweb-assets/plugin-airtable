@@ -16,4 +16,31 @@ module.exports = {
             },
         },
     },
+    functions: [
+        {
+            name: 'Create a record',
+            code: 'createRecord',
+            parameters: [
+                { name: 'collectionId', type: 'string' },
+                { name: 'recordData', type: 'object', optional: true },
+            ],
+        },
+        {
+            name: 'Update a record',
+            code: 'updateRecord',
+            parameters: [
+                { name: 'collectionId', type: 'string' },
+                { name: 'recordId', type: 'string' },
+                { name: 'recordData', type: 'object', optional: true },
+            ],
+        },
+        {
+            name: 'Delete a record',
+            code: 'deleteRecord',
+            parameters: [
+                { name: 'collectionId', type: 'string' },
+                { name: 'recordId', type: 'string' },
+            ],
+        },
+    ],
 };
