@@ -79,7 +79,7 @@ export default {
         );
         /* wwEditor:end */
         /* wwFront:start */
-        response = await axios.post(
+        response = await axios.patch(
             `//${websiteId}.${wwLib.wwApiRequests._getPreviewUrl()}/ww/cms_data_sets/${cmsDataSetId}/airtable/record/${recordId}`,
             { data }
         );
