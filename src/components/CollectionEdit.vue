@@ -49,7 +49,7 @@
                 <wwEditorInputText
                     type="number"
                     name="depth"
-                    placeholder="Default: 1"
+                    placeholder="Default: 0"
                     :model-value="table.depth"
                     large
                     @update:modelValue="setProp('depth', $event)"
@@ -118,7 +118,7 @@ export default {
                 baseId: undefined,
                 tableId: undefined,
                 view: undefined,
-                depth: 1,
+                depth: 0,
                 fields: null,
                 ...this.config,
             };
