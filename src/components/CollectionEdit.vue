@@ -2,7 +2,7 @@
     <div class="airtable-collection-edit">
         <div class="airtable-collection-edit__row">
             <wwEditorFormRow label="Base" required class="-full">
-                <wwEditorSelect
+                <wwEditorInputTextSelect
                     :options="basesOptions"
                     :model-value="table.baseId"
                     placeholder="Select a base"
@@ -16,7 +16,7 @@
         </div>
         <div class="airtable-collection-edit__row">
             <wwEditorFormRow label="Table" required class="-full">
-                <wwEditorSelect
+                <wwEditorInputTextSelect
                     :options="tablesOptions"
                     :model-value="table.tableId"
                     :disabled="!table.baseId"
@@ -35,8 +35,8 @@
             </button>
         </div>
         <div class="airtable-collection-edit__row">
-            <wwEditorFormRow label="View" class="-full" required>
-                <wwEditorSelect
+            <wwEditorFormRow label="View" class="w-50" required>
+                <wwEditorInputTextSelect
                     :options="tablesViewsOptions"
                     :model-value="table.view"
                     :disabled="!table.tableId"
@@ -45,11 +45,11 @@
                     @update:modelValue="setProp('view', $event)"
                 />
             </wwEditorFormRow>
-            <wwEditorFormRow label="Lookup depth" class="m-left">
-                <wwEditorFormInput
+            <wwEditorFormRow label="Lookup depth" class="w-50 m-left">
+                <wwEditorInputText
                     type="number"
                     name="depth"
-                    placeholder="Default: 1"
+                    placeholder="Default: 0"
                     :model-value="table.depth"
                     large
                     @update:modelValue="setProp('depth', $event)"
@@ -58,94 +58,34 @@
         </div>
         <wwEditorFormRow label="Filter fields to fetch">
             <template #append-label>
-                <wwManagerRadio
-                    class="m-auto-left m-bottom"
-                    :modelValue="isFilterFields"
-                    @update:modelValue="filterFields()"
-                ></wwManagerRadio>
+                <wwEditorInputSwitch
+                    class="m-auto-left"
+                    :model-value="isFilterFields"
+                    @update:modelValue="filterFields"
+                />
             </template>
-            <template v-if="isFilterFields">
-                <div
+            <div v-if="isFilterFields" class="airtable-collection-edit__row -wrap">
+                <wwEditorInputTextSelect
                     v-for="(field, index) in table.fields"
                     :key="index"
-                    class="airtable-collection-edit__row -space-between m-bottom"
-                >
-                    <wwEditorSelect
-                        :options="tablesFieldsOptions"
-                        :model-value="field"
-                        :disabled="!table.tableId"
-                        placeholder="Select a field"
-                        @update:modelValue="setFieldsProp(index, $event)"
-                    />
-                    <button
-                        type="button"
-                        class="ww-editor-button -tertiary -small -red -icon"
-                        @click="deleteField(index)"
-                    >
-                        <wwEditorIcon class="ww-editor-button-icon" name="delete" small />
-                    </button>
-                </div>
-                <div class="airtable-collection-edit__row -space-between m-bottom">
-                    <wwEditorSelect
-                        :options="tablesFieldsWithSelectOptions"
-                        placeholder="Select a field"
-                        @update:modelValue="setFieldsProp(null, $event)"
-                    />
-                </div> </template
-        ></wwEditorFormRow>
-
-        <wwEditorFormRow label="Filter by formula">
-            <template #append-label>
-                <a
-                    class="airtable-collection-edit__link"
-                    href="//support.airtable.com/hc/en-us/articles/203255215-Formula-field-reference"
-                    target="_blank"
-                >
-                    Find it here
-                </a>
-            </template>
-            <wwEditorFormInput
-                type="text"
-                name="filter-formula"
-                placeholder="{Name} = 'Mr Toucan'"
-                :model-value="table.filterByFormula"
-                large
-                @update:modelValue="setProp('filterByFormula', $event)"
-            />
-        </wwEditorFormRow>
-        <wwEditorFormRow label="Sort">
-            <template #append-label>
-                <button
-                    type="button"
-                    class="ww-editor-button -primary -small m-auto-left m-bottom"
-                    :disabled="!table.tableId"
-                    @click="addSort"
-                >
-                    Add a field to sort by
-                </button>
-            </template>
-            <div
-                v-for="(sort, index) in table.sort"
-                :key="index"
-                class="airtable-collection-edit__row -space-between m-bottom"
-            >
-                <div v-if="!index" class="label-xs">Sort by</div>
-                <div v-else class="label-xs">then by</div>
-                <wwEditorSelect
-                    :options="tablesFieldsOptions"
-                    :model-value="sort.field"
+                    class="m-bottom m-right"
+                    :options="tablesFieldsOptions(index)"
+                    :actions="filterFieldsActions"
+                    :model-value="field"
                     :disabled="!table.tableId"
                     placeholder="Select a field"
-                    @update:modelValue="setSortProp(index, { field: $event })"
+                    small
+                    @update:modelValue="setFieldsProp(index, $event)"
+                    @action="$event.onAction(index)"
                 />
-                <wwEditorSelect
-                    :options="directionOptions"
-                    :model-value="sort.direction"
-                    @update:modelValue="setSortProp(index, { direction: $event })"
+                <wwEditorInputTextSelect
+                    v-if="tablesFieldsOptions().length"
+                    class="m-bottom"
+                    :options="tablesFieldsOptions()"
+                    placeholder="Select a field"
+                    small
+                    @update:modelValue="setFieldsProp(null, $event)"
                 />
-                <button type="button" class="ww-editor-button -tertiary -small -red -icon" @click="deleteSort(index)">
-                    <wwEditorIcon class="ww-editor-button-icon" name="delete" small />
-                </button>
             </div>
         </wwEditorFormRow>
         <wwLoader :loading="isBasesLoading || isTablesLoading" />
@@ -169,6 +109,7 @@ export default {
                 { value: 'asc', label: 'Asc', default: true },
                 { value: 'desc', label: 'Desc' },
             ],
+            filterFieldsActions: [{ icon: 'delete', label: 'Remove field', onAction: this.deleteField }],
         };
     },
     computed: {
@@ -177,55 +118,26 @@ export default {
                 baseId: undefined,
                 tableId: undefined,
                 view: undefined,
-                depth: 1,
-                sort: [],
+                depth: 0,
                 fields: null,
                 ...this.config,
             };
         },
         basesOptions() {
             return this.allBases
-                .map(base => {
-                    return { value: base.id, label: base.name };
-                })
+                .map(base => ({ value: base.id, label: base.name }))
                 .sort((a, b) => a.label.localeCompare(b.label));
         },
         tablesOptions() {
             return this.allTables
-                .map(table => {
-                    return { value: table.id, label: table.name };
-                })
+                .map(table => ({ value: table.id, label: table.name }))
                 .sort((a, b) => a.label.localeCompare(b.label));
-        },
-        tablesFieldsOptions() {
-            const table = this.allTables.find(table => table.id === this.table.tableId);
-            if (!table) return [];
-            return table.fields
-                .map(field => {
-                    return { value: field.name, label: field.name };
-                })
-                .sort((a, b) => a.label.localeCompare(b.label));
-        },
-        tablesFieldsWithSelectOptions() {
-            const table = this.allTables.find(table => table.id === this.table.tableId);
-            if (!table) return [];
-            const fields = table.fields
-                .map(field => {
-                    return { value: field.name, label: field.name };
-                })
-                .sort((a, b) => a.label.localeCompare(b.label));
-
-            fields.unshift({ value: null, label: 'Select a field' });
-
-            return fields;
         },
         tablesViewsOptions() {
             const table = this.allTables.find(table => table.id === this.table.tableId);
             if (!table) return [];
             return table.views
-                .map(view => {
-                    return { value: view.name, label: view.name };
-                })
+                .map(view => ({ value: view.name, label: view.name }))
                 .sort((a, b) => a.label.localeCompare(b.label));
         },
         isFilterFields() {
@@ -269,21 +181,6 @@ export default {
             }
             this.isTablesLoading = false;
         },
-        addSort() {
-            const sorts = _.cloneDeep(this.table.sort || []);
-            sorts.push({ field: this.tablesFieldsOptions[0].value, direction: 'asc' });
-            this.setProp('sort', sorts);
-        },
-        setSortProp(index, value) {
-            const sorts = _.cloneDeep(this.table.sort);
-            sorts.splice(index, 1, { ...sorts[index], ...value });
-            this.setProp('sort', sorts);
-        },
-        deleteSort(index) {
-            const sorts = _.cloneDeep(this.table.sort);
-            sorts.splice(index, 1);
-            this.setProp('sort', sorts);
-        },
         setBase(baseId) {
             if (baseId === this.table.baseId) return;
             const base = this.allBases.find(base => base.id === baseId);
@@ -305,7 +202,6 @@ export default {
                 result.view = undefined;
                 result.displayBy = undefined;
             }
-            result.sort = [];
             result.tableId = tableId;
 
             return result;
@@ -325,16 +221,26 @@ export default {
             if (!field) return;
             const fields = _.cloneDeep(this.table.fields);
             if (index === null || index > fields.length) fields.push(field);
-            else {
-                fields[index] = field;
-            }
-
+            else fields[index] = field;
             this.setProp('fields', fields);
         },
         deleteField(index) {
             const fields = _.cloneDeep(this.table.fields);
             fields.splice(index, 1);
             this.setProp('fields', fields);
+        },
+        tablesFieldsOptions(index = -1) {
+            const table = this.allTables.find(table => table.id === this.table.tableId);
+            if (!table) return [];
+            return table.fields
+                .map(field => ({ value: field.name, label: field.name }))
+                .sort((a, b) => a.label.localeCompare(b.label))
+                .filter(
+                    item =>
+                        !this.table.fields ||
+                        !this.table.fields.find(field => field === item.value) ||
+                        (index !== -1 && this.table.fields[index] === item.value)
+                );
         },
     },
 };
@@ -354,6 +260,9 @@ export default {
         &.-space-between {
             justify-content: space-between;
         }
+        &.-wrap {
+            flex-wrap: wrap;
+        }
         .-full {
             width: 100%;
         }
@@ -364,8 +273,14 @@ export default {
     .m-left {
         margin-left: var(--ww-spacing-02);
     }
+    .m-right {
+        margin-right: var(--ww-spacing-02);
+    }
     .m-bottom {
         margin-bottom: var(--ww-spacing-02);
+    }
+    .w-50 {
+        width: 50%;
     }
 }
 </style>
