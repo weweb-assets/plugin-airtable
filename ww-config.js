@@ -23,6 +23,7 @@ export default {
                 { name: 'collectionId', type: 'string' },
                 { name: 'recordData', type: 'object', optional: true },
             ],
+            isAsync: true,
         },
         {
             name: 'Update a record',
@@ -32,6 +33,7 @@ export default {
                 { name: 'recordId', type: 'string' },
                 { name: 'recordData', type: 'object', optional: true },
             ],
+            isAsync: true,
         },
         {
             name: 'Delete a record',
@@ -40,6 +42,7 @@ export default {
                 { name: 'collectionId', type: 'string' },
                 { name: 'recordId', type: 'string' },
             ],
+            isAsync: true,
         },
     ],
 };
