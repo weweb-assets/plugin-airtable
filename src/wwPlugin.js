@@ -60,10 +60,13 @@ export default {
         );
         /* wwFront:end */
 
-        const record = { id: response.data.data.id, ...response.data.data.fields };
-
+        const record = response.data.data;
         const collection = wwLib.$store.getters['data/getCollections'][cmsDataSetId];
-        wwLib.$store.dispatch('data/setCollection', { ...collection, data: [...collection.data, record] });
+        wwLib.$store.dispatch('data/setCollection', {
+            ...collection,
+            total: collection.total + 1,
+            data: [...collection.data, record],
+        });
 
         return record;
     },
@@ -85,8 +88,7 @@ export default {
         );
         /* wwFront:end */
 
-        const record = { id: response.data.data.id, ...response.data.data.fields };
-
+        const record = response.data.data;
         const collection = _.cloneDeep(wwLib.$store.getters['data/getCollections'][cmsDataSetId]);
         const recordIndex = collection.data.findIndex(item => item.id === recordId);
         collection.data.splice(recordIndex, 1, record);
