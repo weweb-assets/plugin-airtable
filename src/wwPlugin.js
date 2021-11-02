@@ -112,12 +112,39 @@ export default {
         );
         /* wwFront:end */
 
-        const record = { id: response.data.data.id, ...response.data.data.fields };
-
+        const record = response.data.data;
         const collection = _.cloneDeep(wwLib.$store.getters['data/getCollections'][cmsDataSetId]);
         const recordIndex = collection.data.findIndex(item => item.id === recordId);
         collection.data.splice(recordIndex, 1);
-        wwLib.$store.dispatch('data/setCollection', { ...collection, data: collection.data });
+        wwLib.$store.dispatch('data/setCollection', {
+            ...collection,
+            total: collection.total - 1,
+            data: collection.data,
+        });
+
+        return record;
+    },
+    async syncRecord(cmsDataSetId, recordId) {
+        const websiteId = wwLib.wwWebsiteData.getInfo().id;
+
+        const response = await axios.get(
+            `${wwLib.wwApiRequests._getPluginsUrl()}/hook/designs/${websiteId}/cms_data_sets/${cmsDataSetId}/sync/${recordId}/update`
+        );
+        const record = response.data.data;
+
+        const collection = _.cloneDeep(wwLib.$store.getters['data/getCollections'][cmsDataSetId]);
+        const recordIndex = collection.data.findIndex(item => item.id === recordId);
+        if (recordIndex === -1) {
+            collection.data.push(record);
+            wwLib.$store.dispatch('data/setCollection', {
+                ...collection,
+                total: collection.total + 1,
+                data: collection.data,
+            });
+        } else {
+            collection.data.splice(recordIndex, 1, record);
+            wwLib.$store.dispatch('data/setCollection', { ...collection, data: collection.data });
+        }
 
         return record;
     },

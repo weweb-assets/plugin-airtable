@@ -44,5 +44,14 @@ export default {
             ],
             isAsync: true,
         },
+        {
+            name: 'Sync a record',
+            code: 'syncRecord',
+            parameters: [
+                { name: 'collectionId', type: 'string' },
+                { name: 'recordId', type: 'string' },
+            ],
+            isAsync: true,
+        },
     ],
 };
