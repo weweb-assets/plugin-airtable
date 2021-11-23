@@ -43,112 +43,133 @@ export default {
     },
     /* wwEditor:end */
     async createRecord(cmsDataSetId, data) {
-        const websiteId = wwLib.wwWebsiteData.getInfo().id;
+        try {
+            const websiteId = wwLib.wwWebsiteData.getInfo().id;
 
-        let response = null;
-        /* wwEditor:start */
-        response = await axios.post(
-            `${wwLib.wwApiRequests._getPluginsUrl()}/designs/${websiteId}/cms_data_sets/${cmsDataSetId}/airtable/record`,
-            { data },
-            { headers: wwLib.wwApiRequests._getAuthHeader() }
-        );
-        /* wwEditor:end */
-        /* wwFront:start */
-        response = await axios.post(
-            `//${websiteId}.${wwLib.wwApiRequests._getPreviewUrl()}/ww/cms_data_sets/${cmsDataSetId}/airtable/record`,
-            { data }
-        );
-        /* wwFront:end */
+            let response = null;
+            /* wwEditor:start */
+            response = await axios.post(
+                `${wwLib.wwApiRequests._getPluginsUrl()}/designs/${websiteId}/cms_data_sets/${cmsDataSetId}/airtable/record`,
+                { data },
+                { headers: wwLib.wwApiRequests._getAuthHeader() }
+            );
+            /* wwEditor:end */
+            /* wwFront:start */
+            response = await axios.post(
+                `//${websiteId}.${wwLib.wwApiRequests._getPreviewUrl()}/ww/cms_data_sets/${cmsDataSetId}/airtable/record`,
+                { data }
+            );
+            /* wwFront:end */
 
-        const record = response.data.data;
-        const collection = wwLib.$store.getters['data/getCollections'][cmsDataSetId];
-        wwLib.$store.dispatch('data/setCollection', {
-            ...collection,
-            total: collection.total + 1,
-            data: [...collection.data, record],
-        });
-
-        return record;
-    },
-    async updateRecord(cmsDataSetId, recordId, data) {
-        const websiteId = wwLib.wwWebsiteData.getInfo().id;
-
-        let response = null;
-        /* wwEditor:start */
-        response = await axios.patch(
-            `${wwLib.wwApiRequests._getPluginsUrl()}/designs/${websiteId}/cms_data_sets/${cmsDataSetId}/airtable/record/${recordId}`,
-            { data },
-            { headers: wwLib.wwApiRequests._getAuthHeader() }
-        );
-        /* wwEditor:end */
-        /* wwFront:start */
-        response = await axios.patch(
-            `//${websiteId}.${wwLib.wwApiRequests._getPreviewUrl()}/ww/cms_data_sets/${cmsDataSetId}/airtable/record/${recordId}`,
-            { data }
-        );
-        /* wwFront:end */
-
-        const record = response.data.data;
-        const collection = _.cloneDeep(wwLib.$store.getters['data/getCollections'][cmsDataSetId]);
-        if (!collection) return null
-        const recordIndex = collection.data.findIndex(item => item && item.id === recordId);
-        collection.data.splice(recordIndex, 1, record);
-        wwLib.$store.dispatch('data/setCollection', { ...collection, data: collection.data });
-
-        return record;
-    },
-    async deleteRecord(cmsDataSetId, recordId) {
-        const websiteId = wwLib.wwWebsiteData.getInfo().id;
-
-        let response = null;
-        /* wwEditor:start */
-        response = await axios.delete(
-            `${wwLib.wwApiRequests._getPluginsUrl()}/designs/${websiteId}/cms_data_sets/${cmsDataSetId}/airtable/record/${recordId}`,
-            { headers: wwLib.wwApiRequests._getAuthHeader() }
-        );
-        /* wwEditor:end */
-        /* wwFront:start */
-        response = await axios.delete(
-            `//${websiteId}.${wwLib.wwApiRequests._getPreviewUrl()}/ww/cms_data_sets/${cmsDataSetId}/airtable/record/${recordId}`
-        );
-        /* wwFront:end */
-
-        const record = response.data.data;
-        const collection = _.cloneDeep(wwLib.$store.getters['data/getCollections'][cmsDataSetId]);
-        if (!collection) return null
-        const recordIndex = collection.data.findIndex(item => item && item.id === recordId);
-        collection.data.splice(recordIndex, 1);
-        wwLib.$store.dispatch('data/setCollection', {
-            ...collection,
-            total: collection.total - 1,
-            data: collection.data,
-        });
-
-        return record;
-    },
-    async syncRecord(cmsDataSetId, recordId) {
-        const websiteId = wwLib.wwWebsiteData.getInfo().id;
-
-        const response = await axios.get(
-            `${wwLib.wwApiRequests._getPluginsUrl()}/hook/designs/${websiteId}/cms_data_sets/${cmsDataSetId}/sync/${recordId}/update`
-        );
-        const record = response.data.data;
-
-        const collection = _.cloneDeep(wwLib.$store.getters['data/getCollections'][cmsDataSetId]);
-        if (!collection) return null
-        const recordIndex = collection.data.findIndex(item => item && item.id === recordId);
-        if (recordIndex === -1) {
-            collection.data.push(record);
+            const record = response.data.data;
+            const collection = wwLib.$store.getters['data/getCollections'][cmsDataSetId];
             wwLib.$store.dispatch('data/setCollection', {
                 ...collection,
                 total: collection.total + 1,
-                data: collection.data,
+                data: [...collection.data, record],
             });
-        } else {
+
+            return record;
+        } catch (error) {
+            wwLib.wwLog.error("Record not created :")
+            wwLib.wwLog.error(error)
+        }
+    },
+    async updateRecord(cmsDataSetId, recordId, data) {
+        try {
+            const websiteId = wwLib.wwWebsiteData.getInfo().id;
+
+            let response = null;
+            /* wwEditor:start */
+            response = await axios.patch(
+                `${wwLib.wwApiRequests._getPluginsUrl()}/designs/${websiteId}/cms_data_sets/${cmsDataSetId}/airtable/record/${recordId}`,
+                { data },
+                { headers: wwLib.wwApiRequests._getAuthHeader() }
+            );
+            /* wwEditor:end */
+            /* wwFront:start */
+            response = await axios.patch(
+                `//${websiteId}.${wwLib.wwApiRequests._getPreviewUrl()}/ww/cms_data_sets/${cmsDataSetId}/airtable/record/${recordId}`,
+                { data }
+            );
+            /* wwFront:end */
+
+            const record = response.data.data;
+            const collection = _.cloneDeep(wwLib.$store.getters['data/getCollections'][cmsDataSetId]);
+            if (!collection) return null
+            const recordIndex = collection.data.findIndex(item => item && item.id === recordId);
             collection.data.splice(recordIndex, 1, record);
             wwLib.$store.dispatch('data/setCollection', { ...collection, data: collection.data });
-        }
 
-        return record;
+            return record;
+        } catch (error) {
+            wwLib.wwLog.error("Record not updated :")
+            wwLib.wwLog.error(error)
+        }
+    },
+    async deleteRecord(cmsDataSetId, recordId) {
+        try {
+            const websiteId = wwLib.wwWebsiteData.getInfo().id;
+
+            let response = null;
+            /* wwEditor:start */
+            response = await axios.delete(
+                `${wwLib.wwApiRequests._getPluginsUrl()}/designs/${websiteId}/cms_data_sets/${cmsDataSetId}/airtable/record/${recordId}`,
+                { headers: wwLib.wwApiRequests._getAuthHeader() }
+            );
+            /* wwEditor:end */
+            /* wwFront:start */
+            response = await axios.delete(
+                `//${websiteId}.${wwLib.wwApiRequests._getPreviewUrl()}/ww/cms_data_sets/${cmsDataSetId}/airtable/record/${recordId}`
+            );
+            /* wwFront:end */
+
+            const record = response.data.data;
+            const collection = _.cloneDeep(wwLib.$store.getters['data/getCollections'][cmsDataSetId]);
+            if (!collection) return null
+            const recordIndex = collection.data.findIndex(item => item && item.id === recordId);
+            collection.data.splice(recordIndex, 1);
+            wwLib.$store.dispatch('data/setCollection', {
+                ...collection,
+                total: collection.total - 1,
+                data: collection.data,
+            });
+
+            return record;
+        } catch (error) {
+            wwLib.wwLog.error("Record not deleted :")
+            wwLib.wwLog.error(error)
+        }
+    },
+    async syncRecord(cmsDataSetId, recordId) {
+        try {
+
+            const websiteId = wwLib.wwWebsiteData.getInfo().id;
+
+            const response = await axios.get(
+                `${wwLib.wwApiRequests._getPluginsUrl()}/hook/designs/${websiteId}/cms_data_sets/${cmsDataSetId}/sync/${recordId}/update`
+            );
+            const record = response.data.data;
+
+            const collection = _.cloneDeep(wwLib.$store.getters['data/getCollections'][cmsDataSetId]);
+            if (!collection) return null
+            const recordIndex = collection.data.findIndex(item => item && item.id === recordId);
+            if (recordIndex === -1) {
+                collection.data.push(record);
+                wwLib.$store.dispatch('data/setCollection', {
+                    ...collection,
+                    total: collection.total + 1,
+                    data: collection.data,
+                });
+            } else {
+                collection.data.splice(recordIndex, 1, record);
+                wwLib.$store.dispatch('data/setCollection', { ...collection, data: collection.data });
+            }
+
+            return record;
+        } catch (error) {
+            wwLib.wwLog.error("Record not sync :")
+            wwLib.wwLog.error(error)
+        }
     },
 };
