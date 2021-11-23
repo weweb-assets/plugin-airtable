@@ -90,6 +90,7 @@ export default {
 
         const record = response.data.data;
         const collection = _.cloneDeep(wwLib.$store.getters['data/getCollections'][cmsDataSetId]);
+        if (!collection) return null
         const recordIndex = collection.data.findIndex(item => item && item.id === recordId);
         collection.data.splice(recordIndex, 1, record);
         wwLib.$store.dispatch('data/setCollection', { ...collection, data: collection.data });
@@ -114,6 +115,7 @@ export default {
 
         const record = response.data.data;
         const collection = _.cloneDeep(wwLib.$store.getters['data/getCollections'][cmsDataSetId]);
+        if (!collection) return null
         const recordIndex = collection.data.findIndex(item => item && item.id === recordId);
         collection.data.splice(recordIndex, 1);
         wwLib.$store.dispatch('data/setCollection', {
@@ -133,6 +135,7 @@ export default {
         const record = response.data.data;
 
         const collection = _.cloneDeep(wwLib.$store.getters['data/getCollections'][cmsDataSetId]);
+        if (!collection) return null
         const recordIndex = collection.data.findIndex(item => item && item.id === recordId);
         if (recordIndex === -1) {
             collection.data.push(record);
