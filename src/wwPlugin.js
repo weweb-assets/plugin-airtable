@@ -71,7 +71,7 @@ export default {
 
             return record;
         } catch (error) {
-            wwLib.wwLog.error("Record not created :")
+            wwLib.wwLog.error(`Record not created : `, data)
             wwLib.wwLog.error(error)
         }
     },
@@ -103,7 +103,7 @@ export default {
 
             return record;
         } catch (error) {
-            wwLib.wwLog.error("Record not updated :")
+            wwLib.wwLog.error(`Record not updated : ${recordId}`, data)
             wwLib.wwLog.error(error)
         }
     },
@@ -137,7 +137,7 @@ export default {
 
             return record;
         } catch (error) {
-            wwLib.wwLog.error("Record not deleted :")
+            wwLib.wwLog.error(`Record not deleted : ${recordId}`)
             wwLib.wwLog.error(error)
         }
     },
@@ -168,7 +168,7 @@ export default {
 
             return record;
         } catch (error) {
-            wwLib.wwLog.error("Record not sync :")
+            wwLib.wwLog.error(`Record not sync : ${recordId}`)
             wwLib.wwLog.error(error)
         }
     },
