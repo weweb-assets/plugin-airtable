@@ -26,7 +26,7 @@ export default {
     },
     emits: ['update:args'],
     computed: {
-       collectionOptions() {
+        collectionOptions() {
             const collections = wwLib.$store.getters['data/getCollections'];
             const plugins = wwLib.$store.getters['websiteData/getPluginById'];
             return Object.values(collections)
@@ -38,11 +38,11 @@ export default {
                 }));
         },
         collectionId() {
-            return this.args[0]
+            return this.args[0];
         },
         recordId() {
-            return this.args[1]
-        }
+            return this.args[1];
+        },
     },
     methods: {
         setCollectionId(collectionId) {
@@ -50,7 +50,7 @@ export default {
         },
         setRecordId(recordId) {
             this.$emit('update:args', [this.collectionId, recordId]);
-        }
+        },
     },
 };
 </script>
