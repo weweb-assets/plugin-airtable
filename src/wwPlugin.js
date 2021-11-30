@@ -3,6 +3,10 @@ import './components/SettingsEdit.vue';
 import './components/SettingsSummary.vue';
 import './components/CollectionEdit.vue';
 import './components/CollectionSummary.vue';
+import './components/RecordCreate.vue';
+import './components/RecordDelete.vue';
+import './components/RecordSync.vue';
+import './components/RecordUpdate.vue';
 import { GET_AIRTABLE_BASES, GET_AIRTABLE_TABLES } from './graphql';
 /* wwEditor:end */
 
@@ -71,8 +75,8 @@ export default {
 
             return record;
         } catch (error) {
-            wwLib.wwLog.error(`Record not created : `, data)
-            wwLib.wwLog.error(error)
+            wwLib.wwLog.error('Record not created : ', data);
+            wwLib.wwLog.error(error);
         }
     },
     async updateRecord(cmsDataSetId, recordId, data) {
@@ -96,15 +100,15 @@ export default {
 
             const record = response.data.data;
             const collection = _.cloneDeep(wwLib.$store.getters['data/getCollections'][cmsDataSetId]);
-            if (!collection) return null
+            if (!collection) return null;
             const recordIndex = collection.data.findIndex(item => item && item.id === recordId);
             collection.data.splice(recordIndex, 1, record);
             wwLib.$store.dispatch('data/setCollection', { ...collection, data: collection.data });
 
             return record;
         } catch (error) {
-            wwLib.wwLog.error(`Record not updated : ${recordId}`, data)
-            wwLib.wwLog.error(error)
+            wwLib.wwLog.error(`Record not updated : ${recordId}`, data);
+            wwLib.wwLog.error(error);
         }
     },
     async deleteRecord(cmsDataSetId, recordId) {
@@ -126,7 +130,7 @@ export default {
 
             const record = response.data.data;
             const collection = _.cloneDeep(wwLib.$store.getters['data/getCollections'][cmsDataSetId]);
-            if (!collection) return null
+            if (!collection) return null;
             const recordIndex = collection.data.findIndex(item => item && item.id === recordId);
             collection.data.splice(recordIndex, 1);
             wwLib.$store.dispatch('data/setCollection', {
@@ -137,13 +141,12 @@ export default {
 
             return record;
         } catch (error) {
-            wwLib.wwLog.error(`Record not deleted : ${recordId}`)
-            wwLib.wwLog.error(error)
+            wwLib.wwLog.error(`Record not deleted : ${recordId}`);
+            wwLib.wwLog.error(error);
         }
     },
     async syncRecord(cmsDataSetId, recordId) {
         try {
-
             const websiteId = wwLib.wwWebsiteData.getInfo().id;
 
             const response = await axios.get(
@@ -152,7 +155,7 @@ export default {
             const record = response.data.data;
 
             const collection = _.cloneDeep(wwLib.$store.getters['data/getCollections'][cmsDataSetId]);
-            if (!collection) return null
+            if (!collection) return null;
             const recordIndex = collection.data.findIndex(item => item && item.id === recordId);
             if (recordIndex === -1) {
                 collection.data.push(record);
@@ -168,8 +171,8 @@ export default {
 
             return record;
         } catch (error) {
-            wwLib.wwLog.error(`Record not sync : ${recordId}`)
-            wwLib.wwLog.error(error)
+            wwLib.wwLog.error(`Record not sync : ${recordId}`);
+            wwLib.wwLog.error(error);
         }
     },
 };

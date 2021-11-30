@@ -24,6 +24,12 @@ export default {
                 { name: 'recordData', type: 'object', optional: true },
             ],
             isAsync: true,
+            /* wwEditor:start */
+            edit: () => import('./src/components/RecordCreate.vue'),
+            getIsValid([collectionId, recordData]) {
+                return !!collectionId && !!recordData;
+            },
+            /* wwEditor:end */
         },
         {
             name: 'Update a record',
@@ -34,6 +40,12 @@ export default {
                 { name: 'recordData', type: 'object', optional: true },
             ],
             isAsync: true,
+            /* wwEditor:start */
+            edit: () => import('./src/components/RecordUpdate.vue'),
+            getIsValid([collectionId, recordId, recordData]) {
+                return !!collectionId && !!recordId && !!recordData;
+            },
+            /* wwEditor:end */
         },
         {
             name: 'Delete a record',
@@ -43,6 +55,12 @@ export default {
                 { name: 'recordId', type: 'string' },
             ],
             isAsync: true,
+            /* wwEditor:start */
+            edit: () => import('./src/components/RecordDelete.vue'),
+            getIsValid([collectionId, recordId]) {
+                return !!collectionId && !!recordId;
+            },
+            /* wwEditor:end */
         },
         {
             name: 'Sync a record',
@@ -52,6 +70,12 @@ export default {
                 { name: 'recordId', type: 'string' },
             ],
             isAsync: true,
+            /* wwEditor:start */
+            edit: () => import('./src/components/RecordSync.vue'),
+            getIsValid([collectionId, recordId]) {
+                return !!collectionId && !!recordId;
+            },
+            /* wwEditor:end */
         },
     ],
 };
