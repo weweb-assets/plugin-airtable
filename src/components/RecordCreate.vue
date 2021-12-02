@@ -4,7 +4,6 @@
             :options="collectionOptions"
             :model-value="collectionId"
             placeholder="Select a collection"
-            large
             @update:modelValue="setCollectionId"
         />
     </wwEditorFormRow>
@@ -16,6 +15,7 @@
                     :type="typesConvertion[field.type]"
                     :model-value="data[field.label]"
                     :options="field.options"
+                    :label="field.label"
                     bindable
                     @update:modelValue="setRecordData(field.label, $event)"
                 />
