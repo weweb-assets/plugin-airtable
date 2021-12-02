@@ -39,7 +39,7 @@
 export default {
     props: {
         plugin: { type: Object, required: true },
-        args: { type: Array, default: () => [null, {}] },
+        args: { type: Array, default: () => [null, null, {}] },
     },
     emits: ['update:args'],
     data() {
