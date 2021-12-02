@@ -16,6 +16,7 @@
                     :type="typesConvertion[field.type]"
                     :model-value="data[field.label]"
                     :options="field.options"
+                    bindable
                     @update:modelValue="setRecordData(field.label, $event)"
                 />
             </wwEditorFormRow>

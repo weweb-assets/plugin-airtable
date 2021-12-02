@@ -9,10 +9,12 @@
         />
     </wwEditorFormRow>
     <wwEditorFormRow label="Record ID" required>
-        <wwEditorInputText
+        <wwEditorInput
+            type="query"
             :model-value="recordId"
             placeholder="Enter a record ID"
             large
+            bindable
             @update:modelValue="setRecordId"
         />
     </wwEditorFormRow>
@@ -24,6 +26,7 @@
                     :type="typesConvertion[field.type]"
                     :model-value="data[field.label]"
                     :options="field.options"
+                    bindable
                     @update:modelValue="setRecordData(field.label, $event)"
                 />
             </wwEditorFormRow>
