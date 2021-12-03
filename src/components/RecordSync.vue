@@ -4,15 +4,16 @@
             :options="collectionOptions"
             :model-value="collectionId"
             placeholder="Select a collection"
-            large
             @update:modelValue="setCollectionId"
         />
     </wwEditorFormRow>
     <wwEditorFormRow label="Record ID" required>
-        <wwEditorInputText
+        <wwEditorInput
+            type="query"
             :model-value="recordId"
             placeholder="Enter a record ID"
-            large
+            label="Record ID"
+            bindable
             @update:modelValue="setRecordId"
         />
     </wwEditorFormRow>
