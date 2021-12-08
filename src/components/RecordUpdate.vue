@@ -137,9 +137,9 @@ export default {
         },
         setRecordData(key, value) {
             const data = { ...this.data, [key]: value };
-            for (const key in data) {
-                if (!this.tableFields.find(field => field.label === key)) {
-                    delete data[key];
+            for (const dataKey in data) {
+                if (!this.tableFields.find(field => field.label === dataKey)) {
+                    delete data[dataKey];
                 }
             }
             this.$emit('update:args', [this.collectionId, this.recordId, data]);
