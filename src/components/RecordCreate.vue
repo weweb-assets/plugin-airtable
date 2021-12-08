@@ -9,17 +9,29 @@
     </wwEditorFormRow>
     <div v-if="collection" class="relative">
         <div v-for="field of tableFields" :key="field.label">
-            <wwEditorFormRow v-if="typesConvertion[field.type]" :label="field.label">
-                <wwEditorInput
-                    placeholder="Enter a value"
-                    :type="typesConvertion[field.type]"
-                    :model-value="data[field.label]"
-                    :options="field.options"
-                    :label="field.label"
-                    bindable
-                    @update:modelValue="setRecordData(field.label, $event)"
-                />
-            </wwEditorFormRow>
+            <wwEditorInputRow
+                v-if="typesConvertion[field.type]"
+                placeholder="Enter a value"
+                :type="typesConvertion[field.type]"
+                :model-value="data[field.label]"
+                :options="field.options"
+                :label="field.label"
+                bindable
+                @update:modelValue="setRecordData(field.label, $event)"
+                @add-item="setRecordData(field.label, [...(data[field.label] || []), ''])"
+            >
+                <template v-if="field.type === 'multipleRecordLinks'" #default="{ item, setItem }">
+                    <wwEditorInput
+                        type="query"
+                        :model-value="item"
+                        :label="field.label"
+                        placeholder="Enter a record ID"
+                        bindable
+                        small
+                        @update:modelValue="setItem($event)"
+                    />
+                </template>
+            </wwEditorInputRow>
         </div>
         <wwLoader v-if="isTablesLoading" :loading="true" />
     </div>
@@ -54,6 +66,7 @@ export default {
                 duration: 'number',
                 rating: 'number',
                 barcode: 'query',
+                multipleRecordLinks: 'array',
             },
         };
     },
