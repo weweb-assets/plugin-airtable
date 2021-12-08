@@ -31,7 +31,7 @@
                 @add-item="setRecordData(field.label, [...(data[field.label] || []), ''])"
             >
                 <template v-if="field.type === 'multipleRecordLinks'" #default="{ item, setItem }">
-                    <wwEditorInputRow>
+                    <wwEditorFormRow>
                         <wwEditorInput
                             type="query"
                             :model-value="item"
@@ -41,7 +41,7 @@
                             small
                             @update:modelValue="setItem($event)"
                         />
-                    </wwEditorInputRow>
+                    </wwEditorFormRow>
                 </template>
             </wwEditorInputRow>
         </div>
