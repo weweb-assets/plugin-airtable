@@ -21,15 +21,17 @@
                 @add-item="setRecordData(field.label, [...(data[field.label] || []), ''])"
             >
                 <template v-if="field.type === 'multipleRecordLinks'" #default="{ item, setItem }">
-                    <wwEditorInput
-                        type="query"
-                        :model-value="item"
-                        :label="field.label"
-                        placeholder="Enter a record ID"
-                        bindable
-                        small
-                        @update:modelValue="setItem($event)"
-                    />
+                    <wwEditorInputRow>
+                        <wwEditorInput
+                            type="query"
+                            :model-value="item"
+                            :label="field.label"
+                            placeholder="Enter a record ID"
+                            bindable
+                            small
+                            @update:modelValue="setItem($event)"
+                        />
+                    </wwEditorInputRow>
                 </template>
             </wwEditorInputRow>
         </div>
