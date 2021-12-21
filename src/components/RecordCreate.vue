@@ -16,6 +16,7 @@
                 :model-value="data[field.label]"
                 :options="field.options"
                 :label="field.label"
+                step="0.1"
                 bindable
                 @update:modelValue="setRecordData(field.label, $event)"
                 @add-item="setRecordData(field.label, [...(data[field.label] || []), ''])"
