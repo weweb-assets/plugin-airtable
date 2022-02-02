@@ -11,7 +11,7 @@
         <div v-for="field of tableFields" :key="field.label">
             <wwEditorInputRow
                 v-if="typesConvertion[field.type]"
-                placeholder="Enter a value"
+                :placeholder="field.options ? 'Select a value' : 'Enter a value'"
                 :type="typesConvertion[field.type]"
                 :model-value="data[field.label]"
                 :options="field.options"
@@ -19,10 +19,10 @@
                 step="0.1"
                 bindable
                 @update:modelValue="setRecordData(field.label, $event)"
-                @add-item="setRecordData(field.label, [...(data[field.label] || []), ''])"
+                @add-item="addItem(field)"
             >
-                <template v-if="field.type === 'multipleRecordLinks'" #default="{ item, setItem }">
-                    <wwEditorFormRow>
+                <template v-if="typesConvertion[field.type] === 'array'" #default="{ item, setItem }">
+                    <wwEditorFormRow v-if="field.type === 'multipleRecordLinks'">
                         <wwEditorInput
                             type="query"
                             :model-value="item"
@@ -31,6 +31,29 @@
                             bindable
                             small
                             @update:modelValue="setItem($event)"
+                        />
+                    </wwEditorFormRow>
+                    <wwEditorFormRow v-else-if="field.type === 'multipleSelects'">
+                        <wwEditorInput
+                            type="select"
+                            :model-value="item"
+                            :label="field.label"
+                            placeholder="Select a value"
+                            :options="field.options"
+                            bindable
+                            small
+                            @update:modelValue="setItem($event)"
+                        />
+                    </wwEditorFormRow>
+                    <wwEditorFormRow v-else-if="field.type === 'multipleAttachments'">
+                        <wwEditorInput
+                            type="query"
+                            :model-value="item.url"
+                            :label="field.label"
+                            placeholder="Enter an URL"
+                            bindable
+                            small
+                            @update:modelValue="setItem({ url: $event })"
                         />
                     </wwEditorFormRow>
                 </template>
@@ -53,10 +76,10 @@ export default {
             allTables: [],
             typesConvertion: {
                 singleLineText: 'query',
-                multilineText: 'query',
+                multilineText: 'string',
                 checkbox: 'boolean',
                 richText: 'query',
-                multipleSelects: 'select',
+                multipleSelects: 'array',
                 singleSelect: 'select',
                 singleCollaborator: 'query',
                 date: 'query',
@@ -70,6 +93,7 @@ export default {
                 rating: 'number',
                 barcode: 'query',
                 multipleRecordLinks: 'array',
+                multipleAttachments: 'array',
             },
         };
     },
@@ -119,6 +143,11 @@ export default {
         this.getTables(true);
     },
     methods: {
+        addItem(field) {
+            if (field.type === 'multipleAttachments')
+                this.setRecordData(field.label, [...(this.data[field.label] || []), { url: '' }]);
+            else this.setRecordData(field.label, [...(this.data[field.label] || []), '']);
+        },
         setCollectionId(collectionId) {
             this.$emit('update:args', [collectionId, this.data]);
         },
