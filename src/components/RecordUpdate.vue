@@ -55,17 +55,26 @@
                             @update:modelValue="setItem($event)"
                         />
                     </wwEditorFormRow>
-                    <wwEditorFormRow v-else-if="field.type === 'multipleAttachments'">
-                        <wwEditorInput
+                    <template v-else-if="field.type === 'multipleAttachments'">
+                        <wwEditorInputRow
                             type="query"
                             :model-value="item.url"
-                            :label="field.label"
-                            placeholder="Enter an URL"
+                            label="URL"
+                            placeholder="Enter a value"
                             bindable
                             small
-                            @update:modelValue="setItem({ url: $event })"
+                            @update:modelValue="setItem({ ...item, url: $event })"
                         />
-                    </wwEditorFormRow>
+                        <wwEditorInputRow
+                            type="query"
+                            :model-value="item.filename"
+                            label="Filename"
+                            placeholder="Enter a value"
+                            bindable
+                            small
+                            @update:modelValue="setItem({ ...item, filename: $event })"
+                        />
+                    </template>
                 </template>
             </wwEditorInputRow>
         </div>
