@@ -46,11 +46,14 @@ export default {
         return response.data.getAirtableTables.data;
     },
     /* wwEditor:end */
-    async createRecord(cmsDataSetId, data) {
+    async createRecord(cmsDataSetId, data, wwUtils) {
         try {
             const websiteId = wwLib.wwWebsiteData.getInfo().id;
 
             let response = null;
+            /* wwEditor:start */
+            wwUtils.log({ label: 'Payload', preview: data });
+            /* wwEditor:end */
             /* wwEditor:start */
             response = await axios.post(
                 `${wwLib.wwApiRequests._getPluginsUrl()}/designs/${websiteId}/cms_data_sets/${cmsDataSetId}/airtable/record`,
@@ -79,11 +82,15 @@ export default {
             wwLib.wwLog.error(error);
         }
     },
-    async updateRecord(cmsDataSetId, recordId, data) {
+    async updateRecord(cmsDataSetId, recordId, data, wwUtils) {
         try {
             const websiteId = wwLib.wwWebsiteData.getInfo().id;
 
             let response = null;
+            /* wwEditor:start */
+            wwUtils.log({ label: 'Record ID', preview: recordId });
+            wwUtils.log({ label: 'Payload', preview: data });
+            /* wwEditor:end */
             /* wwEditor:start */
             response = await axios.patch(
                 `${wwLib.wwApiRequests._getPluginsUrl()}/designs/${websiteId}/cms_data_sets/${cmsDataSetId}/airtable/record/${recordId}`,
@@ -111,11 +118,14 @@ export default {
             wwLib.wwLog.error(error);
         }
     },
-    async deleteRecord(cmsDataSetId, recordId) {
+    async deleteRecord(cmsDataSetId, recordId, wwUtils) {
         try {
             const websiteId = wwLib.wwWebsiteData.getInfo().id;
 
             let response = null;
+            /* wwEditor:start */
+            wwUtils.log({ label: 'Record ID', preview: recordId });
+            /* wwEditor:end */
             /* wwEditor:start */
             response = await axios.delete(
                 `${wwLib.wwApiRequests._getPluginsUrl()}/designs/${websiteId}/cms_data_sets/${cmsDataSetId}/airtable/record/${recordId}`,
@@ -145,10 +155,13 @@ export default {
             wwLib.wwLog.error(error);
         }
     },
-    async syncRecord(cmsDataSetId, recordId) {
+    async syncRecord(cmsDataSetId, recordId, wwUtils) {
         try {
             const websiteId = wwLib.wwWebsiteData.getInfo().id;
 
+            /* wwEditor:start */
+            wwUtils.log({ label: 'Record ID', preview: recordId });
+            /* wwEditor:end */
             const response = await axios.get(
                 `${wwLib.wwApiRequests._getPluginsUrl()}/hook/designs/${websiteId}/cms_data_sets/${cmsDataSetId}/sync/${recordId}/update`
             );
