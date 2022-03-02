@@ -52,7 +52,7 @@ export default {
 
             let response = null;
             /* wwEditor:start */
-            wwUtils.log({ label: 'Payload', preview: data });
+            wwUtils && wwUtils.log({ label: 'Payload', preview: data });
             /* wwEditor:end */
             /* wwEditor:start */
             response = await axios.post(
@@ -88,8 +88,8 @@ export default {
 
             let response = null;
             /* wwEditor:start */
-            wwUtils.log({ label: 'Record ID', preview: recordId });
-            wwUtils.log({ label: 'Payload', preview: data });
+            wwUtils && wwUtils.log({ label: 'Record ID', preview: recordId });
+            wwUtils && wwUtils.log({ label: 'Payload', preview: data });
             /* wwEditor:end */
             /* wwEditor:start */
             response = await axios.patch(
@@ -124,7 +124,7 @@ export default {
 
             let response = null;
             /* wwEditor:start */
-            wwUtils.log({ label: 'Record ID', preview: recordId });
+            wwUtils && wwUtils.log({ label: 'Record ID', preview: recordId });
             /* wwEditor:end */
             /* wwEditor:start */
             response = await axios.delete(
@@ -160,7 +160,7 @@ export default {
             const websiteId = wwLib.wwWebsiteData.getInfo().id;
 
             /* wwEditor:start */
-            wwUtils.log({ label: 'Record ID', preview: recordId });
+            wwUtils && wwUtils.log({ label: 'Record ID', preview: recordId });
             /* wwEditor:end */
             const response = await axios.get(
                 `${wwLib.wwApiRequests._getPluginsUrl()}/hook/designs/${websiteId}/cms_data_sets/${cmsDataSetId}/sync/${recordId}/update`
