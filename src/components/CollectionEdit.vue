@@ -34,28 +34,26 @@
                 Refresh
             </button>
         </div>
-        <div class="airtable-collection-edit__row">
-            <wwEditorFormRow label="View" class="w-50" required>
-                <wwEditorInputTextSelect
-                    :options="tablesViewsOptions"
-                    :model-value="table.view"
-                    :disabled="!table.tableId"
-                    placeholder="Select a view"
-                    large
-                    @update:modelValue="setProp('view', $event)"
-                />
-            </wwEditorFormRow>
-            <wwEditorFormRow label="Lookup depth" class="w-50 m-left">
-                <wwEditorInputText
-                    type="number"
-                    name="depth"
-                    placeholder="Default: 0"
-                    :model-value="table.depth"
-                    large
-                    @update:modelValue="setProp('depth', $event)"
-                />
-            </wwEditorFormRow>
-        </div>
+        <wwEditorFormRow label="View" required>
+            <wwEditorInputTextSelect
+                :options="tablesViewsOptions"
+                :model-value="table.view"
+                :disabled="!table.tableId"
+                placeholder="Select a view"
+                large
+                @update:modelValue="setProp('view', $event)"
+            />
+        </wwEditorFormRow>
+        <wwEditorFormRow v-if="config.depth && config.depth != '0'" label="Lookup depth">
+            <wwEditorInputText
+                type="number"
+                name="depth"
+                placeholder="Default: 0"
+                :model-value="table.depth"
+                large
+                @update:modelValue="setProp('depth', $event)"
+            />
+        </wwEditorFormRow>
         <wwEditorFormRow label="Filter fields to fetch">
             <template #append-label>
                 <wwEditorInputSwitch
