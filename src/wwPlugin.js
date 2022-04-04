@@ -47,145 +47,125 @@ export default {
     },
     /* wwEditor:end */
     async createRecord(cmsDataSetId, data, wwUtils) {
-        try {
-            const websiteId = wwLib.wwWebsiteData.getInfo().id;
+        const websiteId = wwLib.wwWebsiteData.getInfo().id;
 
-            let response = null;
-            /* wwEditor:start */
-            wwUtils && wwUtils.log({ label: 'Payload', preview: data });
-            /* wwEditor:end */
-            /* wwEditor:start */
-            response = await axios.post(
-                `${wwLib.wwApiRequests._getPluginsUrl()}/designs/${websiteId}/cms_data_sets/${cmsDataSetId}/airtable/record`,
-                { data },
-                { headers: wwLib.wwApiRequests._getAuthHeader() }
-            );
-            /* wwEditor:end */
-            /* wwFront:start */
-            response = await axios.post(
-                `//${websiteId}.${wwLib.wwApiRequests._getPreviewUrl()}/ww/cms_data_sets/${cmsDataSetId}/airtable/record`,
-                { data }
-            );
-            /* wwFront:end */
+        let response = null;
+        /* wwEditor:start */
+        wwUtils && wwUtils.log({ label: 'Payload', preview: data });
+        /* wwEditor:end */
+        /* wwEditor:start */
+        response = await axios.post(
+            `${wwLib.wwApiRequests._getPluginsUrl()}/designs/${websiteId}/cms_data_sets/${cmsDataSetId}/airtable/record`,
+            { data },
+            { headers: wwLib.wwApiRequests._getAuthHeader() }
+        );
+        /* wwEditor:end */
+        /* wwFront:start */
+        response = await axios.post(
+            `//${websiteId}.${wwLib.wwApiRequests._getPreviewUrl()}/ww/cms_data_sets/${cmsDataSetId}/airtable/record`,
+            { data }
+        );
+        /* wwFront:end */
 
-            const record = response.data.data;
-            const collection = wwLib.$store.getters['data/getCollections'][cmsDataSetId];
+        const record = response.data.data;
+        const collection = wwLib.$store.getters['data/getCollections'][cmsDataSetId];
+        wwLib.$store.dispatch('data/setCollection', {
+            ...collection,
+            total: collection.total + 1,
+            data: [...collection.data, record],
+        });
+
+        return record;
+    },
+    async updateRecord(cmsDataSetId, recordId, data, wwUtils) {
+        const websiteId = wwLib.wwWebsiteData.getInfo().id;
+
+        let response = null;
+        /* wwEditor:start */
+        wwUtils && wwUtils.log({ label: 'Record ID', preview: recordId });
+        wwUtils && wwUtils.log({ label: 'Payload', preview: data });
+        /* wwEditor:end */
+        /* wwEditor:start */
+        response = await axios.patch(
+            `${wwLib.wwApiRequests._getPluginsUrl()}/designs/${websiteId}/cms_data_sets/${cmsDataSetId}/airtable/record/${recordId}`,
+            { data },
+            { headers: wwLib.wwApiRequests._getAuthHeader() }
+        );
+        /* wwEditor:end */
+        /* wwFront:start */
+        response = await axios.patch(
+            `//${websiteId}.${wwLib.wwApiRequests._getPreviewUrl()}/ww/cms_data_sets/${cmsDataSetId}/airtable/record/${recordId}`,
+            { data }
+        );
+        /* wwFront:end */
+
+        const record = response.data.data;
+        const collection = _.cloneDeep(wwLib.$store.getters['data/getCollections'][cmsDataSetId]);
+        if (!collection) return null;
+        const recordIndex = collection.data.findIndex(item => item && item.id === recordId);
+        collection.data.splice(recordIndex, 1, record);
+        wwLib.$store.dispatch('data/setCollection', { ...collection, data: collection.data });
+
+        return record;
+    },
+    async deleteRecord(cmsDataSetId, recordId, wwUtils) {
+        const websiteId = wwLib.wwWebsiteData.getInfo().id;
+
+        let response = null;
+        /* wwEditor:start */
+        wwUtils && wwUtils.log({ label: 'Record ID', preview: recordId });
+        /* wwEditor:end */
+        /* wwEditor:start */
+        response = await axios.delete(
+            `${wwLib.wwApiRequests._getPluginsUrl()}/designs/${websiteId}/cms_data_sets/${cmsDataSetId}/airtable/record/${recordId}`,
+            { headers: wwLib.wwApiRequests._getAuthHeader() }
+        );
+        /* wwEditor:end */
+        /* wwFront:start */
+        response = await axios.delete(
+            `//${websiteId}.${wwLib.wwApiRequests._getPreviewUrl()}/ww/cms_data_sets/${cmsDataSetId}/airtable/record/${recordId}`
+        );
+        /* wwFront:end */
+
+        const record = response.data.data;
+        const collection = _.cloneDeep(wwLib.$store.getters['data/getCollections'][cmsDataSetId]);
+        if (!collection) return null;
+        const recordIndex = collection.data.findIndex(item => item && item.id === recordId);
+        collection.data.splice(recordIndex, 1);
+        wwLib.$store.dispatch('data/setCollection', {
+            ...collection,
+            total: collection.total - 1,
+            data: collection.data,
+        });
+
+        return record;
+    },
+    async syncRecord(cmsDataSetId, recordId, wwUtils) {
+        const websiteId = wwLib.wwWebsiteData.getInfo().id;
+
+        /* wwEditor:start */
+        wwUtils && wwUtils.log({ label: 'Record ID', preview: recordId });
+        /* wwEditor:end */
+        const response = await axios.get(
+            `${wwLib.wwApiRequests._getPluginsUrl()}/hook/designs/${websiteId}/cms_data_sets/${cmsDataSetId}/sync/${recordId}/update`
+        );
+        const record = response.data.data;
+
+        const collection = _.cloneDeep(wwLib.$store.getters['data/getCollections'][cmsDataSetId]);
+        if (!collection) return null;
+        const recordIndex = collection.data.findIndex(item => item && item.id === recordId);
+        if (recordIndex === -1) {
+            collection.data.push(record);
             wwLib.$store.dispatch('data/setCollection', {
                 ...collection,
                 total: collection.total + 1,
-                data: [...collection.data, record],
-            });
-
-            return record;
-        } catch (error) {
-            wwLib.wwLog.error('Record not created : ', data);
-            wwLib.wwLog.error(error);
-        }
-    },
-    async updateRecord(cmsDataSetId, recordId, data, wwUtils) {
-        try {
-            const websiteId = wwLib.wwWebsiteData.getInfo().id;
-
-            let response = null;
-            /* wwEditor:start */
-            wwUtils && wwUtils.log({ label: 'Record ID', preview: recordId });
-            wwUtils && wwUtils.log({ label: 'Payload', preview: data });
-            /* wwEditor:end */
-            /* wwEditor:start */
-            response = await axios.patch(
-                `${wwLib.wwApiRequests._getPluginsUrl()}/designs/${websiteId}/cms_data_sets/${cmsDataSetId}/airtable/record/${recordId}`,
-                { data },
-                { headers: wwLib.wwApiRequests._getAuthHeader() }
-            );
-            /* wwEditor:end */
-            /* wwFront:start */
-            response = await axios.patch(
-                `//${websiteId}.${wwLib.wwApiRequests._getPreviewUrl()}/ww/cms_data_sets/${cmsDataSetId}/airtable/record/${recordId}`,
-                { data }
-            );
-            /* wwFront:end */
-
-            const record = response.data.data;
-            const collection = _.cloneDeep(wwLib.$store.getters['data/getCollections'][cmsDataSetId]);
-            if (!collection) return null;
-            const recordIndex = collection.data.findIndex(item => item && item.id === recordId);
-            collection.data.splice(recordIndex, 1, record);
-            wwLib.$store.dispatch('data/setCollection', { ...collection, data: collection.data });
-
-            return record;
-        } catch (error) {
-            wwLib.wwLog.error(`Record not updated : ${recordId}`, data);
-            wwLib.wwLog.error(error);
-        }
-    },
-    async deleteRecord(cmsDataSetId, recordId, wwUtils) {
-        try {
-            const websiteId = wwLib.wwWebsiteData.getInfo().id;
-
-            let response = null;
-            /* wwEditor:start */
-            wwUtils && wwUtils.log({ label: 'Record ID', preview: recordId });
-            /* wwEditor:end */
-            /* wwEditor:start */
-            response = await axios.delete(
-                `${wwLib.wwApiRequests._getPluginsUrl()}/designs/${websiteId}/cms_data_sets/${cmsDataSetId}/airtable/record/${recordId}`,
-                { headers: wwLib.wwApiRequests._getAuthHeader() }
-            );
-            /* wwEditor:end */
-            /* wwFront:start */
-            response = await axios.delete(
-                `//${websiteId}.${wwLib.wwApiRequests._getPreviewUrl()}/ww/cms_data_sets/${cmsDataSetId}/airtable/record/${recordId}`
-            );
-            /* wwFront:end */
-
-            const record = response.data.data;
-            const collection = _.cloneDeep(wwLib.$store.getters['data/getCollections'][cmsDataSetId]);
-            if (!collection) return null;
-            const recordIndex = collection.data.findIndex(item => item && item.id === recordId);
-            collection.data.splice(recordIndex, 1);
-            wwLib.$store.dispatch('data/setCollection', {
-                ...collection,
-                total: collection.total - 1,
                 data: collection.data,
             });
-
-            return record;
-        } catch (error) {
-            wwLib.wwLog.error(`Record not deleted : ${recordId}`);
-            wwLib.wwLog.error(error);
+        } else {
+            collection.data.splice(recordIndex, 1, record);
+            wwLib.$store.dispatch('data/setCollection', { ...collection, data: collection.data });
         }
-    },
-    async syncRecord(cmsDataSetId, recordId, wwUtils) {
-        try {
-            const websiteId = wwLib.wwWebsiteData.getInfo().id;
 
-            /* wwEditor:start */
-            wwUtils && wwUtils.log({ label: 'Record ID', preview: recordId });
-            /* wwEditor:end */
-            const response = await axios.get(
-                `${wwLib.wwApiRequests._getPluginsUrl()}/hook/designs/${websiteId}/cms_data_sets/${cmsDataSetId}/sync/${recordId}/update`
-            );
-            const record = response.data.data;
-
-            const collection = _.cloneDeep(wwLib.$store.getters['data/getCollections'][cmsDataSetId]);
-            if (!collection) return null;
-            const recordIndex = collection.data.findIndex(item => item && item.id === recordId);
-            if (recordIndex === -1) {
-                collection.data.push(record);
-                wwLib.$store.dispatch('data/setCollection', {
-                    ...collection,
-                    total: collection.total + 1,
-                    data: collection.data,
-                });
-            } else {
-                collection.data.splice(recordIndex, 1, record);
-                wwLib.$store.dispatch('data/setCollection', { ...collection, data: collection.data });
-            }
-
-            return record;
-        } catch (error) {
-            wwLib.wwLog.error(`Record not sync : ${recordId}`);
-            wwLib.wwLog.error(error);
-        }
+        return record;
     },
 };
