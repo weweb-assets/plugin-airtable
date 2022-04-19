@@ -86,7 +86,7 @@
 export default {
     props: {
         plugin: { type: Object, required: true },
-        args: { type: Array, default: () => [null, null, {}] },
+        args: { type: Object, default: () => ({ collectionId: null, recordId: null, data: {} }) },
     },
     emits: ['update:args'],
     data() {
@@ -129,16 +129,16 @@ export default {
                 }));
         },
         collectionId() {
-            return this.args[0];
+            return this.args.collectionId;
         },
         collection() {
             return wwLib.$store.getters['data/getCollections'][this.collectionId];
         },
         recordId() {
-            return this.args[1];
+            return this.args.recordId;
         },
         data() {
-            return this.args[2];
+            return this.args.data;
         },
         tableFields() {
             if (!this.collection) return [];
@@ -171,10 +171,10 @@ export default {
             else this.setRecordData(field.label, [...(this.data[field.label] || []), '']);
         },
         setCollectionId(collectionId) {
-            this.$emit('update:args', [collectionId, this.recordId, this.data]);
+            this.$emit('update:args', { ...this.args, collectionId });
         },
         setRecordId(recordId) {
-            this.$emit('update:args', [this.collectionId, recordId, this.data]);
+            this.$emit('update:args', { ...this.args, recordId });
         },
         setRecordData(key, value) {
             const data = { ...this.data, [key]: value };
@@ -183,7 +183,7 @@ export default {
                     delete data[dataKey];
                 }
             }
-            this.$emit('update:args', [this.collectionId, this.recordId, data]);
+            this.$emit('update:args', { ...this.args, data });
         },
         async getTables(isNoCache = false) {
             if (!this.collection || !this.collection.config.baseId) return;

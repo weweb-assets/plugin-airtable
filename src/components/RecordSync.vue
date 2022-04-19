@@ -23,7 +23,7 @@
 export default {
     props: {
         plugin: { type: Object, required: true },
-        args: { type: Array, default: () => [null, null] },
+        args: { type: Object, default: () => ({ collectionId: null, recordId: null }) },
     },
     emits: ['update:args'],
     computed: {
@@ -39,18 +39,18 @@ export default {
                 }));
         },
         collectionId() {
-            return this.args[0];
+            return this.args.collectionId;
         },
         recordId() {
-            return this.args[1];
+            return this.args.recordId;
         },
     },
     methods: {
         setCollectionId(collectionId) {
-            this.$emit('update:args', [collectionId, this.recordId]);
+            this.$emit('update:args', { ...this.args, collectionId });
         },
         setRecordId(recordId) {
-            this.$emit('update:args', [this.collectionId, recordId]);
+            this.$emit('update:args', { ...this.args, recordId });
         },
     },
 };

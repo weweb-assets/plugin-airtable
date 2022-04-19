@@ -15,14 +15,10 @@ export default {
             },
         },
     },
-    functions: [
+    actions: [
         {
             name: 'Create a record',
             code: 'createRecord',
-            parameters: [
-                { name: 'collectionId', type: 'string' },
-                { name: 'recordData', type: 'object', optional: true },
-            ],
             isAsync: true,
             /* wwEditor:start */
             edit: () => import('./src/components/RecordCreate.vue'),
@@ -34,11 +30,6 @@ export default {
         {
             name: 'Update a record',
             code: 'updateRecord',
-            parameters: [
-                { name: 'collectionId', type: 'string' },
-                { name: 'recordId', type: 'string' },
-                { name: 'recordData', type: 'object', optional: true },
-            ],
             isAsync: true,
             /* wwEditor:start */
             edit: () => import('./src/components/RecordUpdate.vue'),
@@ -50,10 +41,6 @@ export default {
         {
             name: 'Delete a record',
             code: 'deleteRecord',
-            parameters: [
-                { name: 'collectionId', type: 'string' },
-                { name: 'recordId', type: 'string' },
-            ],
             isAsync: true,
             /* wwEditor:start */
             edit: () => import('./src/components/RecordDelete.vue'),
@@ -65,10 +52,6 @@ export default {
         {
             name: 'Sync a record',
             code: 'syncRecord',
-            parameters: [
-                { name: 'collectionId', type: 'string' },
-                { name: 'recordId', type: 'string' },
-            ],
             isAsync: true,
             /* wwEditor:start */
             edit: () => import('./src/components/RecordSync.vue'),

@@ -46,7 +46,7 @@ export default {
         return response.data.getAirtableTables.data;
     },
     /* wwEditor:end */
-    async createRecord(cmsDataSetId, data, wwUtils) {
+    async createRecord({ cmsDataSetId, data }, wwUtils) {
         const websiteId = wwLib.wwWebsiteData.getInfo().id;
 
         let response = null;
@@ -77,7 +77,7 @@ export default {
 
         return record;
     },
-    async updateRecord(cmsDataSetId, recordId, data, wwUtils) {
+    async updateRecord({ cmsDataSetId, recordId, data }, wwUtils) {
         const websiteId = wwLib.wwWebsiteData.getInfo().id;
 
         let response = null;
@@ -108,7 +108,7 @@ export default {
 
         return record;
     },
-    async deleteRecord(cmsDataSetId, recordId, wwUtils) {
+    async deleteRecord({ cmsDataSetId, recordId }, wwUtils) {
         const websiteId = wwLib.wwWebsiteData.getInfo().id;
 
         let response = null;
@@ -140,7 +140,7 @@ export default {
 
         return record;
     },
-    async syncRecord(cmsDataSetId, recordId, wwUtils) {
+    async syncRecord({ cmsDataSetId, recordId }, wwUtils) {
         const websiteId = wwLib.wwWebsiteData.getInfo().id;
 
         /* wwEditor:start */
