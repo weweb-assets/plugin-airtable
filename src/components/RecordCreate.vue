@@ -76,7 +76,7 @@
 export default {
     props: {
         plugin: { type: Object, required: true },
-        args: { type: Object, default: () => ({ collectionId: null, data: {} }) },
+        args: { type: Object, required: true },
     },
     emits: ['update:args'],
     data() {
@@ -125,7 +125,7 @@ export default {
             return wwLib.$store.getters['data/getCollections'][this.collectionId];
         },
         data() {
-            return this.args.data;
+            return this.args.data || {};
         },
         tableFields() {
             if (!this.collection) return [];

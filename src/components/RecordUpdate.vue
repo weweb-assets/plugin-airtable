@@ -86,7 +86,7 @@
 export default {
     props: {
         plugin: { type: Object, required: true },
-        args: { type: Object, default: () => ({ collectionId: null, recordId: null, data: {} }) },
+        args: { type: Object, required: true },
     },
     emits: ['update:args'],
     data() {
@@ -138,7 +138,7 @@ export default {
             return this.args.recordId;
         },
         data() {
-            return this.args.data;
+            return this.args.data || {};
         },
         tableFields() {
             if (!this.collection) return [];
