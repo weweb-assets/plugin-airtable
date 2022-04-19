@@ -22,7 +22,7 @@ export default {
             isAsync: true,
             /* wwEditor:start */
             edit: () => import('./src/components/RecordCreate.vue'),
-            getIsValid([collectionId, recordData]) {
+            getIsValid({ collectionId, recordData }) {
                 return !!collectionId && !!recordData;
             },
             /* wwEditor:end */
@@ -33,7 +33,7 @@ export default {
             isAsync: true,
             /* wwEditor:start */
             edit: () => import('./src/components/RecordUpdate.vue'),
-            getIsValid([collectionId, recordId, recordData]) {
+            getIsValid({ collectionId, recordId, recordData }) {
                 return !!collectionId && !!recordId && !!recordData;
             },
             /* wwEditor:end */
@@ -44,7 +44,7 @@ export default {
             isAsync: true,
             /* wwEditor:start */
             edit: () => import('./src/components/RecordDelete.vue'),
-            getIsValid([collectionId, recordId]) {
+            getIsValid({ collectionId, recordId }) {
                 return !!collectionId && !!recordId;
             },
             /* wwEditor:end */
@@ -55,7 +55,7 @@ export default {
             isAsync: true,
             /* wwEditor:start */
             edit: () => import('./src/components/RecordSync.vue'),
-            getIsValid([collectionId, recordId]) {
+            getIsValid({ collectionId, recordId }) {
                 return !!collectionId && !!recordId;
             },
             /* wwEditor:end */
