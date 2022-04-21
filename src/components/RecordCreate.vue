@@ -76,7 +76,7 @@
 export default {
     props: {
         plugin: { type: Object, required: true },
-        args: { type: Array, default: () => [null, {}] },
+        args: { type: Object, required: true },
     },
     emits: ['update:args'],
     data() {
@@ -119,13 +119,13 @@ export default {
                 }));
         },
         collectionId() {
-            return this.args[0];
+            return this.args.collectionId;
         },
         collection() {
             return wwLib.$store.getters['data/getCollections'][this.collectionId];
         },
         data() {
-            return this.args[1];
+            return this.args.data || {};
         },
         tableFields() {
             if (!this.collection) return [];
@@ -158,7 +158,7 @@ export default {
             else this.setRecordData(field.label, [...(this.data[field.label] || []), '']);
         },
         setCollectionId(collectionId) {
-            this.$emit('update:args', [collectionId, this.data]);
+            this.$emit('update:args', { ...this.args, collectionId });
         },
         setRecordData(key, value) {
             const data = { ...this.data, [key]: value };
@@ -167,7 +167,7 @@ export default {
                     delete data[dataKey];
                 }
             }
-            this.$emit('update:args', [this.collectionId, data]);
+            this.$emit('update:args', { ...this.args, data });
         },
         async getTables(isNoCache = false) {
             if (!this.collection || !this.collection.config.baseId) return;

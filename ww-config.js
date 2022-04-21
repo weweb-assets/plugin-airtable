@@ -15,18 +15,14 @@ export default {
             },
         },
     },
-    functions: [
+    actions: [
         {
             name: 'Create a record',
             code: 'createRecord',
-            parameters: [
-                { name: 'collectionId', type: 'string' },
-                { name: 'recordData', type: 'object', optional: true },
-            ],
             isAsync: true,
             /* wwEditor:start */
             edit: () => import('./src/components/RecordCreate.vue'),
-            getIsValid([collectionId, recordData]) {
+            getIsValid({ collectionId, recordData }) {
                 return !!collectionId && !!recordData;
             },
             /* wwEditor:end */
@@ -34,15 +30,10 @@ export default {
         {
             name: 'Update a record',
             code: 'updateRecord',
-            parameters: [
-                { name: 'collectionId', type: 'string' },
-                { name: 'recordId', type: 'string' },
-                { name: 'recordData', type: 'object', optional: true },
-            ],
             isAsync: true,
             /* wwEditor:start */
             edit: () => import('./src/components/RecordUpdate.vue'),
-            getIsValid([collectionId, recordId, recordData]) {
+            getIsValid({ collectionId, recordId, recordData }) {
                 return !!collectionId && !!recordId && !!recordData;
             },
             /* wwEditor:end */
@@ -50,14 +41,10 @@ export default {
         {
             name: 'Delete a record',
             code: 'deleteRecord',
-            parameters: [
-                { name: 'collectionId', type: 'string' },
-                { name: 'recordId', type: 'string' },
-            ],
             isAsync: true,
             /* wwEditor:start */
             edit: () => import('./src/components/RecordDelete.vue'),
-            getIsValid([collectionId, recordId]) {
+            getIsValid({ collectionId, recordId }) {
                 return !!collectionId && !!recordId;
             },
             /* wwEditor:end */
@@ -65,14 +52,10 @@ export default {
         {
             name: 'Sync a record',
             code: 'syncRecord',
-            parameters: [
-                { name: 'collectionId', type: 'string' },
-                { name: 'recordId', type: 'string' },
-            ],
             isAsync: true,
             /* wwEditor:start */
             edit: () => import('./src/components/RecordSync.vue'),
-            getIsValid([collectionId, recordId]) {
+            getIsValid({ collectionId, recordId }) {
                 return !!collectionId && !!recordId;
             },
             /* wwEditor:end */
