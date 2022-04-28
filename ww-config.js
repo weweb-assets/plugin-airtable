@@ -22,8 +22,8 @@ export default {
             isAsync: true,
             /* wwEditor:start */
             edit: () => import('./src/components/RecordCreate.vue'),
-            getIsValid({ collectionId, recordData }) {
-                return !!collectionId && !!recordData;
+            getIsValid({ collectionId, data }) {
+                return !!collectionId && !!data;
             },
             /* wwEditor:end */
         },
@@ -33,8 +33,8 @@ export default {
             isAsync: true,
             /* wwEditor:start */
             edit: () => import('./src/components/RecordUpdate.vue'),
-            getIsValid({ collectionId, recordId, recordData }) {
-                return !!collectionId && !!recordId && !!recordData;
+            getIsValid({ collectionId, recordId, data }) {
+                return !!collectionId && !!recordId && !!data;
             },
             /* wwEditor:end */
         },
