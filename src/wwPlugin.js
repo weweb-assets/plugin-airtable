@@ -46,7 +46,7 @@ export default {
         return response.data.getAirtableTables.data;
     },
     /* wwEditor:end */
-    async createRecord({ cmsDataSetId, data }, wwUtils) {
+    async createRecord({ collectionId, data }, wwUtils) {
         const websiteId = wwLib.wwWebsiteData.getInfo().id;
 
         let response = null;
@@ -55,20 +55,20 @@ export default {
         /* wwEditor:end */
         /* wwEditor:start */
         response = await axios.post(
-            `${wwLib.wwApiRequests._getPluginsUrl()}/designs/${websiteId}/cms_data_sets/${cmsDataSetId}/airtable/record`,
+            `${wwLib.wwApiRequests._getPluginsUrl()}/designs/${websiteId}/cms_data_sets/${collectionId}/airtable/record`,
             { data },
             { headers: wwLib.wwApiRequests._getAuthHeader() }
         );
         /* wwEditor:end */
         /* wwFront:start */
         response = await axios.post(
-            `//${websiteId}.${wwLib.wwApiRequests._getPreviewUrl()}/ww/cms_data_sets/${cmsDataSetId}/airtable/record`,
+            `//${websiteId}.${wwLib.wwApiRequests._getPreviewUrl()}/ww/cms_data_sets/${collectionId}/airtable/record`,
             { data }
         );
         /* wwFront:end */
 
         const record = response.data.data;
-        const collection = wwLib.$store.getters['data/getCollections'][cmsDataSetId];
+        const collection = wwLib.$store.getters['data/getCollections'][collectionId];
         wwLib.$store.dispatch('data/setCollection', {
             ...collection,
             total: collection.total + 1,
@@ -77,7 +77,7 @@ export default {
 
         return record;
     },
-    async updateRecord({ cmsDataSetId, recordId, data }, wwUtils) {
+    async updateRecord({ collectionId, recordId, data }, wwUtils) {
         const websiteId = wwLib.wwWebsiteData.getInfo().id;
 
         let response = null;
@@ -87,20 +87,20 @@ export default {
         /* wwEditor:end */
         /* wwEditor:start */
         response = await axios.patch(
-            `${wwLib.wwApiRequests._getPluginsUrl()}/designs/${websiteId}/cms_data_sets/${cmsDataSetId}/airtable/record/${recordId}`,
+            `${wwLib.wwApiRequests._getPluginsUrl()}/designs/${websiteId}/cms_data_sets/${collectionId}/airtable/record/${recordId}`,
             { data },
             { headers: wwLib.wwApiRequests._getAuthHeader() }
         );
         /* wwEditor:end */
         /* wwFront:start */
         response = await axios.patch(
-            `//${websiteId}.${wwLib.wwApiRequests._getPreviewUrl()}/ww/cms_data_sets/${cmsDataSetId}/airtable/record/${recordId}`,
+            `//${websiteId}.${wwLib.wwApiRequests._getPreviewUrl()}/ww/cms_data_sets/${collectionId}/airtable/record/${recordId}`,
             { data }
         );
         /* wwFront:end */
 
         const record = response.data.data;
-        const collection = _.cloneDeep(wwLib.$store.getters['data/getCollections'][cmsDataSetId]);
+        const collection = _.cloneDeep(wwLib.$store.getters['data/getCollections'][collectionId]);
         if (!collection) return null;
         const recordIndex = collection.data.findIndex(item => item && item.id === recordId);
         collection.data.splice(recordIndex, 1, record);
@@ -108,7 +108,7 @@ export default {
 
         return record;
     },
-    async deleteRecord({ cmsDataSetId, recordId }, wwUtils) {
+    async deleteRecord({ collectionId, recordId }, wwUtils) {
         const websiteId = wwLib.wwWebsiteData.getInfo().id;
 
         let response = null;
@@ -117,18 +117,18 @@ export default {
         /* wwEditor:end */
         /* wwEditor:start */
         response = await axios.delete(
-            `${wwLib.wwApiRequests._getPluginsUrl()}/designs/${websiteId}/cms_data_sets/${cmsDataSetId}/airtable/record/${recordId}`,
+            `${wwLib.wwApiRequests._getPluginsUrl()}/designs/${websiteId}/cms_data_sets/${collectionId}/airtable/record/${recordId}`,
             { headers: wwLib.wwApiRequests._getAuthHeader() }
         );
         /* wwEditor:end */
         /* wwFront:start */
         response = await axios.delete(
-            `//${websiteId}.${wwLib.wwApiRequests._getPreviewUrl()}/ww/cms_data_sets/${cmsDataSetId}/airtable/record/${recordId}`
+            `//${websiteId}.${wwLib.wwApiRequests._getPreviewUrl()}/ww/cms_data_sets/${collectionId}/airtable/record/${recordId}`
         );
         /* wwFront:end */
 
         const record = response.data.data;
-        const collection = _.cloneDeep(wwLib.$store.getters['data/getCollections'][cmsDataSetId]);
+        const collection = _.cloneDeep(wwLib.$store.getters['data/getCollections'][collectionId]);
         if (!collection) return null;
         const recordIndex = collection.data.findIndex(item => item && item.id === recordId);
         collection.data.splice(recordIndex, 1);
@@ -140,18 +140,18 @@ export default {
 
         return record;
     },
-    async syncRecord({ cmsDataSetId, recordId }, wwUtils) {
+    async syncRecord({ collectionId, recordId }, wwUtils) {
         const websiteId = wwLib.wwWebsiteData.getInfo().id;
 
         /* wwEditor:start */
         wwUtils && wwUtils.log({ label: 'Record ID', preview: recordId });
         /* wwEditor:end */
         const response = await axios.get(
-            `${wwLib.wwApiRequests._getPluginsUrl()}/hook/designs/${websiteId}/cms_data_sets/${cmsDataSetId}/sync/${recordId}/update`
+            `${wwLib.wwApiRequests._getPluginsUrl()}/hook/designs/${websiteId}/cms_data_sets/${collectionId}/sync/${recordId}/update`
         );
         const record = response.data.data;
 
-        const collection = _.cloneDeep(wwLib.$store.getters['data/getCollections'][cmsDataSetId]);
+        const collection = _.cloneDeep(wwLib.$store.getters['data/getCollections'][collectionId]);
         if (!collection) return null;
         const recordIndex = collection.data.findIndex(item => item && item.id === recordId);
         if (recordIndex === -1) {
