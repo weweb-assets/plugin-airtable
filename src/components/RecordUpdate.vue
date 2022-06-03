@@ -167,7 +167,7 @@ export default {
                             label: choice.name,
                         })),
                     }))
-                    .filter(field => !this.fields.length || this.fields.includes(field))
+                    .filter(field => !this.fields.length || this.fields.includes(field.name))
             );
         },
         tableFieldsOptions() {
