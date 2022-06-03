@@ -54,38 +54,16 @@
                 @update:modelValue="setProp('depth', $event)"
             />
         </wwEditorFormRow>
-        <wwEditorFormRow label="Filter fields to fetch">
-            <template #append-label>
-                <wwEditorInputSwitch
-                    class="m-auto-left"
-                    :model-value="isFilterFields"
-                    @update:modelValue="filterFields"
-                />
-            </template>
-            <div v-if="isFilterFields" class="airtable-collection-edit__row -wrap">
-                <wwEditorInputTextSelect
-                    v-for="(field, index) in table.fields"
-                    :key="index"
-                    class="m-bottom m-right"
-                    :options="tablesFieldsOptions(index)"
-                    :actions="filterFieldsActions"
-                    :model-value="field"
-                    :disabled="!table.tableId"
-                    placeholder="Select a field"
-                    small
-                    @update:modelValue="setFieldsProp(index, $event)"
-                    @action="$event.onAction(index)"
-                />
-                <wwEditorInputTextSelect
-                    v-if="tablesFieldsOptions().length"
-                    class="m-bottom"
-                    :options="tablesFieldsOptions()"
-                    placeholder="Select a field"
-                    small
-                    @update:modelValue="setFieldsProp(null, $event)"
-                />
-            </div>
-        </wwEditorFormRow>
+        <wwEditorInputRow
+            label="Filter fields to fetch"
+            required
+            type="select"
+            multiple
+            :options="tablesFieldsOptions"
+            :model-value="table.fields"
+            placeholder="All fields"
+            @update:modelValue="setProp('fields', $event)"
+        />
         <wwLoader :loading="isBasesLoading || isTablesLoading" />
     </div>
 </template>
