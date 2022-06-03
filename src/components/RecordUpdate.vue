@@ -18,6 +18,16 @@
         />
     </wwEditorFormRow>
     <div v-if="collection" class="relative">
+        <wwEditorInputRow
+            label="Fields"
+            required
+            type="select"
+            multiple
+            :options="tableFields"
+            :model-value="fields"
+            placeholder="All fields"
+            @update:modelValue="setFields"
+        />
         <div v-for="field of tableFields" :key="field.label">
             <wwEditorInputRow
                 v-if="typesConvertion[field.type]"
@@ -137,6 +147,9 @@ export default {
         recordId() {
             return this.args.recordId;
         },
+        fields() {
+            return this.args.fields || [];
+        },
         data() {
             return this.args.data || {};
         },
@@ -145,15 +158,22 @@ export default {
             const table = this.allTables.find(table => table.id === this.collection.config.tableId);
             return (
                 table &&
-                table.fields.map(field => ({
-                    label: field.name,
-                    type: field.type,
-                    options: ((field.options && field.options.choices) || []).map(choice => ({
-                        value: choice.name,
-                        label: choice.name,
-                    })),
-                }))
+                table.fields
+                    .map(field => ({
+                        label: field.name,
+                        type: field.type,
+                        options: ((field.options && field.options.choices) || []).map(choice => ({
+                            value: choice.name,
+                            label: choice.name,
+                        })),
+                    }))
+                    .filter(field => !this.fields.length || this.fields.includes(field))
             );
+        },
+        tableFieldsOptions() {
+            if (!this.collection) return [];
+            const table = this.allTables.find(table => table.id === this.collection.config.tableId);
+            return table && table.fields.map(field => ({ label: field.name, value: field.name }));
         },
     },
     watch: {
@@ -175,6 +195,9 @@ export default {
         },
         setRecordId(recordId) {
             this.$emit('update:args', { ...this.args, recordId });
+        },
+        setFields(fields) {
+            this.$emit('update:args', { ...this.args, fields });
         },
         setData(key, value) {
             const data = { ...this.data, [key]: value };
