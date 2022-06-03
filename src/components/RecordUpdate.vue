@@ -198,7 +198,7 @@ export default {
             this.$emit('update:args', { ...this.args, recordId });
         },
         setFields(fields) {
-            console.log(fields);
+            console.log('setFields', fields);
             this.$emit('update:args', { ...this.args, fields });
         },
         setData(key, value) {
