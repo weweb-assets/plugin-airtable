@@ -156,24 +156,23 @@ export default {
         tableFields() {
             if (!this.collection) return [];
             const table = this.allTables.find(table => table.id === this.collection.config.tableId);
-            return (
-                table &&
-                table.fields
-                    .map(field => ({
-                        label: field.name,
-                        type: field.type,
-                        options: ((field.options && field.options.choices) || []).map(choice => ({
-                            value: choice.name,
-                            label: choice.name,
-                        })),
-                    }))
-                    .filter(field => !this.fields.length || this.fields.includes(field.name))
-            );
+            if (!table) return [];
+            return table.fields
+                .map(field => ({
+                    label: field.name,
+                    type: field.type,
+                    options: ((field.options && field.options.choices) || []).map(choice => ({
+                        value: choice.name,
+                        label: choice.name,
+                    })),
+                }))
+                .filter(field => !this.fields.length || this.fields.includes(field.name));
         },
         tableFieldsOptions() {
             if (!this.collection) return [];
             const table = this.allTables.find(table => table.id === this.collection.config.tableId);
-            return table && table.fields.map(field => ({ label: field.name, value: field.name }));
+            if (!table) return [];
+            return table.fields.map(field => ({ label: field.name, value: field.name }));
         },
     },
     watch: {
