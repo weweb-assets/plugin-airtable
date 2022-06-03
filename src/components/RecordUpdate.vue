@@ -23,7 +23,7 @@
             required
             type="select"
             multiple
-            :options="tableFields"
+            :options="tableFieldsOptions"
             :model-value="fields"
             placeholder="All fields"
             @update:modelValue="setFields"
