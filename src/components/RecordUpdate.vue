@@ -173,8 +173,8 @@ export default {
             const table = this.allTables.find(table => table.id === this.collection.config.tableId);
             if (!table) return [];
             return table.fields
-                .map(field => ({ label: field.name, value: field.name }))
-                .filter(field => this.typesConvertion[field.type]);
+                .filter(field => this.typesConvertion[field.type])
+                .map(field => ({ label: field.name, value: field.name }));
         },
     },
     watch: {
