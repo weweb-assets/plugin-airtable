@@ -116,6 +116,13 @@ export default {
                 .map(view => ({ value: view.name, label: view.name }))
                 .sort((a, b) => a.label.localeCompare(b.label));
         },
+        tablesFieldsOptions() {
+            const table = this.allTables.find(table => table.id === this.table.tableId);
+            if (!table) return [];
+            return table.fields
+                .map(field => ({ value: field.name, label: field.name }))
+                .sort((a, b) => a.label.localeCompare(b.label));
+        },
         isFilterFields() {
             return this.table.fields !== null;
         },
@@ -204,19 +211,6 @@ export default {
             const fields = _.cloneDeep(this.table.fields);
             fields.splice(index, 1);
             this.setProp('fields', fields);
-        },
-        tablesFieldsOptions(index = -1) {
-            const table = this.allTables.find(table => table.id === this.table.tableId);
-            if (!table) return [];
-            return table.fields
-                .map(field => ({ value: field.name, label: field.name }))
-                .sort((a, b) => a.label.localeCompare(b.label))
-                .filter(
-                    item =>
-                        !this.table.fields ||
-                        !this.table.fields.find(field => field === item.value) ||
-                        (index !== -1 && this.table.fields[index] === item.value)
-                );
         },
     },
 };
