@@ -166,7 +166,7 @@ export default {
                         label: choice.name,
                     })),
                 }))
-                .filter(field => !this.fields.length || this.fields.includes(field.name));
+                .filter(field => !this.fields.length || this.fields.includes(field.label));
         },
         tableFieldsOptions() {
             if (!this.collection) return [];
