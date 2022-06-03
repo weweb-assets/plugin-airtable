@@ -172,7 +172,9 @@ export default {
             if (!this.collection) return [];
             const table = this.allTables.find(table => table.id === this.collection.config.tableId);
             if (!table) return [];
-            return table.fields.map(field => ({ label: field.name, value: field.name }));
+            return table.fields
+                .map(field => ({ label: field.name, value: field.name }))
+                .filter(field => this.typesConvertion[field.type]);
         },
     },
     watch: {
@@ -196,6 +198,7 @@ export default {
             this.$emit('update:args', { ...this.args, recordId });
         },
         setFields(fields) {
+            console.log(fields);
             this.$emit('update:args', { ...this.args, fields });
         },
         setData(key, value) {
