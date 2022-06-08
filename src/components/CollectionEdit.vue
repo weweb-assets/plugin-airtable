@@ -54,38 +54,16 @@
                 @update:modelValue="setProp('depth', $event)"
             />
         </wwEditorFormRow>
-        <wwEditorFormRow label="Filter fields to fetch">
-            <template #append-label>
-                <wwEditorInputSwitch
-                    class="m-auto-left"
-                    :model-value="isFilterFields"
-                    @update:modelValue="filterFields"
-                />
-            </template>
-            <div v-if="isFilterFields" class="airtable-collection-edit__row -wrap">
-                <wwEditorInputTextSelect
-                    v-for="(field, index) in table.fields"
-                    :key="index"
-                    class="m-bottom m-right"
-                    :options="tablesFieldsOptions(index)"
-                    :actions="filterFieldsActions"
-                    :model-value="field"
-                    :disabled="!table.tableId"
-                    placeholder="Select a field"
-                    small
-                    @update:modelValue="setFieldsProp(index, $event)"
-                    @action="$event.onAction(index)"
-                />
-                <wwEditorInputTextSelect
-                    v-if="tablesFieldsOptions().length"
-                    class="m-bottom"
-                    :options="tablesFieldsOptions()"
-                    placeholder="Select a field"
-                    small
-                    @update:modelValue="setFieldsProp(null, $event)"
-                />
-            </div>
-        </wwEditorFormRow>
+        <wwEditorInputRow
+            label="Filter fields to fetch"
+            required
+            type="select"
+            multiple
+            :options="tablesFieldsOptions"
+            :model-value="table.fields"
+            placeholder="All fields"
+            @update:modelValue="setProp('fields', $event)"
+        />
         <wwLoader :loading="isBasesLoading || isTablesLoading" />
     </div>
 </template>
@@ -136,6 +114,13 @@ export default {
             if (!table) return [];
             return table.views
                 .map(view => ({ value: view.name, label: view.name }))
+                .sort((a, b) => a.label.localeCompare(b.label));
+        },
+        tablesFieldsOptions() {
+            const table = this.allTables.find(table => table.id === this.table.tableId);
+            if (!table) return [];
+            return table.fields
+                .map(field => ({ value: field.name, label: field.name }))
                 .sort((a, b) => a.label.localeCompare(b.label));
         },
         isFilterFields() {
@@ -226,19 +211,6 @@ export default {
             const fields = _.cloneDeep(this.table.fields);
             fields.splice(index, 1);
             this.setProp('fields', fields);
-        },
-        tablesFieldsOptions(index = -1) {
-            const table = this.allTables.find(table => table.id === this.table.tableId);
-            if (!table) return [];
-            return table.fields
-                .map(field => ({ value: field.name, label: field.name }))
-                .sort((a, b) => a.label.localeCompare(b.label))
-                .filter(
-                    item =>
-                        !this.table.fields ||
-                        !this.table.fields.find(field => field === item.value) ||
-                        (index !== -1 && this.table.fields[index] === item.value)
-                );
         },
     },
 };
