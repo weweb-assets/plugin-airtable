@@ -199,10 +199,10 @@ export default {
         },
         setFields(fields) {
             this.$emit('update:args', { ...this.args, fields });
-            this.setData(_.cloneDeep({ ...this.data }));
+            this.setData({ ...this.data });
         },
         setDataKey(key, value) {
-            this.setData(_.cloneDeep({ ...this.data, [key]: value }));
+            this.setData({ ...this.data, [key]: value });
         },
         setData(data) {
             for (const dataKey in data) {
@@ -210,9 +210,9 @@ export default {
                     delete data[dataKey];
                 }
             }
-            for (const field of this.tableFields) {
-                data[field.label] = data[field.label] || null;
-            }
+            // for (const field of this.tableFields) {
+            //     data[field.label] = data[field.label] || null;
+            // }
             this.$emit('update:args', { ...this.args, data });
         },
         async getTables(isNoCache = false) {
