@@ -213,7 +213,7 @@ export default {
             // for (const field of this.tableFields) {
             //     data[field.label] = data[field.label] || null;
             // }
-            this.$emit('update:args', { ...this.args, data });
+            // this.$emit('update:args', { ...this.args, data });
         },
         async getTables(isNoCache = false) {
             if (!this.collection || !this.collection.config.baseId) return;
