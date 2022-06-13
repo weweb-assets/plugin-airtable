@@ -38,7 +38,7 @@
                 :label="field.label"
                 step="0.1"
                 bindable
-                @update:modelValue="setData(field.label, $event)"
+                @update:modelValue="setDataKey(field.label, $event)"
                 @add-item="addItem(field)"
             >
                 <template v-if="typesConvertion[field.type] === 'array'" #default="{ item, setItem }">
@@ -188,8 +188,8 @@ export default {
     methods: {
         addItem(field) {
             if (field.type === 'multipleAttachments')
-                this.setData(field.label, [...(this.data[field.label] || []), { url: '' }]);
-            else this.setData(field.label, [...(this.data[field.label] || []), '']);
+                this.setDataKey(field.label, [...(this.data[field.label] || []), { url: '' }]);
+            else this.setDataKey(field.label, [...(this.data[field.label] || []), '']);
         },
         setCollectionId(collectionId) {
             this.$emit('update:args', { ...this.args, collectionId });
@@ -199,13 +199,19 @@ export default {
         },
         setFields(fields) {
             this.$emit('update:args', { ...this.args, fields });
+            this.setData({ ...this.data });
         },
-        setData(key, value) {
-            const data = { ...this.data, [key]: value };
+        setDataKey(key, value) {
+            this.setData({ ...this.data, [key]: value });
+        },
+        setData(data) {
             for (const dataKey in data) {
                 if (!this.tableFields.find(field => field.label === dataKey)) {
                     delete data[dataKey];
                 }
+            }
+            for (const field of this.tableFields) {
+                data[field.label] = data[field.label] || null;
             }
             this.$emit('update:args', { ...this.args, data });
         },
