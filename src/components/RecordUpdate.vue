@@ -199,7 +199,7 @@ export default {
         },
         setFields(fields) {
             this.$emit('update:args', { ...this.args, fields });
-            this.setData({ ...this.data });
+            this.$nextTick(() => this.setData({ ...this.data }));
         },
         setDataKey(key, value) {
             this.setData({ ...this.data, [key]: value });
