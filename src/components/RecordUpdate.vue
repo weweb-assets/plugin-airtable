@@ -205,11 +205,11 @@ export default {
             this.setData({ ...this.data, [key]: value });
         },
         setData(data) {
-            for (const dataKey in data) {
-                if (!this.tableFields.find(field => field.label === dataKey)) {
-                    delete data[dataKey];
-                }
-            }
+            // for (const dataKey in data) {
+            //     if (!this.tableFields.find(field => field.label === dataKey)) {
+            //         delete data[dataKey];
+            //     }
+            // }
             // for (const field of this.tableFields) {
             //     data[field.label] = data[field.label] || null;
             // }
