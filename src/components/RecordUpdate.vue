@@ -205,15 +205,15 @@ export default {
             this.setData({ ...this.data, [key]: value });
         },
         setData(data) {
-            // for (const dataKey in data) {
-            //     if (!this.tableFields.find(field => field.label === dataKey)) {
-            //         delete data[dataKey];
-            //     }
-            // }
-            // for (const field of this.tableFields) {
-            //     data[field.label] = data[field.label] || null;
-            // }
-            // this.$emit('update:args', { ...this.args, data });
+            for (const dataKey in data) {
+                if (!this.tableFields.find(field => field.label === dataKey)) {
+                    delete data[dataKey];
+                }
+            }
+            for (const field of this.tableFields) {
+                data[field.label] = data[field.label] || null;
+            }
+            this.$emit('update:args', { ...this.args, data });
         },
         async getTables(isNoCache = false) {
             if (!this.collection || !this.collection.config.baseId) return;
