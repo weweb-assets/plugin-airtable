@@ -148,10 +148,10 @@ export default {
             return this.args.recordId;
         },
         fields() {
-            return this.args.fields || [];
+            return this.args.fields;
         },
         data() {
-            return this.args.data || {};
+            return this.args.data;
         },
         tableFields() {
             if (!this.collection) return [];
@@ -192,7 +192,7 @@ export default {
             else this.setDataKey(field.label, [...(this.data[field.label] || []), '']);
         },
         setCollectionId(collectionId) {
-            this.$emit('update:args', { ...this.args, collectionId });
+            this.$emit('update:args', { ...this.args, collectionId, fields: [], data: {} });
         },
         setRecordId(recordId) {
             this.$emit('update:args', { ...this.args, recordId });
