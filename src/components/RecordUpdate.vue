@@ -151,7 +151,7 @@ export default {
             return this.args.fields;
         },
         data() {
-            return this.args.data;
+            return this.args.data || {};
         },
         tableFields() {
             if (!this.collection) return [];
