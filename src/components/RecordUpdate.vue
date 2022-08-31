@@ -220,6 +220,7 @@ export default {
             this.isTablesLoading = true;
             try {
                 this.allTables = await this.plugin.getTables(this.collection.config.baseId, isNoCache);
+                this.setData(this.data)
             } catch (err) {
                 wwLib.wwNotification.open({
                     text: 'Unable to pull your tables, please make sure you entered the correct API key.',
