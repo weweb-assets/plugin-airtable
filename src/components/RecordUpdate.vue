@@ -158,6 +158,7 @@ export default {
             const table = this.allTables.find(table => table.id === this.collection.config.tableId);
             if (!table) return [];
             return table.fields
+                .filter(field => this.typesConvertion[field.type])
                 .map(field => ({
                     label: field.name,
                     type: field.type,
@@ -206,11 +207,11 @@ export default {
         },
         setData(data) {
             for (const dataKey in data) {
-                if (!this.tableFieldsOptions.find(field => field.label === dataKey)) {
+                if (!this.tableFields.find(field => field.label === dataKey)) {
                     delete data[dataKey];
                 }
             }
-            for (const field of this.tableFieldsOptions) {
+            for (const field of this.tableFields) {
                 data[field.label] = data[field.label] || null;
             }
             this.$emit('update:args', { ...this.args, data });
