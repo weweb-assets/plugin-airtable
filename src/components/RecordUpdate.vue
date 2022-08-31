@@ -158,6 +158,7 @@ export default {
             const table = this.allTables.find(table => table.id === this.collection.config.tableId);
             if (!table) return [];
             return table.fields
+                .filter(field => this.typesConvertion[field.type])
                 .map(field => ({
                     label: field.name,
                     type: field.type,
@@ -220,6 +221,7 @@ export default {
             this.isTablesLoading = true;
             try {
                 this.allTables = await this.plugin.getTables(this.collection.config.baseId, isNoCache);
+                this.setData({ ...this.data })
             } catch (err) {
                 wwLib.wwNotification.open({
                     text: 'Unable to pull your tables, please make sure you entered the correct API key.',
