@@ -69,10 +69,12 @@ export default {
 
         const record = response.data.data;
         const collection = wwLib.$store.getters['data/getCollections'][collectionId];
+        if (!collection) return null;
+        const collectionData = collection.data || []
         wwLib.$store.dispatch('data/setCollection', {
             ...collection,
             total: collection.total + 1,
-            data: [...collection.data, record],
+            data: [...collectionData, record],
         });
 
         return record;
@@ -102,9 +104,10 @@ export default {
         const record = response.data.data;
         const collection = _.cloneDeep(wwLib.$store.getters['data/getCollections'][collectionId]);
         if (!collection) return null;
-        const recordIndex = collection.data.findIndex(item => item && item.id === recordId);
-        collection.data.splice(recordIndex, 1, record);
-        wwLib.$store.dispatch('data/setCollection', { ...collection, data: collection.data });
+        const collectionData = collection.data || []
+        const recordIndex = collectionData.findIndex(item => item && item.id === recordId);
+        collectionData.splice(recordIndex, 1, record);
+        wwLib.$store.dispatch('data/setCollection', { ...collection, data: collectionData });
 
         return record;
     },
@@ -130,12 +133,13 @@ export default {
         const record = response.data.data;
         const collection = _.cloneDeep(wwLib.$store.getters['data/getCollections'][collectionId]);
         if (!collection) return null;
-        const recordIndex = collection.data.findIndex(item => item && item.id === recordId);
-        collection.data.splice(recordIndex, 1);
+        const collectionData = collection.data || []
+        const recordIndex = collectionData.findIndex(item => item && item.id === recordId);
+        collectionData.splice(recordIndex, 1);
         wwLib.$store.dispatch('data/setCollection', {
             ...collection,
             total: collection.total - 1,
-            data: collection.data,
+            data: collectionData,
         });
 
         return record;
@@ -153,17 +157,18 @@ export default {
 
         const collection = _.cloneDeep(wwLib.$store.getters['data/getCollections'][collectionId]);
         if (!collection) return null;
-        const recordIndex = collection.data.findIndex(item => item && item.id === recordId);
+        const collectionData = collection.data || []
+        const recordIndex = collectionData.findIndex(item => item && item.id === recordId);
         if (recordIndex === -1) {
-            collection.data.push(record);
+            collectionData.push(record);
             wwLib.$store.dispatch('data/setCollection', {
                 ...collection,
                 total: collection.total + 1,
-                data: collection.data,
+                data: collectionData,
             });
         } else {
-            collection.data.splice(recordIndex, 1, record);
-            wwLib.$store.dispatch('data/setCollection', { ...collection, data: collection.data });
+            collectionData.splice(recordIndex, 1, record);
+            wwLib.$store.dispatch('data/setCollection', { ...collection, data: collectionData });
         }
 
         return record;
