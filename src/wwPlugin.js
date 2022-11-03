@@ -70,7 +70,7 @@ export default {
         const record = response.data.data;
         const collection = wwLib.$store.getters['data/getCollections'][collectionId];
         if (!collection) return null;
-        const collectionData = collection.data || []
+        const collectionData = Array.isArray(collection.data) ? collection.data : []
         wwLib.$store.dispatch('data/setCollection', {
             ...collection,
             total: collection.total + 1,
@@ -104,7 +104,7 @@ export default {
         const record = response.data.data;
         const collection = _.cloneDeep(wwLib.$store.getters['data/getCollections'][collectionId]);
         if (!collection) return null;
-        const collectionData = collection.data || []
+        const collectionData = Array.isArray(collection.data) ? collection.data : []
         const recordIndex = collectionData.findIndex(item => item && item.id === recordId);
         collectionData.splice(recordIndex, 1, record);
         wwLib.$store.dispatch('data/setCollection', { ...collection, data: collectionData });
@@ -133,7 +133,7 @@ export default {
         const record = response.data.data;
         const collection = _.cloneDeep(wwLib.$store.getters['data/getCollections'][collectionId]);
         if (!collection) return null;
-        const collectionData = collection.data || []
+        const collectionData = Array.isArray(collection.data) ? collection.data : []
         const recordIndex = collectionData.findIndex(item => item && item.id === recordId);
         collectionData.splice(recordIndex, 1);
         wwLib.$store.dispatch('data/setCollection', {
@@ -157,7 +157,7 @@ export default {
 
         const collection = _.cloneDeep(wwLib.$store.getters['data/getCollections'][collectionId]);
         if (!collection) return null;
-        const collectionData = collection.data || []
+        const collectionData = Array.isArray(collection.data) ? collection.data : []
         const recordIndex = collectionData.findIndex(item => item && item.id === recordId);
         if (recordIndex === -1) {
             collectionData.push(record);
