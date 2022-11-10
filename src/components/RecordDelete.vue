@@ -35,7 +35,7 @@ export default {
                 .map(collection => ({
                     label: collection.name,
                     value: collection.id,
-                    icon: plugins(collection.pluginId).name,
+                    icon: `logos/${plugins(collection.pluginId).name}`,
                 }));
         },
         collectionId() {
