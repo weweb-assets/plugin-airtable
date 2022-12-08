@@ -15,6 +15,7 @@
     "globals": {
         "wwLib": "readonly",
         "axios": "readonly",
+        "wwAxios": "readonly",
         "_": "readonly"
     }
 }
