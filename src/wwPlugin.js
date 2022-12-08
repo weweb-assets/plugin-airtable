@@ -54,10 +54,9 @@ export default {
         wwUtils && wwUtils.log({ label: 'Payload', preview: data });
         /* wwEditor:end */
         /* wwEditor:start */
-        response = await axios.post(
+        response = await wwAxios.post(
             `${wwLib.wwApiRequests._getPluginsUrl()}/designs/${websiteId}/cms_data_sets/${collectionId}/airtable/record`,
-            { data },
-            { headers: wwLib.wwApiRequests._getAuthHeader() }
+            { data }
         );
         /* wwEditor:end */
         /* wwFront:start */
@@ -88,10 +87,9 @@ export default {
         wwUtils && wwUtils.log({ label: 'Payload', preview: data });
         /* wwEditor:end */
         /* wwEditor:start */
-        response = await axios.patch(
+        response = await wwAxios.patch(
             `${wwLib.wwApiRequests._getPluginsUrl()}/designs/${websiteId}/cms_data_sets/${collectionId}/airtable/record/${recordId}`,
-            { data },
-            { headers: wwLib.wwApiRequests._getAuthHeader() }
+            { data }
         );
         /* wwEditor:end */
         /* wwFront:start */
@@ -119,9 +117,8 @@ export default {
         wwUtils && wwUtils.log({ label: 'Record ID', preview: recordId });
         /* wwEditor:end */
         /* wwEditor:start */
-        response = await axios.delete(
-            `${wwLib.wwApiRequests._getPluginsUrl()}/designs/${websiteId}/cms_data_sets/${collectionId}/airtable/record/${recordId}`,
-            { headers: wwLib.wwApiRequests._getAuthHeader() }
+        response = await wwAxios.delete(
+            `${wwLib.wwApiRequests._getPluginsUrl()}/designs/${websiteId}/cms_data_sets/${collectionId}/airtable/record/${recordId}`
         );
         /* wwEditor:end */
         /* wwFront:start */
