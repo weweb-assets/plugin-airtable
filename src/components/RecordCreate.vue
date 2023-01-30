@@ -30,7 +30,7 @@
                             placeholder="Enter a user ID"
                             bindable
                             small
-                            @update:modelValue="setItem({ ...(item || {}), id: $event })"
+                            @update:modelValue="setData(field.label, { ...(item || {}), id: $event })"
                         />
                         <wwEditorInputRow
                             type="query"
@@ -39,7 +39,7 @@
                             placeholder="Enter a user email"
                             bindable
                             small
-                            @update:modelValue="setItem({ ...(item || {}), email: $event })"
+                            @update:modelValue="setData(field.label, { ...(item || {}), email: $event })"
                         />
                     </template>
                 </template>
