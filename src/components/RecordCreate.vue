@@ -25,21 +25,21 @@
                     <template v-if="field.type === 'singleCollaborator'">
                         <wwEditorInputRow
                             type="query"
-                            :model-value="item.id"
+                            :model-value="item && item.id"
                             label="ID"
                             placeholder="Enter a user ID"
                             bindable
                             small
-                            @update:modelValue="setItem({ ...item, id: $event })"
+                            @update:modelValue="setItem({ ...(item || {}), id: $event })"
                         />
                         <wwEditorInputRow
                             type="query"
-                            :model-value="item.email"
+                            :model-value="item && item.email"
                             label="Email"
                             placeholder="Enter a user email"
                             bindable
                             small
-                            @update:modelValue="setItem({ ...item, email: $event })"
+                            @update:modelValue="setItem({ ...(item || {}), email: $event })"
                         />
                     </template>
                 </template>
