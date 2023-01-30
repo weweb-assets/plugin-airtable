@@ -21,7 +21,7 @@
                 @update:modelValue="setData(field.label, $event)"
                 @add-item="addItem(field)"
             >
-                <template v-else-if="typesConvertion[field.type] === 'object'" #default="{ item, setItem }">
+                <template v-if="typesConvertion[field.type] === 'object'" #default="{ item, setItem }">
                     <template v-else-if="field.type === 'singleCollaborators'">
                         <wwEditorInputRow
                             type="query"
@@ -43,7 +43,7 @@
                         />
                     </template>
                 </template>
-                <template v-if="typesConvertion[field.type] === 'array'" #default="{ item, setItem }">
+                <template v-else-if="typesConvertion[field.type] === 'array'" #default="{ item, setItem }">
                     <wwEditorFormRow v-if="field.type === 'multipleRecordLinks'">
                         <wwEditorInput
                             type="query"
