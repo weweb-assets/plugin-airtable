@@ -41,7 +41,29 @@
                 @update:modelValue="setDataKey(field.label, $event)"
                 @add-item="addItem(field)"
             >
-                <template v-if="typesConvertion[field.type] === 'array'" #default="{ item, setItem }">
+                <template v-if="typesConvertion[field.type] === 'object'" #default="{ item, setItem }">
+                    <template v-if="field.type === 'singleCollaborator'">
+                        <wwEditorInputRow
+                            type="query"
+                            :model-value="item && item.id"
+                            label="ID"
+                            placeholder="Enter a user ID"
+                            bindable
+                            small
+                            @update:modelValue="setData(field.label, { ...(item || {}), id: $event })"
+                        />
+                        <wwEditorInputRow
+                            type="query"
+                            :model-value="item && item.email"
+                            label="Email"
+                            placeholder="Enter a user email"
+                            bindable
+                            small
+                            @update:modelValue="setData(field.label, { ...(item || {}), email: $event })"
+                        />
+                    </template>
+                </template>
+                <template v-else-if="typesConvertion[field.type] === 'array'" #default="{ item, setItem }">
                     <wwEditorFormRow v-if="field.type === 'multipleRecordLinks'">
                         <wwEditorInput
                             type="query"
@@ -85,17 +107,26 @@
                             @update:modelValue="setItem({ ...item, filename: $event })"
                         />
                     </template>
-                    <wwEditorFormRow v-else-if="field.type === 'multipleCollaborators'">
-                        <wwEditorInput
+                    <template v-else-if="field.type === 'multipleCollaborators'">
+                        <wwEditorInputRow
                             type="query"
-                            :model-value="item"
-                            :label="field.label"
+                            :model-value="item.id"
+                            label="ID"
                             placeholder="Enter a user ID"
                             bindable
                             small
-                            @update:modelValue="setItem($event)"
+                            @update:modelValue="setItem({ ...item, id: $event })"
                         />
-                    </wwEditorFormRow>
+                        <wwEditorInputRow
+                            type="query"
+                            :model-value="item.email"
+                            label="Email"
+                            placeholder="Enter a user email"
+                            bindable
+                            small
+                            @update:modelValue="setItem({ ...item, email: $event })"
+                        />
+                    </template>
                 </template>
             </wwEditorInputRow>
         </div>
@@ -234,7 +265,7 @@ export default {
             this.isTablesLoading = true;
             try {
                 this.allTables = await this.plugin.getTables(this.collection.config.baseId, isNoCache);
-                this.setData({ ...this.data })
+                this.setData({ ...this.data });
             } catch (err) {
                 wwLib.wwNotification.open({
                     text: 'Unable to pull your tables, please make sure you entered the correct API key.',
