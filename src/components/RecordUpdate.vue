@@ -152,7 +152,7 @@ export default {
                 richText: 'query',
                 multipleSelects: 'array',
                 singleSelect: 'select',
-                singleCollaborator: 'query',
+                singleCollaborator: 'object',
                 date: 'query',
                 dateTime: 'query',
                 phoneNumber: 'query',
