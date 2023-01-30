@@ -22,7 +22,7 @@
                 @add-item="addItem(field)"
             >
                 <template v-if="typesConvertion[field.type] === 'object'" #default="{ item, setItem }">
-                    <template v-else-if="field.type === 'singleCollaborators'">
+                    <template v-if="field.type === 'singleCollaborators'">
                         <wwEditorInputRow
                             type="query"
                             :model-value="item.id"
