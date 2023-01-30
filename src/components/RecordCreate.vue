@@ -33,6 +33,7 @@
                             @update:modelValue="setItem($event)"
                         />
                     </wwEditorFormRow>
+                   
                     <wwEditorFormRow v-else-if="field.type === 'multipleSelects'">
                         <wwEditorInput
                             type="select"
@@ -65,6 +66,17 @@
                             @update:modelValue="setItem({ ...item, filename: $event })"
                         />
                     </template>
+                    <wwEditorFormRow v-else-if="field.type === 'multipleCollaborators'">
+                        <wwEditorInput
+                            type="query"
+                            :model-value="item"
+                            :label="field.label"
+                            placeholder="Enter a user ID"
+                            bindable
+                            small
+                            @update:modelValue="setItem($event)"
+                        />
+                    </wwEditorFormRow>
                 </template>
             </wwEditorInputRow>
         </div>
@@ -104,7 +116,7 @@ export default {
                 barcode: 'query',
                 multipleRecordLinks: 'array',
                 multipleAttachments: 'array',
-                multipleCollaborators: 'array'
+                multipleCollaborators: 'array',
             },
         };
     },

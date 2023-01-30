@@ -85,6 +85,17 @@
                             @update:modelValue="setItem({ ...item, filename: $event })"
                         />
                     </template>
+                    <wwEditorFormRow v-else-if="field.type === 'multipleCollaborators'">
+                        <wwEditorInput
+                            type="query"
+                            :model-value="item"
+                            :label="field.label"
+                            placeholder="Enter a user ID"
+                            bindable
+                            small
+                            @update:modelValue="setItem($event)"
+                        />
+                    </wwEditorFormRow>
                 </template>
             </wwEditorInputRow>
         </div>
@@ -112,6 +123,7 @@ export default {
                 singleSelect: 'select',
                 singleCollaborator: 'query',
                 date: 'query',
+                dateTime: 'query',
                 phoneNumber: 'query',
                 email: 'query',
                 url: 'query',
@@ -123,6 +135,7 @@ export default {
                 barcode: 'query',
                 multipleRecordLinks: 'array',
                 multipleAttachments: 'array',
+                multipleCollaborators: 'array',
             },
         };
     },
