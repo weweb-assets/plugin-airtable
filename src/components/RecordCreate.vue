@@ -92,6 +92,7 @@ export default {
                 singleSelect: 'select',
                 singleCollaborator: 'query',
                 date: 'query',
+                dateTime: 'query',
                 phoneNumber: 'query',
                 email: 'query',
                 url: 'query',
@@ -103,6 +104,7 @@ export default {
                 barcode: 'query',
                 multipleRecordLinks: 'array',
                 multipleAttachments: 'array',
+                multipleCollaborators: 'array'
             },
         };
     },
