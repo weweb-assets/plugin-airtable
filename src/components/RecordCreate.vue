@@ -21,7 +21,29 @@
                 @update:modelValue="setData(field.label, $event)"
                 @add-item="addItem(field)"
             >
-                <template v-if="typesConvertion[field.type] === 'array'" #default="{ item, setItem }">
+                <template v-if="typesConvertion[field.type] === 'object'" #default="{ item, setItem }">
+                    <template v-if="field.type === 'singleCollaborator'">
+                        <wwEditorInputRow
+                            type="query"
+                            :model-value="item && item.id"
+                            label="ID"
+                            placeholder="Enter a user ID"
+                            bindable
+                            small
+                            @update:modelValue="setData(field.label, { ...(item || {}), id: $event })"
+                        />
+                        <wwEditorInputRow
+                            type="query"
+                            :model-value="item && item.email"
+                            label="Email"
+                            placeholder="Enter a user email"
+                            bindable
+                            small
+                            @update:modelValue="setData(field.label, { ...(item || {}), email: $event })"
+                        />
+                    </template>
+                </template>
+                <template v-else-if="typesConvertion[field.type] === 'array'" #default="{ item, setItem }">
                     <wwEditorFormRow v-if="field.type === 'multipleRecordLinks'">
                         <wwEditorInput
                             type="query"
@@ -65,6 +87,26 @@
                             @update:modelValue="setItem({ ...item, filename: $event })"
                         />
                     </template>
+                    <template v-else-if="field.type === 'multipleCollaborators'">
+                        <wwEditorInputRow
+                            type="query"
+                            :model-value="item.id"
+                            label="ID"
+                            placeholder="Enter a user ID"
+                            bindable
+                            small
+                            @update:modelValue="setItem({ ...item, id: $event })"
+                        />
+                        <wwEditorInputRow
+                            type="query"
+                            :model-value="item.email"
+                            label="Email"
+                            placeholder="Enter a user email"
+                            bindable
+                            small
+                            @update:modelValue="setItem({ ...item, email: $event })"
+                        />
+                    </template>
                 </template>
             </wwEditorInputRow>
         </div>
@@ -90,8 +132,9 @@ export default {
                 richText: 'query',
                 multipleSelects: 'array',
                 singleSelect: 'select',
-                singleCollaborator: 'query',
+                singleCollaborator: 'object',
                 date: 'query',
+                dateTime: 'query',
                 phoneNumber: 'query',
                 email: 'query',
                 url: 'query',
@@ -103,6 +146,7 @@ export default {
                 barcode: 'query',
                 multipleRecordLinks: 'array',
                 multipleAttachments: 'array',
+                multipleCollaborators: 'array',
             },
         };
     },
