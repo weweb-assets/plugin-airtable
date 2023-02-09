@@ -64,14 +64,6 @@
             placeholder="All fields"
             @update:modelValue="setProp('fields', $event)"
         />
-        <!-- <wwEditorInputRow
-            label="Filter by formula"
-            type="string"
-            :model-value="table.filterByFormula"
-            placeholder="{Days Overdye} > 3"
-            @update:modelValue="setProp('filterByFormula', $event)"
-            bindable
-        /> -->
         <wwLoader :loading="isBasesLoading || isTablesLoading" />
     </div>
 </template>
@@ -104,7 +96,6 @@ export default {
                 view: undefined,
                 depth: 0,
                 fields: null,
-                // filterByFormula: null,
                 ...this.config,
             };
         },
