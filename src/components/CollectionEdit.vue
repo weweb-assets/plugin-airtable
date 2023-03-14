@@ -75,7 +75,7 @@
                 </a>
             </template>
             <wwEditorInput
-                type="text"
+                type="string"
                 placeholder="Airtable formula"
                 :model-value="table.filterByFormula"
                 :bindable="collection.mode === 'dynamic'"
