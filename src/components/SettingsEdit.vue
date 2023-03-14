@@ -6,20 +6,21 @@
                     Find it here
                 </a>
             </template>
-            <wwEditorInputText
-                type="text"
-                name="api-key"
-                placeholder="key**************"
-                :model-value="settings.privateData.apiKey"
-                :style="{ '-webkit-text-security': isKeyVisible ? 'none' : 'disc' }"
-                large
-                @update:modelValue="changeApiKey"
-            />
+            <div class="flex items-center">
+                <wwEditorInputText
+                    :type="isKeyVisible ? 'text' : 'password'"
+                    name="api-key"
+                    placeholder="key**************"
+                    :model-value="settings.privateData.apiKey"
+                    large
+                    @update:modelValue="changeApiKey"
+                    class="w-full mr-3"
+                />
+                <button class="pointer" @click.prevent="isKeyVisible = !isKeyVisible">
+                    <wwEditorIcon :name="isKeyVisible ? 'eye-off' : 'eye'"></wwEditorIcon>
+                </button>
+            </div>
         </wwEditorFormRow>
-        <div class="airtable-settings-edit__row">
-            <wwEditorInputSwitch v-model="isKeyVisible" />
-            <span class="airtable-settings-edit__radio-label caption-m">Show api key</span>
-        </div>
     </div>
 </template>
 
