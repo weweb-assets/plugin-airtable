@@ -64,6 +64,20 @@
             placeholder="All fields"
             @update:modelValue="setProp('fields', $event)"
         />
+        <wwEditorFormRow label="Filter by formula">
+            <template #append-label>
+                <a class="airtable-settings-edit__link" href="https://airtable.com/filter" target="_blank">
+                    Find it here
+                </a>
+            </template>
+            <wwEditorInputText
+                type="text"
+                placeholder="Airtable formula"
+                :model-value="table.filterByFormula"
+                :bindable="collection.mode === 'dynamic'"
+                @update:modelValue="setProp('filterByFormula', $event)"
+            />
+        </wwEditorFormRow>
         <wwLoader :loading="isBasesLoading || isTablesLoading" />
     </div>
 </template>
@@ -71,6 +85,7 @@
 <script>
 export default {
     props: {
+        collection: { type: Object, required: true },
         plugin: { type: Object, required: true },
         config: { type: Object, required: true },
     },
