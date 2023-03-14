@@ -74,9 +74,7 @@
                     Find it here
                 </a>
             </template>
-            {{ collection.mode }}
-            {{ collection }}
-            <wwEditorInputText
+            <wwEditorInput
                 type="text"
                 placeholder="Airtable formula"
                 :model-value="table.filterByFormula"
