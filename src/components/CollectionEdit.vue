@@ -66,10 +66,16 @@
         />
         <wwEditorFormRow label="Filter by formula">
             <template #append-label>
-                <a class="airtable-settings-edit__link" href="https://airtable.com/filter" target="_blank">
+                <a
+                    class="ww-editor-link ml-auto"
+                    href="https://support.airtable.com/docs/formula-field-reference"
+                    target="_blank"
+                >
                     Find it here
                 </a>
             </template>
+            {{ collection.mode }}
+            {{ collection }}
             <wwEditorInputText
                 type="text"
                 placeholder="Airtable formula"
