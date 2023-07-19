@@ -14,9 +14,9 @@
                     :model-value="settings.privateData.apiKey"
                     large
                     @update:modelValue="changeApiKey"
-                    class="w-full mr-3"
+                    class="w-full mr-2"
                 />
-                <button class="pointer" @click.prevent="isKeyVisible = !isKeyVisible">
+                <button class="ww-editor-button -icon -secondary -dark" @click.prevent="isKeyVisible = !isKeyVisible">
                     <wwEditorIcon :name="isKeyVisible ? 'eye-off' : 'eye'"></wwEditorIcon>
                 </button>
                 <wwEditorQuestionMark
