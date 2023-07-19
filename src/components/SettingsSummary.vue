@@ -23,6 +23,7 @@ export default {
 .airtable-settings-summary {
     display: flex;
     align-items: baseline;
+    overflow-x: clip;
     &__icon {
         margin-right: var(--ww-spacing-02);
     }

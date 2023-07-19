@@ -2,14 +2,14 @@
     <div class="airtable-settings-edit">
         <wwEditorFormRow required label="API key">
             <template #append-label>
-                <a class="airtable-settings-edit__link" href="https://airtable.com/account" target="_blank">
+                <a class="airtable-settings-edit__link" href="https://airtable.com/create/tokens" target="_blank">
                     Find it here
                 </a>
             </template>
             <div class="flex items-center">
                 <wwEditorInputText
                     :type="isKeyVisible ? 'text' : 'password'"
-                    name="api-key"
+                    name="Personal Access Token"
                     placeholder="key**************"
                     :model-value="settings.privateData.apiKey"
                     large
@@ -19,6 +19,11 @@
                 <button class="pointer" @click.prevent="isKeyVisible = !isKeyVisible">
                     <wwEditorIcon :name="isKeyVisible ? 'eye-off' : 'eye'"></wwEditorIcon>
                 </button>
+                <wwEditorQuestionMark
+                    tooltip-position="top-left"
+                    class="ml-2"
+                    :forcedContent="`Make sure to set proper read and write permissions on your token and access to the right bases. So that WeWeb can fetch your bases schema and data. More info on scopes here: https://airtable.com/developers/web/api/scopes`"
+                />
             </div>
         </wwEditorFormRow>
     </div>
