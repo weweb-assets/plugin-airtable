@@ -1,6 +1,6 @@
 # How to configure the Airtable plugin
 
-![https://github.com/weweb-assets/plugin-airtable/blob/main/src/markdown/images/airtable-scopes.png?raw=true](https://github.com/weweb-assets/plugin-airtable/blob/main/src/markdown/images/airtable-scopes?raw=true)
+![https://github.com/weweb-assets/plugin-airtable/blob/update_markdown/src/markdown/images/airtable-scopes.png?raw=true](https://github.com/weweb-assets/plugin-airtable/blob/update_markdown/src/markdown/images/airtable-scopes.png?raw=true)
 
 To use the Airtable plugin, you must copy/paste your Personal Access Token, which you can find <a href="https://airtable.com/create/tokens" target="_blank" class="ww-editor-link">on your account</a>.
 
