@@ -50,9 +50,11 @@ export default {
         const websiteId = wwLib.wwWebsiteData.getInfo().id;
 
         let response = null;
-        /* wwEditor:start */
-        wwUtils && wwUtils.log({ label: 'Payload', preview: data });
-        /* wwEditor:end */
+        wwUtils?.log('info', `Creating a record for _wwCollection(${collectionId})`, {
+            preview: data,
+            type: 'request',
+        });
+
         /* wwEditor:start */
         response = await wwAxios.post(
             `${wwLib.wwApiRequests._getPluginsUrl()}/designs/${websiteId}/cms_data_sets/${collectionId}/airtable/record`,
@@ -69,7 +71,7 @@ export default {
         const record = response.data.data;
         const collection = wwLib.$store.getters['data/getCollections'][collectionId];
         if (!collection) return null;
-        const collectionData = Array.isArray(collection.data) ? collection.data : []
+        const collectionData = Array.isArray(collection.data) ? collection.data : [];
         wwLib.$store.dispatch('data/setCollection', {
             ...collection,
             total: collection.total + 1,
@@ -82,10 +84,10 @@ export default {
         const websiteId = wwLib.wwWebsiteData.getInfo().id;
 
         let response = null;
-        /* wwEditor:start */
-        wwUtils && wwUtils.log({ label: 'Record ID', preview: recordId });
-        wwUtils && wwUtils.log({ label: 'Payload', preview: data });
-        /* wwEditor:end */
+        wwUtils?.log('info', `Updating record ${recordId} for _wwCollection(${collectionId})`, {
+            preview: data,
+            type: 'request',
+        });
         /* wwEditor:start */
         response = await wwAxios.patch(
             `${wwLib.wwApiRequests._getPluginsUrl()}/designs/${websiteId}/cms_data_sets/${collectionId}/airtable/record/${recordId}`,
@@ -102,7 +104,7 @@ export default {
         const record = response.data.data;
         const collection = _.cloneDeep(wwLib.$store.getters['data/getCollections'][collectionId]);
         if (!collection) return null;
-        const collectionData = Array.isArray(collection.data) ? collection.data : []
+        const collectionData = Array.isArray(collection.data) ? collection.data : [];
         const recordIndex = collectionData.findIndex(item => item && item.id === recordId);
         collectionData.splice(recordIndex, 1, record);
         wwLib.$store.dispatch('data/setCollection', { ...collection, data: collectionData });
@@ -113,9 +115,7 @@ export default {
         const websiteId = wwLib.wwWebsiteData.getInfo().id;
 
         let response = null;
-        /* wwEditor:start */
-        wwUtils && wwUtils.log({ label: 'Record ID', preview: recordId });
-        /* wwEditor:end */
+        wwUtils?.log('info', `Deleting record ${recordId} for _wwCollection(${collectionId})`, { type: 'request' });
         /* wwEditor:start */
         response = await wwAxios.delete(
             `${wwLib.wwApiRequests._getPluginsUrl()}/designs/${websiteId}/cms_data_sets/${collectionId}/airtable/record/${recordId}`
@@ -130,7 +130,7 @@ export default {
         const record = response.data.data;
         const collection = _.cloneDeep(wwLib.$store.getters['data/getCollections'][collectionId]);
         if (!collection) return null;
-        const collectionData = Array.isArray(collection.data) ? collection.data : []
+        const collectionData = Array.isArray(collection.data) ? collection.data : [];
         const recordIndex = collectionData.findIndex(item => item && item.id === recordId);
         collectionData.splice(recordIndex, 1);
         wwLib.$store.dispatch('data/setCollection', {
@@ -143,10 +143,7 @@ export default {
     },
     async syncRecord({ collectionId, recordId }, wwUtils) {
         const websiteId = wwLib.wwWebsiteData.getInfo().id;
-
-        /* wwEditor:start */
-        wwUtils && wwUtils.log({ label: 'Record ID', preview: recordId });
-        /* wwEditor:end */
+        wwUtils?.log('info', `Syncing record ${recordId} for _wwCollection(${collectionId})`, { type: 'request' });
         const response = await axios.get(
             `${wwLib.wwApiRequests._getPluginsUrl()}/hook/designs/${websiteId}/cms_data_sets/${collectionId}/sync/${recordId}/update`
         );
@@ -154,7 +151,7 @@ export default {
 
         const collection = _.cloneDeep(wwLib.$store.getters['data/getCollections'][collectionId]);
         if (!collection) return null;
-        const collectionData = Array.isArray(collection.data) ? collection.data : []
+        const collectionData = Array.isArray(collection.data) ? collection.data : [];
         const recordIndex = collectionData.findIndex(item => item && item.id === recordId);
         if (recordIndex === -1) {
             collectionData.push(record);
