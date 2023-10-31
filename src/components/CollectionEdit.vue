@@ -210,7 +210,7 @@ export default {
         },
         setTable(tableId) {
             if (this.table.id === tableId) return;
-            this.$emit('update:config', { ...this.table, ...this.getTable(tableId) });
+            this.$emit('update:config', { ...this.table, ...this.getTable(tableId), fields: [] });
         },
         setProp(key, value) {
             if (this.table[key] === value) return;
