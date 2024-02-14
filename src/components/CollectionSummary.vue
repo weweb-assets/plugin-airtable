@@ -1,7 +1,7 @@
 <template>
     <div class="airtable-collection-summary">
         <div class="label-sm content-primary">Base</div>
-        <div class="body-sm content-secondary">{{ config.baseName || '-' }}</div>
+        <div class="body-sm content-secondary truncate">{{ config.baseName || '-' }}</div>
         <div class="label-sm content-primary">Table</div>
         <div class="body-sm content-secondary truncate">{{ config.tableName || '-' }}</div>
         <div class="label-sm content-primary">View</div>
