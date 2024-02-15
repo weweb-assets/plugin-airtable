@@ -10,7 +10,7 @@
                     large
                     @update:modelValue="setBase"
                 />
-                <button type="button" class="ww-editor-button -primary -small -icon m-left" @click="getBases(true)">
+                <button type="button" class="ww-editor-button -primary -small -icon ml-2" @click="getBases(true)">
                     <wwEditorIcon name="refresh" medium />
                 </button>
             </div>
@@ -28,7 +28,7 @@
                 />
                 <button
                     type="button"
-                    class="ww-editor-button -primary -small -icon m-left"
+                    class="ww-editor-button -primary -small -icon ml-2"
                     :disabled="!table.baseId"
                     @click="getTables(true)"
                 >
@@ -257,21 +257,6 @@ export default {
         .-full {
             width: 100%;
         }
-    }
-    .m-auto-left {
-        margin-left: auto;
-    }
-    .m-left {
-        margin-left: var(--ww-spacing-02);
-    }
-    .m-right {
-        margin-right: var(--ww-spacing-02);
-    }
-    .m-bottom {
-        margin-bottom: var(--ww-spacing-02);
-    }
-    .w-50 {
-        width: 50%;
     }
 }
 </style>
