@@ -1,8 +1,11 @@
 <template>
     <div class="airtable-collection-summary">
-        <div class="airtable-collection-summary__elem caption-s">Base: {{ config.baseName || '-' }}</div>
-        <div class="airtable-collection-summary__elem caption-s">Table: {{ config.tableName || '-' }}</div>
-        <div class="airtable-collection-summary__elem caption-s">View: {{ config.view || '-' }}</div>
+        <div class="label-sm content-primary">Base</div>
+        <div class="body-sm content-secondary truncate">{{ config.baseName || '-' }}</div>
+        <div class="label-sm content-primary">Table</div>
+        <div class="body-sm content-secondary truncate">{{ config.tableName || '-' }}</div>
+        <div class="label-sm content-primary">View</div>
+        <div class="body-sm content-secondary truncate">{{ config.view || '-' }}</div>
     </div>
 </template>
 
@@ -16,8 +19,9 @@ export default {
 
 <style lang="scss" scoped>
 .airtable-collection-summary {
-    &__elem {
-        margin-bottom: var(--ww-spacing-01);
-    }
+    display: grid;
+    grid-template-columns: 0fr 1fr;
+    column-gap: var(--ww-spacing-02);
+    row-gap: var(--ww-spacing-02);
 }
 </style>

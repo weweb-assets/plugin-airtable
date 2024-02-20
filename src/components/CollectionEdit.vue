@@ -1,22 +1,24 @@
 <template>
     <div class="airtable-collection-edit">
-        <div class="airtable-collection-edit__row">
-            <wwEditorFormRow label="Base" required class="-full">
+        <wwEditorFormRow label="Base" required class="-full">
+            <div class="flex items-center">
                 <wwEditorInputTextSelect
+                    class="w-100"
                     :options="basesOptions"
                     :model-value="table.baseId"
                     placeholder="Select a base"
                     large
                     @update:modelValue="setBase"
                 />
-            </wwEditorFormRow>
-            <button type="button" class="ww-editor-button -primary -small m-left" @click="getBases(true)">
-                Refresh
-            </button>
-        </div>
-        <div class="airtable-collection-edit__row">
-            <wwEditorFormRow label="Table" required class="-full">
+                <button type="button" class="ww-editor-button -primary -small -icon ml-2" @click="getBases(true)">
+                    <wwEditorIcon name="refresh" medium />
+                </button>
+            </div>
+        </wwEditorFormRow>
+        <wwEditorFormRow label="Table" required class="-full">
+            <div class="flex items-center">
                 <wwEditorInputTextSelect
+                    class="w-100"
                     :options="tablesOptions"
                     :model-value="table.tableId"
                     :disabled="!table.baseId"
@@ -24,16 +26,16 @@
                     large
                     @update:modelValue="setTable"
                 />
-            </wwEditorFormRow>
-            <button
-                type="button"
-                class="ww-editor-button -primary -small m-left"
-                :disabled="!table.baseId"
-                @click="getTables(true)"
-            >
-                Refresh
-            </button>
-        </div>
+                <button
+                    type="button"
+                    class="ww-editor-button -primary -small -icon ml-2"
+                    :disabled="!table.baseId"
+                    @click="getTables(true)"
+                >
+                    <wwEditorIcon name="refresh" medium />
+                </button>
+            </div>
+        </wwEditorFormRow>
         <wwEditorFormRow label="View" required>
             <wwEditorInputTextSelect
                 :options="tablesViewsOptions"
@@ -255,21 +257,6 @@ export default {
         .-full {
             width: 100%;
         }
-    }
-    .m-auto-left {
-        margin-left: auto;
-    }
-    .m-left {
-        margin-left: var(--ww-spacing-02);
-    }
-    .m-right {
-        margin-right: var(--ww-spacing-02);
-    }
-    .m-bottom {
-        margin-bottom: var(--ww-spacing-02);
-    }
-    .w-50 {
-        width: 50%;
     }
 }
 </style>
