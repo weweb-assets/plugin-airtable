@@ -1,6 +1,6 @@
 <template>
     <div class="airtable-collection-edit">
-        <wwEditorFormRow label="Base" required class="-full">
+        <wwEditorFormRow label="Base" required>
             <div class="flex items-center">
                 <wwEditorInputTextSelect
                     class="w-100"
@@ -15,7 +15,7 @@
                 </button>
             </div>
         </wwEditorFormRow>
-        <wwEditorFormRow label="Table" required class="-full">
+        <wwEditorFormRow label="Table" required>
             <div class="flex items-center">
                 <wwEditorInputTextSelect
                     class="w-100"
