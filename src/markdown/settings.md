@@ -9,4 +9,4 @@ Also, give it the proper scopes so that WeWeb can read and write data:
 - `data.records:write`
 - `schema.bases:read`
 
-![Airtable scopes](https://docs.weweb.io/assets/airtable-scopes-fc92e346.png)
+![Airtable scopes](https://docs.weweb.io/assets/airtable-scopes-D2bGwEYO.png)
