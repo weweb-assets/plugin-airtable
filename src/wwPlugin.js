@@ -63,7 +63,7 @@ export default {
         /* wwEditor:end */
         /* wwFront:start */
         response = await axios.post(
-            `//${websiteId}.${wwLib.wwApiRequests._getPreviewUrl()}/ww/cms_data_sets/${collectionId}/airtable/record`,
+            `//${wwLib.wwApiRequests._getPreviewUrl()}/ww/cms_data_sets/${collectionId}/airtable/record`,
             { data }
         );
         /* wwFront:end */
@@ -96,7 +96,7 @@ export default {
         /* wwEditor:end */
         /* wwFront:start */
         response = await axios.patch(
-            `//${websiteId}.${wwLib.wwApiRequests._getPreviewUrl()}/ww/cms_data_sets/${collectionId}/airtable/record/${recordId}`,
+            `//${wwLib.wwApiRequests._getPreviewUrl()}/ww/cms_data_sets/${collectionId}/airtable/record/${recordId}`,
             { data }
         );
         /* wwFront:end */
@@ -123,7 +123,7 @@ export default {
         /* wwEditor:end */
         /* wwFront:start */
         response = await axios.delete(
-            `//${websiteId}.${wwLib.wwApiRequests._getPreviewUrl()}/ww/cms_data_sets/${collectionId}/airtable/record/${recordId}`
+            `//${wwLib.wwApiRequests._getPreviewUrl()}/ww/cms_data_sets/${collectionId}/airtable/record/${recordId}`
         );
         /* wwFront:end */
 
