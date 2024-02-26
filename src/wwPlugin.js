@@ -63,7 +63,7 @@ export default {
         /* wwEditor:end */
         /* wwFront:start */
         response = await axios.post(
-            `//${wwLib.wwApiRequests._getPreviewUrl()}/ww/cms_data_sets/${collectionId}/airtable/record`,
+            `//${window.location.hostname}/ww/cms_data_sets/${collectionId}/airtable/record`,
             { data }
         );
         /* wwFront:end */
@@ -96,7 +96,7 @@ export default {
         /* wwEditor:end */
         /* wwFront:start */
         response = await axios.patch(
-            `//${wwLib.wwApiRequests._getPreviewUrl()}/ww/cms_data_sets/${collectionId}/airtable/record/${recordId}`,
+            `//${window.location.hostname}/ww/cms_data_sets/${collectionId}/airtable/record/${recordId}`,
             { data }
         );
         /* wwFront:end */
@@ -123,7 +123,7 @@ export default {
         /* wwEditor:end */
         /* wwFront:start */
         response = await axios.delete(
-            `//${wwLib.wwApiRequests._getPreviewUrl()}/ww/cms_data_sets/${collectionId}/airtable/record/${recordId}`
+            `//${window.location.hostname}/ww/cms_data_sets/${collectionId}/airtable/record/${recordId}`
         );
         /* wwFront:end */
 
