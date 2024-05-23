@@ -1,4 +1,7 @@
 export default {
+    features: {
+        datasource: true,
+    },
     editor: {
         settings: {
             edit: () => import('./src/components/SettingsEdit.vue'),
