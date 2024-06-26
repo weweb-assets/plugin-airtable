@@ -175,11 +175,11 @@ export default {
             const collections = wwLib.$store.getters['data/getCollections'];
             const plugins = wwLib.$store.getters['websiteData/getPluginById'];
             return Object.values(collections)
-                .filter(collection => plugins(collection.pluginId).name === 'airtable')
+                .filter(collection => plugins(collection.pluginId).namespace === 'airtable')
                 .map(collection => ({
                     label: collection.name,
                     value: collection.id,
-                    icon: `logos/${plugins(collection.pluginId).name}`,
+                    icon: `logos/${plugins(collection.pluginId).namespace}`,
                 }));
         },
         collectionId() {
