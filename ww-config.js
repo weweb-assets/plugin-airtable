@@ -28,6 +28,22 @@ export default {
             getIsValid({ collectionId, data }) {
                 return !!collectionId && !!data;
             },
+            copilot: {
+                description: "Creates a new record in an Airtable collection",
+                returns: "object - The newly created record",
+                schema: {
+                    collectionId: {
+                        type: "string",
+                        description: "ID of the Airtable collection",
+                        bindable: false
+                    },
+                    data: {
+                        type: "object",
+                        description: "Data object containing field values for the new record",
+                        bindable: true
+                    }
+                }
+            }
             /* wwEditor:end */
         },
         {
@@ -39,6 +55,27 @@ export default {
             getIsValid({ collectionId, recordId, data }) {
                 return !!collectionId && !!recordId && !!data;
             },
+            copilot: {
+                description: "Updates an existing record in an Airtable collection",
+                returns: "object - The updated record",
+                schema: {
+                    collectionId: {
+                        type: "string", 
+                        description: "ID of the Airtable collection",
+                        bindable: false
+                    },
+                    recordId: {
+                        type: "string",
+                        description: "ID of the record to update",
+                        bindable: true
+                    },
+                    data: {
+                        type: "object",
+                        description: "Data object containing updated field values",
+                        bindable: true
+                    }
+                }
+            }
             /* wwEditor:end */
         },
         {
@@ -50,6 +87,22 @@ export default {
             getIsValid({ collectionId, recordId }) {
                 return !!collectionId && !!recordId;
             },
+            copilot: {
+                description: "Deletes a record from an Airtable collection",
+                returns: "object - The deleted record",
+                schema: {
+                    collectionId: {
+                        type: "string",
+                        description: "ID of the Airtable collection",
+                        bindable: false
+                    },
+                    recordId: {
+                        type: "string",
+                        description: "ID of the record to delete",
+                        bindable: true
+                    }
+                }
+            }
             /* wwEditor:end */
         },
         {
@@ -61,6 +114,22 @@ export default {
             getIsValid({ collectionId, recordId }) {
                 return !!collectionId && !!recordId;
             },
+            copilot: {
+                description: "Synchronizes a record with Airtable to get its latest data",
+                returns: "object - The synchronized record with updated data",
+                schema: {
+                    collectionId: {
+                        type: "string",
+                        description: "ID of the Airtable collection",
+                        bindable: false
+                    },
+                    recordId: {
+                        type: "string",
+                        description: "ID of the record to synchronize",
+                        bindable: true
+                    }
+                }
+            }
             /* wwEditor:end */
         },
     ],
