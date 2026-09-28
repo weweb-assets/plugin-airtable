@@ -28,8 +28,8 @@ export default {
     emits: ['update:args'],
     computed: {
         collectionOptions() {
-            const collections = wwLib.$store.getters['data/getCollections'];
-            const plugins = wwLib.$store.getters['websiteData/getPluginById'];
+            const collections = wwLib.wwCollection.getCollections();
+            const plugins = wwLib.wwPluginHelper.getPluginById;
             return Object.values(collections)
                 .filter(collection => plugins(collection.pluginId).namespace === 'airtable')
                 .map(collection => ({
