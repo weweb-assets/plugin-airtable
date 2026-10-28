@@ -152,21 +152,21 @@ export default {
     },
     computed: {
         collectionOptions() {
-            const collections = wwLib.$store.getters['data/getCollections'];
-            const plugins = wwLib.$store.getters['websiteData/getPluginById'];
+            const collections = wwLib.wwCollection.collectionsById;
+            const plugins = wwLib.wwPluginHelper.pluginsById;
             return Object.values(collections)
-                .filter(collection => plugins(collection.pluginId).namespace === 'airtable')
+                .filter(collection => plugins[collection.pluginId]?.namespace === 'airtable')
                 .map(collection => ({
                     label: collection.name,
                     value: collection.id,
-                    icon: `logos/${plugins(collection.pluginId).namespace}`,
+                    icon: `logos/${plugins[collection.pluginId]?.namespace}`,
                 }));
         },
         collectionId() {
             return this.args.collectionId;
         },
         collection() {
-            return wwLib.$store.getters['data/getCollections'][this.collectionId];
+            return wwLib.wwCollection.collectionsById[this.collectionId];
         },
         data() {
             return this.args.data || {};
