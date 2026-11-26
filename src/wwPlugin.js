@@ -56,17 +56,19 @@ export default {
         });
 
         /* wwEditor:start */
-        if (wwLib.editor?.isolatedCanvas) record = await wwUtils.runRecordAction();
-        else record = (await wwAxios.post(
-            `${wwLib.wwApiRequests._getPluginsUrl()}/designs/${websiteId}/cms_data_sets/${collectionId}/airtable/record`,
-            { data }
-        )).data.data;
+        if (wwLib.editor?.isolatedCanvas) record = await wwUtils.runPreviewAction();
+        else
+            record = (
+                await wwAxios.post(
+                    `${wwLib.wwApiRequests._getPluginsUrl()}/designs/${websiteId}/cms_data_sets/${collectionId}/airtable/record`,
+                    { data }
+                )
+            ).data.data;
         /* wwEditor:end */
         /* wwFront:start */
-        record = (await axios.post(
-            `//${window.location.hostname}/ww/cms_data_sets/${collectionId}/airtable/record`,
-            { data }
-        )).data.data;
+        record = (
+            await axios.post(`//${window.location.hostname}/ww/cms_data_sets/${collectionId}/airtable/record`, { data })
+        ).data.data;
         /* wwFront:end */
 
         const collection = wwLib.wwCollection.collectionsById[collectionId];
@@ -89,17 +91,22 @@ export default {
             type: 'request',
         });
         /* wwEditor:start */
-        if (wwLib.editor?.isolatedCanvas) record = await wwUtils.runRecordAction();
-        else record = (await wwAxios.patch(
-            `${wwLib.wwApiRequests._getPluginsUrl()}/designs/${websiteId}/cms_data_sets/${collectionId}/airtable/record/${recordId}`,
-            { data }
-        )).data.data;
+        if (wwLib.editor?.isolatedCanvas) record = await wwUtils.runPreviewAction();
+        else
+            record = (
+                await wwAxios.patch(
+                    `${wwLib.wwApiRequests._getPluginsUrl()}/designs/${websiteId}/cms_data_sets/${collectionId}/airtable/record/${recordId}`,
+                    { data }
+                )
+            ).data.data;
         /* wwEditor:end */
         /* wwFront:start */
-        record = (await axios.patch(
-            `//${window.location.hostname}/ww/cms_data_sets/${collectionId}/airtable/record/${recordId}`,
-            { data }
-        )).data.data;
+        record = (
+            await axios.patch(
+                `//${window.location.hostname}/ww/cms_data_sets/${collectionId}/airtable/record/${recordId}`,
+                { data }
+            )
+        ).data.data;
         /* wwFront:end */
 
         const collection = _.cloneDeep(wwLib.wwCollection.collectionsById[collectionId]);
@@ -117,15 +124,20 @@ export default {
         let record;
         wwUtils?.log('info', `Deleting record ${recordId} for _wwCollection(${collectionId})`, { type: 'request' });
         /* wwEditor:start */
-        if (wwLib.editor?.isolatedCanvas) record = await wwUtils.runRecordAction();
-        else record = (await wwAxios.delete(
-            `${wwLib.wwApiRequests._getPluginsUrl()}/designs/${websiteId}/cms_data_sets/${collectionId}/airtable/record/${recordId}`
-        )).data.data;
+        if (wwLib.editor?.isolatedCanvas) record = await wwUtils.runPreviewAction();
+        else
+            record = (
+                await wwAxios.delete(
+                    `${wwLib.wwApiRequests._getPluginsUrl()}/designs/${websiteId}/cms_data_sets/${collectionId}/airtable/record/${recordId}`
+                )
+            ).data.data;
         /* wwEditor:end */
         /* wwFront:start */
-        record = (await axios.delete(
-            `//${window.location.hostname}/ww/cms_data_sets/${collectionId}/airtable/record/${recordId}`
-        )).data.data;
+        record = (
+            await axios.delete(
+                `//${window.location.hostname}/ww/cms_data_sets/${collectionId}/airtable/record/${recordId}`
+            )
+        ).data.data;
         /* wwFront:end */
 
         const collection = _.cloneDeep(wwLib.wwCollection.collectionsById[collectionId]);
@@ -146,7 +158,7 @@ export default {
         wwUtils?.log('info', `Syncing record ${recordId} for _wwCollection(${collectionId})`, { type: 'request' });
         async function readRecord() {
             /* wwEditor:start */
-            if (wwLib.editor?.isolatedCanvas) return wwUtils.runRecordAction();
+            if (wwLib.editor?.isolatedCanvas) return wwUtils.runPreviewAction();
             /* wwEditor:end */
             const response = await axios.get(
                 `${wwLib.wwApiRequests._getPluginsUrl()}/hook/designs/${websiteId}/cms_data_sets/${collectionId}/sync/${recordId}/update`
