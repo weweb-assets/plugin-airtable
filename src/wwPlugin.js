@@ -49,26 +49,28 @@ export default {
     async createRecord({ collectionId, data }, wwUtils) {
         const websiteId = wwLib.wwWebsiteData.info.id;
 
-        let response = null;
+        let record;
         wwUtils?.log('info', `Creating a record for _wwCollection(${collectionId})`, {
             preview: data,
             type: 'request',
         });
 
         /* wwEditor:start */
-        response = await wwAxios.post(
-            `${wwLib.wwApiRequests._getPluginsUrl()}/designs/${websiteId}/cms_data_sets/${collectionId}/airtable/record`,
-            { data }
-        );
+        if (wwLib.editor?.isolatedCanvas) record = await wwUtils.runPreviewAction();
+        else
+            record = (
+                await wwAxios.post(
+                    `${wwLib.wwApiRequests._getPluginsUrl()}/designs/${websiteId}/cms_data_sets/${collectionId}/airtable/record`,
+                    { data }
+                )
+            ).data.data;
         /* wwEditor:end */
         /* wwFront:start */
-        response = await axios.post(
-            `//${window.location.hostname}/ww/cms_data_sets/${collectionId}/airtable/record`,
-            { data }
-        );
+        record = (
+            await axios.post(`//${window.location.hostname}/ww/cms_data_sets/${collectionId}/airtable/record`, { data })
+        ).data.data;
         /* wwFront:end */
 
-        const record = response.data.data;
         const collection = wwLib.wwCollection.collectionsById[collectionId];
         if (!collection) return null;
         const collectionData = Array.isArray(collection.data) ? collection.data : [];
@@ -83,30 +85,35 @@ export default {
     async updateRecord({ collectionId, recordId, data }, wwUtils) {
         const websiteId = wwLib.wwWebsiteData.info.id;
 
-        let response = null;
+        let record;
         wwUtils?.log('info', `Updating record ${recordId} for _wwCollection(${collectionId})`, {
             preview: data,
             type: 'request',
         });
         /* wwEditor:start */
-        response = await wwAxios.patch(
-            `${wwLib.wwApiRequests._getPluginsUrl()}/designs/${websiteId}/cms_data_sets/${collectionId}/airtable/record/${recordId}`,
-            { data }
-        );
+        if (wwLib.editor?.isolatedCanvas) record = await wwUtils.runPreviewAction();
+        else
+            record = (
+                await wwAxios.patch(
+                    `${wwLib.wwApiRequests._getPluginsUrl()}/designs/${websiteId}/cms_data_sets/${collectionId}/airtable/record/${recordId}`,
+                    { data }
+                )
+            ).data.data;
         /* wwEditor:end */
         /* wwFront:start */
-        response = await axios.patch(
-            `//${window.location.hostname}/ww/cms_data_sets/${collectionId}/airtable/record/${recordId}`,
-            { data }
-        );
+        record = (
+            await axios.patch(
+                `//${window.location.hostname}/ww/cms_data_sets/${collectionId}/airtable/record/${recordId}`,
+                { data }
+            )
+        ).data.data;
         /* wwFront:end */
 
-        const record = response.data.data;
         const collection = _.cloneDeep(wwLib.wwCollection.collectionsById[collectionId]);
         if (!collection) return null;
         const collectionData = Array.isArray(collection.data) ? collection.data : [];
         const recordIndex = collectionData.findIndex(item => item && item.id === recordId);
-        collectionData.splice(recordIndex, 1, record);
+        if (recordIndex >= 0) collectionData.splice(recordIndex, 1, record);
         wwLib.wwCollection.setCollection({ ...collection, data: collectionData });
 
         return record;
@@ -114,25 +121,30 @@ export default {
     async deleteRecord({ collectionId, recordId }, wwUtils) {
         const websiteId = wwLib.wwWebsiteData.info.id;
 
-        let response = null;
+        let record;
         wwUtils?.log('info', `Deleting record ${recordId} for _wwCollection(${collectionId})`, { type: 'request' });
         /* wwEditor:start */
-        response = await wwAxios.delete(
-            `${wwLib.wwApiRequests._getPluginsUrl()}/designs/${websiteId}/cms_data_sets/${collectionId}/airtable/record/${recordId}`
-        );
+        if (wwLib.editor?.isolatedCanvas) record = await wwUtils.runPreviewAction();
+        else
+            record = (
+                await wwAxios.delete(
+                    `${wwLib.wwApiRequests._getPluginsUrl()}/designs/${websiteId}/cms_data_sets/${collectionId}/airtable/record/${recordId}`
+                )
+            ).data.data;
         /* wwEditor:end */
         /* wwFront:start */
-        response = await axios.delete(
-            `//${window.location.hostname}/ww/cms_data_sets/${collectionId}/airtable/record/${recordId}`
-        );
+        record = (
+            await axios.delete(
+                `//${window.location.hostname}/ww/cms_data_sets/${collectionId}/airtable/record/${recordId}`
+            )
+        ).data.data;
         /* wwFront:end */
 
-        const record = response.data.data;
         const collection = _.cloneDeep(wwLib.wwCollection.collectionsById[collectionId]);
         if (!collection) return null;
         const collectionData = Array.isArray(collection.data) ? collection.data : [];
         const recordIndex = collectionData.findIndex(item => item && item.id === recordId);
-        collectionData.splice(recordIndex, 1);
+        if (recordIndex >= 0) collectionData.splice(recordIndex, 1);
         wwLib.wwCollection.setCollection({
             ...collection,
             total: collection.total - 1,
@@ -144,15 +156,28 @@ export default {
     async syncRecord({ collectionId, recordId }, wwUtils) {
         const websiteId = wwLib.wwWebsiteData.info.id;
         wwUtils?.log('info', `Syncing record ${recordId} for _wwCollection(${collectionId})`, { type: 'request' });
-        const response = await axios.get(
-            `${wwLib.wwApiRequests._getPluginsUrl()}/hook/designs/${websiteId}/cms_data_sets/${collectionId}/sync/${recordId}/update`
-        );
-        const record = response.data.data;
+        async function readRecord() {
+            /* wwEditor:start */
+            if (wwLib.editor?.isolatedCanvas) return wwUtils.runPreviewAction();
+            /* wwEditor:end */
+            const response = await axios.get(
+                `${wwLib.wwApiRequests._getPluginsUrl()}/hook/designs/${websiteId}/cms_data_sets/${collectionId}/sync/${recordId}/update`
+            );
+            return response.data.data;
+        }
+        const record = await readRecord();
 
         const collection = _.cloneDeep(wwLib.wwCollection.collectionsById[collectionId]);
         if (!collection) return null;
         const collectionData = Array.isArray(collection.data) ? collection.data : [];
         const recordIndex = collectionData.findIndex(item => item && item.id === recordId);
+        if (record == null) {
+            if (recordIndex >= 0) {
+                collectionData.splice(recordIndex, 1);
+                wwLib.wwCollection.setCollection({ ...collection, total: collection.total - 1, data: collectionData });
+            }
+            return record;
+        }
         if (recordIndex === -1) {
             collectionData.push(record);
             wwLib.wwCollection.setCollection({

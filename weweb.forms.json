@@ -1,0 +1,204 @@
+{
+    "schemaVersion": 1,
+    "features": {
+        "datasource": true
+    },
+    "settings": {
+        "fields": [
+            {
+                "key": "apiKey",
+                "type": "secret",
+                "label": "Personal access token",
+                "storage": "privateData",
+                "required": true,
+                "help": {
+                    "text": "Use a token with access to the resources used by the project.",
+                    "link": {
+                        "label": "Create a token",
+                        "url": "https://airtable.com/create/tokens"
+                    }
+                }
+            }
+        ]
+    },
+    "collection": {
+        "fields": [
+            {
+                "key": "baseId",
+                "type": "choice",
+                "label": "Base",
+                "operation": "airtable.catalog",
+                "catalogPart": "base",
+                "required": true
+            },
+            {
+                "key": "tableId",
+                "type": "choice",
+                "label": "Table",
+                "operation": "airtable.catalog",
+                "catalogPart": "table",
+                "required": true
+            },
+            {
+                "key": "view",
+                "type": "choice",
+                "label": "View",
+                "operation": "airtable.catalog",
+                "catalogPart": "view",
+                "required": true
+            },
+            {
+                "key": "depth",
+                "type": "number",
+                "label": "Lookup depth",
+                "min": 0,
+                "max": 5
+            },
+            {
+                "key": "fields",
+                "type": "choice",
+                "label": "Filter fields to fetch",
+                "operation": "airtable.catalog",
+                "catalogPart": "columns",
+                "placeholder": "All fields"
+            },
+            {
+                "key": "filterByFormula",
+                "type": "text",
+                "label": "Filter by formula",
+                "bindableIn": "dynamicCollection",
+                "help": {
+                    "text": "Filter records using an Airtable formula.",
+                    "link": {
+                        "label": "Formula reference",
+                        "url": "https://support.airtable.com/docs/formula-field-reference"
+                    }
+                }
+            }
+        ],
+        "summary": [
+            {
+                "field": "baseId",
+                "label": "Base",
+                "empty": "—"
+            },
+            {
+                "field": "tableId",
+                "label": "Table",
+                "empty": "—"
+            },
+            {
+                "field": "view",
+                "label": "View",
+                "empty": "—"
+            }
+        ]
+    },
+    "actions": [
+        {
+            "code": "createRecord",
+            "name": "Create a record",
+            "isAsync": true,
+            "form": {
+                "fields": [
+                    {
+                        "key": "collectionId",
+                        "type": "choice",
+                        "label": "Collection",
+                        "operation": "project.collections",
+                        "required": true
+                    },
+                    {
+                        "key": "data",
+                        "type": "resource",
+                        "label": "Fields",
+                        "operation": "airtable.catalog",
+                        "catalogPart": "data",
+                        "required": true
+                    }
+                ]
+            },
+            "validation": "requiredFields"
+        },
+        {
+            "code": "updateRecord",
+            "name": "Update a record",
+            "isAsync": true,
+            "form": {
+                "fields": [
+                    {
+                        "key": "collectionId",
+                        "type": "choice",
+                        "label": "Collection",
+                        "operation": "project.collections",
+                        "required": true
+                    },
+                    {
+                        "key": "recordId",
+                        "type": "text",
+                        "label": "Record ID",
+                        "required": true,
+                        "bindable": true
+                    },
+                    {
+                        "key": "data",
+                        "type": "resource",
+                        "label": "Fields",
+                        "operation": "airtable.catalog",
+                        "catalogPart": "patch",
+                        "required": true
+                    }
+                ]
+            },
+            "validation": "requiredFields"
+        },
+        {
+            "code": "deleteRecord",
+            "name": "Delete a record",
+            "isAsync": true,
+            "form": {
+                "fields": [
+                    {
+                        "key": "collectionId",
+                        "type": "choice",
+                        "label": "Collection",
+                        "operation": "project.collections",
+                        "required": true
+                    },
+                    {
+                        "key": "recordId",
+                        "type": "text",
+                        "label": "Record ID",
+                        "required": true,
+                        "bindable": true
+                    }
+                ]
+            },
+            "validation": "requiredFields"
+        },
+        {
+            "code": "syncRecord",
+            "name": "Sync a record",
+            "isAsync": true,
+            "form": {
+                "fields": [
+                    {
+                        "key": "collectionId",
+                        "type": "choice",
+                        "label": "Collection",
+                        "operation": "project.collections",
+                        "required": true
+                    },
+                    {
+                        "key": "recordId",
+                        "type": "text",
+                        "label": "Record ID",
+                        "required": true,
+                        "bindable": true
+                    }
+                ]
+            },
+            "validation": "requiredFields"
+        }
+    ]
+}
